@@ -30,9 +30,41 @@ class MotorDeReglasTest {
     }
 
     @Test
-    fun `la direccion no coincide en apps que solo dan el nombre`() {
+    fun `una direccion coincide con el nombre visible usando lo que va antes de la arroba`() {
+        // Outlook y a veces Gmail solo publican "Luciano Reverberi", sin direccion.
         val regla = Regla(nombre = "x", remitente = "lucianoreverberi@hotmail.com")
-        assertFalse(MotorDeReglas.coincide(regla, correo(direcciones = emptyList())))
+        assertTrue(MotorDeReglas.coincide(regla, correo(direcciones = emptyList())))
+    }
+
+    @Test
+    fun `la parte antes de la arroba ignora puntos y tildes`() {
+        val regla = Regla(nombre = "x", remitente = "juan.perez@empresa.com")
+        assertTrue(MotorDeReglas.coincide(regla, correo(remitente = "Juan Pérez", direcciones = emptyList())))
+    }
+
+    @Test
+    fun `una parte generica antes de la arroba no se usa`() {
+        // Si "info" alcanzara, sonaria con cualquier remitente llamado "Info ...".
+        val regla = Regla(nombre = "x", remitente = "info@miempresa.com")
+        assertFalse(
+            MotorDeReglas.coincide(regla, correo(remitente = "Info Banco Galicia", direcciones = emptyList()))
+        )
+    }
+
+    @Test
+    fun `las tildes no importan en ninguna direccion`() {
+        val conTilde = Regla(nombre = "x", palabraClave = "migración")
+        assertTrue(MotorDeReglas.coincide(conTilde, correo(asunto = "Su cita de migracion")))
+        val sinTilde = Regla(nombre = "x", palabraClave = "migracion")
+        assertTrue(MotorDeReglas.coincide(sinTilde, correo(asunto = "Su cita de MIGRACIÓN")))
+    }
+
+    @Test
+    fun `el remitente coincide en parte`() {
+        val regla = Regla(nombre = "x", remitente = "uscis")
+        assertTrue(
+            MotorDeReglas.coincide(regla, correo(remitente = "USCIS Online Account", direcciones = emptyList()))
+        )
     }
 
     @Test

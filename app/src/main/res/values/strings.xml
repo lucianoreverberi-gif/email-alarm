@@ -2,53 +2,63 @@
     <string name="app_name">Email Alarm</string>
     <string name="tagline">The email you can\'t afford to miss</string>
 
+    <!-- Pantalla principal -->
+    <string name="action_settings">Settings</string>
+    <string name="section_rules">Rules</string>
+    <string name="section_history">Recent emails</string>
     <string name="section_permissions">Permissions</string>
     <string name="section_apps">Apps I listen to</string>
-    <string name="section_rules">Rules</string>
 
+    <!-- Estado general: titulo, detalle y la accion que lo resuelve -->
     <string name="status_blocked_title">The alarm can\'t ring</string>
     <string name="status_blocked_body">A required permission is missing.</string>
-    <string name="status_no_rules_title">No active rules</string>
+    <string name="status_no_rules_title">No rules yet</string>
     <string name="status_no_rules_body">The app is listening, but nothing will make it ring.</string>
     <string name="status_limited_title">Working, with limitations</string>
-    <string name="status_limited_body">An optional permission is missing — check below.</string>
+    <string name="status_limited_body">An optional permission is missing.</string>
     <string name="status_ready_title">All set</string>
     <string name="status_ready_body">The alarm will ring even if the phone is locked.</string>
+    <string name="status_no_sub_title">Start your free month</string>
+    <string name="status_no_sub_body">The alarm only rings with an active subscription.</string>
+    <string name="status_expired_title">Your subscription ended</string>
+    <string name="status_expired_body">The alarm won\'t ring until you renew.</string>
 
-    <string name="action_enable">Enable</string>
+    <string name="action_enable_permission">Enable permission</string>
+    <string name="action_start_free_month">Start free month</string>
+    <string name="action_create_first_rule">Create my first rule</string>
+    <string name="action_review_permissions">Review permissions</string>
+    <string name="action_test_alarm">Test alarm</string>
+    <string name="action_test_alarm_later">Test in 10 seconds</string>
+    <string name="test_alarm_later_hint">Lock your phone after tapping. It\'s the real test: the alarm has to wake you up with the screen off.</string>
+    <string name="test_alarm_scheduled">Lock your phone now. The alarm rings in 10 seconds.</string>
+    <string name="test_alarm_sender">Email Alarm</string>
+    <string name="test_alarm_subject">This is a test. If you can hear it, it works.</string>
+
+    <!-- Reglas -->
+    <string name="action_new_rule">New rule</string>
     <string name="action_edit">Edit</string>
     <string name="action_delete">Delete</string>
-    <string name="action_save">Save</string>
-    <string name="action_cancel">Cancel</string>
-    <string name="action_new_rule">New rule</string>
-    <string name="action_stop_alarm">Stop alarm</string>
-    <string name="action_stop">STOP</string>
-
-    <string name="apps_none">I couldn\'t find any known email apps on this phone.</string>
-    <string name="app_no_address">only publishes the sender\'s name, not the address</string>
-
-    <string name="rules_empty">No rules yet. Without rules the alarm never rings. Create one with the sender you\'re expecting, or a word you know will be in the subject.</string>
-
     <!-- Frases completas, no armadas por partes: en otros idiomas el orden cambia. -->
     <string name="rule_when_sender">Rings when it comes from \"%1$s\"</string>
     <string name="rule_when_keyword">Rings when it says \"%1$s\"</string>
     <string name="rule_when_both">Rings when it comes from \"%1$s\" or says \"%2$s\"</string>
-    <string name="rule_address_warning">This rule looks for an email address. The apps you have enabled besides Gmail only publish the sender\'s name, so that condition will never match there.</string>
+    <string name="rule_sound">Sound: %1$s</string>
+    <string name="rule_address_warning">Outlook and some other apps only show the sender\'s name. This rule also tries the part before the @, but if the visible name is different it won\'t match there. Safer: use the name exactly as you see it in the notification.</string>
 
-    <string name="dialog_new_rule">New rule</string>
-    <string name="dialog_edit_rule">Edit rule</string>
-    <string name="field_name">Name</string>
-    <string name="field_name_hint">Restaurant shifts</string>
-    <string name="field_sender">Sender</string>
-    <string name="field_sender_hint">shifts@company.com</string>
-    <string name="field_keyword">Keyword</string>
-    <string name="field_keyword_hint">shift</string>
-    <string name="dialog_hint_both">It will ring if either one matches.</string>
-    <string name="dialog_hint_one">One of the two is enough. The keyword is searched in the subject and in the body preview.</string>
+    <!-- Historial -->
+    <string name="history_empty">No emails yet since the app was turned on. When one arrives it shows up here, even if it matches no rule.</string>
+    <string name="history_hint">The last 20, stored only on this phone.</string>
+    <string name="history_clear">Clear</string>
+    <string name="history_rang">Rang · %1$s</string>
+    <string name="history_no_match">No match</string>
+    <string name="history_no_sub">Matched \"%1$s\", didn\'t ring: no subscription</string>
+    <string name="history_account">Email account problem</string>
 
-    <string name="tip_spam_title">Tip: keep it out of spam</string>
-    <string name="tip_spam_body">If this email lands in spam, your email app won\'t notify you and Email Alarm won\'t ring. On the Gmail website (it can\'t be done in the phone app), create a filter with the word \"%1$s\" and check \"Never send it to Spam\".</string>
-
+    <!-- Permisos -->
+    <string name="permissions_summary">Permissions: %1$d of %2$d</string>
+    <string name="permissions_show">Show all</string>
+    <string name="permissions_hide">Hide</string>
+    <string name="action_enable">Enable</string>
     <string name="perm_listener_title">Read notifications</string>
     <string name="perm_listener_body">This is how the app finds out an email arrived. Nothing works without it.</string>
     <string name="perm_post_title">Show notifications</string>
@@ -60,31 +70,63 @@
     <string name="perm_battery_title">Ignore battery optimization</string>
     <string name="perm_battery_body">Stops the system from putting the app to sleep and missing emails.</string>
 
-    <!-- Suscripcion. Google exige mostrar duracion de la prueba, precio,
-         renovacion automatica y como cancelar. -->
+    <!-- Apps -->
+    <string name="apps_none">I couldn\'t find any known email apps on this phone.</string>
+    <string name="app_no_address">only publishes the sender\'s name, not the address</string>
+
+    <!-- Dialogo de regla -->
+    <string name="dialog_new_rule">New rule</string>
+    <string name="dialog_edit_rule">Edit rule</string>
+    <string name="optional">optional</string>
+    <string name="field_name">Rule name</string>
+    <string name="field_name_hint">E.g. Work shifts</string>
+    <string name="field_name_help">Just so you can recognize it in the list.</string>
+    <string name="field_sender">From</string>
+    <string name="field_sender_hint">E.g. hr@company.com or HR</string>
+    <string name="field_sender_help">The sender\'s name or address. Partial matches count: \"uscis\" also matches \"USCIS Online Account\". Note: Gmail usually shows the NAME, not the address. If unsure, use the name exactly as you see it in the notification.</string>
+    <string name="field_keyword">Contains the word</string>
+    <string name="field_keyword_hint">E.g. shift available</string>
+    <string name="field_keyword_help">Searched in the subject and in the message preview.</string>
+    <string name="dialog_combination">Fill in at least one of the last two. If you fill in both, the alarm rings when either one matches.</string>
+    <string name="dialog_missing">Missing the sender or the keyword</string>
+    <string name="field_sound">Alarm sound</string>
+    <string name="sound_default">System alarm tone</string>
+    <string name="sound_custom">Chosen tone</string>
+    <string name="sound_change">Change</string>
+    <string name="action_save">Save</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="tip_spam_title">Tip: keep it out of spam</string>
+    <string name="tip_spam_body">If this email lands in spam, your email app won\'t notify you and Email Alarm won\'t ring. On the Gmail website (it can\'t be done in the phone app), create a filter with the word \"%1$s\" and check \"Never send it to Spam\".</string>
+
+    <!-- Ajustes y suscripcion. Google exige mostrar duracion de la prueba,
+         precio, renovacion automatica y como cancelar. -->
+    <string name="settings_title">Settings</string>
+    <string name="action_back">Back</string>
     <string name="section_subscription">Subscription</string>
-    <string name="status_no_sub_title">Start your free month</string>
-    <string name="status_no_sub_body">The alarm only rings with an active subscription.</string>
-    <string name="status_expired_title">Your subscription ended</string>
-    <string name="status_expired_body">The alarm won\'t ring until you renew.</string>
+    <string name="sub_active">Subscription active</string>
+    <string name="sub_active_body">The alarm is on.</string>
+    <string name="sub_none">No subscription</string>
     <string name="sub_trial_terms">Free for %1$d days, then %2$s per year. Renews automatically. Cancel anytime in Google Play.</string>
     <string name="sub_terms">%1$s per year. Renews automatically. Cancel anytime in Google Play.</string>
     <string name="sub_start_trial">Start %1$d-day free trial</string>
     <string name="sub_subscribe">Subscribe</string>
     <string name="sub_renew">Renew</string>
-    <string name="sub_active">Subscription active</string>
-    <string name="sub_active_body">The alarm is on. You can change or cancel your subscription in Google Play.</string>
-    <string name="sub_manage">Manage subscription</string>
+    <string name="sub_manage">Manage or cancel subscription</string>
+    <string name="sub_manage_hint">Opens Google Play</string>
     <string name="sub_unavailable">Can\'t reach Google Play right now. Check your connection and try again.</string>
+    <string name="section_alarm">Alarm</string>
+    <string name="action_stop_alarm">Stop alarm</string>
+    <string name="stop_alarm_hint">If an alarm keeps ringing and you can\'t reach its screen.</string>
 
+    <!-- Pantalla de alarma y notificaciones -->
+    <string name="alarm_banner">IMPORTANT EMAIL</string>
+    <string name="action_stop">STOP</string>
+    <string name="channel_name">Email alarm</string>
+    <string name="channel_description">Rings when an email matches one of your rules</string>
     <string name="canal_cuenta">Subscription</string>
     <string name="aviso_vencida_titulo">Your subscription ended</string>
     <string name="aviso_vencida_texto">Email Alarm won\'t ring until you renew. Tap to renew.</string>
     <string name="aviso_correo_titulo">An important email arrived — the alarm didn\'t ring</string>
     <string name="aviso_correo_nunca">Email from %1$s matched one of your rules. Start your free month so the alarm rings next time.</string>
     <string name="aviso_correo_vencida">Email from %1$s matched one of your rules, but your subscription ended. Renew so the alarm rings next time.</string>
-
-    <string name="alarm_banner">IMPORTANT EMAIL</string>
-    <string name="channel_name">Email alarm</string>
-    <string name="channel_description">Rings when an email matches one of your rules</string>
 </resources>

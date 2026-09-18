@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
  *   adb shell am broadcast -n com.reverstabilizer.emailalarm/.DemoReceiver \
  *       --es accion reglas --es idioma en
  *
- * accion: reglas | alarma | detener | pro | sinpro      idioma: en | es
+ * accion: reglas | historial | alarma | detener | pro | sinpro      idioma: en | es
  *
  * "pro" simula una suscripcion activa (solo debug), para capturas y para usar
  * la app antes de que exista el producto en Play Console. "sinpro" la quita.
@@ -28,6 +28,7 @@ class DemoReceiver : BroadcastReceiver() {
         val espanol = intent.getStringExtra("idioma") == "es"
         when (intent.getStringExtra("accion")) {
             "reglas" -> cargarReglas(context, espanol)
+            "historial" -> cargarHistorial(context, espanol)
             "alarma" -> mostrarAlarma(context, espanol)
             "detener" -> Alarma.detener()
             "pro" -> Suscripcion.simularActiva(context, true)
@@ -55,6 +56,40 @@ class DemoReceiver : BroadcastReceiver() {
             val dao = BaseDeDatos.obtener(context).reglaDao()
             dao.observarTodas().first().forEach { dao.borrar(it) }
             reglas.forEach { dao.guardar(it) }
+            pendiente.finish()
+        }
+    }
+
+    /** Correos de ejemplo para el historial: uno que sono, varios que no. */
+    private fun cargarHistorial(context: Context, espanol: Boolean) {
+        val ahora = System.currentTimeMillis()
+        val min = 60_000L
+        val ejemplos = if (espanol) {
+            listOf(
+                Deteccion(hora = ahora - 3 * min, app = "Gmail", remitente = "Turnos del restaurante",
+                    asunto = "Ya están abiertos los turnos de la semana que viene",
+                    resultado = Resultado.SONO.name, regla = "Turnos del restaurante"),
+                Deteccion(hora = ahora - 41 * min, app = "Gmail", remitente = "Banco Galicia",
+                    asunto = "Tu resumen de cuenta ya está disponible", resultado = Resultado.SIN_COINCIDENCIA.name),
+                Deteccion(hora = ahora - 95 * min, app = "Outlook", remitente = "Mercado Libre",
+                    asunto = "Tu compra está en camino", resultado = Resultado.SIN_COINCIDENCIA.name)
+            )
+        } else {
+            listOf(
+                Deteccion(hora = ahora - 3 * min, app = "Gmail", remitente = "Shift Scheduler",
+                    asunto = "Next week's shifts are open — sign up now",
+                    resultado = Resultado.SONO.name, regla = "Restaurant shifts"),
+                Deteccion(hora = ahora - 41 * min, app = "Gmail", remitente = "Chase",
+                    asunto = "Your statement is ready", resultado = Resultado.SIN_COINCIDENCIA.name),
+                Deteccion(hora = ahora - 95 * min, app = "Outlook", remitente = "Amazon",
+                    asunto = "Your package is on the way", resultado = Resultado.SIN_COINCIDENCIA.name)
+            )
+        }
+        val pendiente = goAsync()
+        CoroutineScope(Dispatchers.IO).launch {
+            val dao = BaseDeDatos.obtener(context).deteccionDao()
+            dao.borrarTodo()
+            ejemplos.forEach { dao.guardar(it) }
             pendiente.finish()
         }
     }

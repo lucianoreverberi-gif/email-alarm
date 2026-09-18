@@ -4,6 +4,7 @@ import android.content.Context
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.media.RingtoneManager
+import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 
@@ -26,29 +27,53 @@ object AlarmPlayer {
 
     fun estaSonando(): Boolean = player != null
 
-    /** Idempotente: llamarla dos veces no arranca dos alarmas. */
-    fun sonar(context: Context, alDetener: (() -> Unit)? = null) {
+    /**
+     * Idempotente: llamarla dos veces no arranca dos alarmas.
+     *
+     * [sonido] es el tono elegido en la regla (una Uri en texto), o null para
+     * el de alarma del sistema. Si el elegido falla, suena el del sistema:
+     * un tono borrado o sin permiso de lectura nunca puede dejarla muda.
+     */
+    fun sonar(context: Context, sonido: String? = null, alDetener: (() -> Unit)? = null) {
         this.alDetener = alDetener ?: this.alDetener
         if (player != null) return
 
-        val tono = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
+        val ctx = context.applicationContext
+        val delSistema = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
             ?: RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
+        val elegido = sonido?.let { runCatching { Uri.parse(it) }.getOrNull() }
 
-        player = MediaPlayer().apply {
-            setAudioAttributes(
+        player = crear(ctx, elegido) ?: crear(ctx, delSistema)
+        if (player == null) {
+            Registro.w("No se pudo reproducir ningun tono")
+            return
+        }
+
+        handler.postDelayed(corteDeSeguridad, DURACION_MAXIMA_MS)
+        Registro.d(">>> ALARMA SONANDO <<<")
+    }
+
+    /** Un reproductor en bucle por el canal de alarma, o null si ese tono no anda. */
+    private fun crear(ctx: Context, tono: Uri?): MediaPlayer? {
+        if (tono == null) return null
+        val mp = MediaPlayer()
+        return try {
+            mp.setAudioAttributes(
                 AudioAttributes.Builder()
                     .setUsage(AudioAttributes.USAGE_ALARM)
                     .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                     .build()
             )
-            setDataSource(context.applicationContext, tono)
-            isLooping = true
-            prepare()
-            start()
+            mp.setDataSource(ctx, tono)
+            mp.isLooping = true
+            mp.prepare()
+            mp.start()
+            mp
+        } catch (e: Exception) {
+            Registro.w("El tono $tono no se pudo reproducir: ${e.message}")
+            mp.release()
+            null
         }
-
-        handler.postDelayed(corteDeSeguridad, DURACION_MAXIMA_MS)
-        Registro.d(">>> ALARMA SONANDO <<<")
     }
 
     fun detener() {

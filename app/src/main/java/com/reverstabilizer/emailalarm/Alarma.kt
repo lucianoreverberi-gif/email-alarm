@@ -6,6 +6,8 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.os.Handler
+import android.os.Looper
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 
@@ -33,11 +35,45 @@ const val EXTRA_ASUNTO = "asunto"
  */
 object Alarma {
 
-    fun disparar(context: Context, remitente: String, asunto: String) {
+    fun disparar(context: Context, remitente: String, asunto: String, sonido: String? = null) {
         val ctx = context.applicationContext
         crearCanal(ctx)
         mostrarNotificacion(ctx, remitente, asunto)
-        AlarmPlayer.sonar(ctx) { NotificationManagerCompat.from(ctx).cancel(ID_NOTIFICACION) }
+        AlarmPlayer.sonar(ctx, sonido) { NotificationManagerCompat.from(ctx).cancel(ID_NOTIFICACION) }
+    }
+
+    /**
+     * Alarma de prueba, ya: abre la pantalla completa y suena. Con la app
+     * abierta Android no deja lanzar la pantalla por notificacion (la muestra
+     * como aviso flotante), asi que se abre directo.
+     *
+     * No mira la suscripcion: sirve justamente para confiar antes de pagar.
+     */
+    fun probarAhora(context: Context) {
+        val ctx = context.applicationContext
+        AlarmPlayer.sonar(ctx)
+        ctx.startActivity(
+            Intent(ctx, AlarmaActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                .putExtra(EXTRA_REMITENTE, ctx.getString(R.string.test_alarm_sender))
+                .putExtra(EXTRA_ASUNTO, ctx.getString(R.string.test_alarm_subject))
+        )
+    }
+
+    /**
+     * Alarma de prueba en [segundos], por el camino real (notificacion de
+     * pantalla completa): da tiempo a bloquear el telefono y prueba lo que
+     * de verdad importa, que suene con el telefono bloqueado.
+     */
+    fun probarDespues(context: Context, segundos: Long = 10) {
+        val ctx = context.applicationContext
+        Handler(Looper.getMainLooper()).postDelayed({
+            disparar(
+                ctx,
+                ctx.getString(R.string.test_alarm_sender),
+                ctx.getString(R.string.test_alarm_subject)
+            )
+        }, segundos * 1000)
     }
 
     fun detener() = AlarmPlayer.detener()

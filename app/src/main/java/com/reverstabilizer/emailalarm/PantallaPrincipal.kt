@@ -1,9 +1,12 @@
 package com.reverstabilizer.emailalarm
 
+import android.text.format.DateUtils
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,17 +14,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -29,14 +30,38 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+
+/** Lo que mas importa arreglar primero, en orden. */
+enum class EstadoGeneral { BLOQUEADA, VENCIDA, SIN_REGLAS, SIN_SUSCRIPCION, LIMITADA, LISTA }
+
+/**
+ * El orden define el recorrido de alguien nuevo: permisos, primera regla,
+ * probar la alarma, y recien ahi suscribirse. Se pide la tarjeta despues de
+ * que la persona vio que funciona, no antes.
+ */
+internal fun estadoGeneral(
+    faltaEsencial: Boolean,
+    suscripcion: Suscripcion.Estado,
+    hayReglasActivas: Boolean,
+    faltaOpcional: Boolean
+): EstadoGeneral = when {
+    faltaEsencial -> EstadoGeneral.BLOQUEADA
+    suscripcion == Suscripcion.Estado.VENCIDA -> EstadoGeneral.VENCIDA
+    !hayReglasActivas -> EstadoGeneral.SIN_REGLAS
+    suscripcion == Suscripcion.Estado.NUNCA -> EstadoGeneral.SIN_SUSCRIPCION
+    faltaOpcional -> EstadoGeneral.LIMITADA
+    else -> EstadoGeneral.LISTA
+}
 
 @Composable
 fun PantallaPrincipal(
@@ -44,96 +69,70 @@ fun PantallaPrincipal(
     appsInstaladas: List<AppCorreo>,
     appsEscuchadas: Set<String>,
     reglas: List<Regla>,
+    detecciones: List<Deteccion>,
+    suscripcion: Suscripcion.Estado,
     onResolverPermiso: (EstadoDePermiso) -> Unit,
     onCambiarApp: (String, Boolean) -> Unit,
     onGuardarRegla: (Regla) -> Unit,
     onCambiarActiva: (Regla, Boolean) -> Unit,
     onBorrarRegla: (Regla) -> Unit,
-    onDetenerAlarma: () -> Unit,
-    suscripcion: Suscripcion.Estado,
-    oferta: Suscripcion.Oferta?,
+    onProbarAhora: () -> Unit,
+    onProbarDespues: () -> Unit,
     onSuscribirse: () -> Unit,
-    onGestionarSuscripcion: () -> Unit,
+    onBorrarHistorial: () -> Unit,
+    onAbrirAjustes: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var reglaEnEdicion by remember { mutableStateOf<Regla?>(null) }
     var mostrandoDialogo by remember { mutableStateOf(false) }
+    var permisosAbiertos by rememberSaveable { mutableStateOf(false) }
+
+    val nuevaRegla = {
+        reglaEnEdicion = null
+        mostrandoDialogo = true
+    }
+
+    val pendientes = permisos.filter { !it.concedido }
+    val estado = estadoGeneral(
+        faltaEsencial = pendientes.any { it.imprescindible },
+        suscripcion = suscripcion,
+        hayReglasActivas = reglas.any { it.activa },
+        faltaOpcional = pendientes.any { !it.imprescindible }
+    )
 
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
-        contentPadding = androidx.compose.foundation.layout.PaddingValues(20.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        item { Encabezado() }
+        // a) Titulo
+        item { Encabezado(onAbrirAjustes) }
 
-        item { Resumen(permisos, reglas, suscripcion) }
-
+        // b) Estado, con la accion que lo resuelve en la misma tarjeta
         item {
-            TarjetaSuscripcion(
-                estado = suscripcion,
-                oferta = oferta,
+            TarjetaDeEstado(
+                estado = estado,
+                faltantes = pendientes,
+                onResolverPermiso = onResolverPermiso,
                 onSuscribirse = onSuscribirse,
-                onGestionar = onGestionarSuscripcion
+                onCrearRegla = nuevaRegla,
+                onProbarAhora = onProbarAhora,
+                onProbarDespues = onProbarDespues
             )
         }
 
-        item { Titulo(stringResource(R.string.section_permissions)) }
-
-        items(permisos, key = { it.clave }) { permiso ->
-            FilaDePermiso(permiso) { onResolverPermiso(permiso) }
-        }
-
-        item { Titulo(stringResource(R.string.section_apps)) }
-
-        if (appsInstaladas.isEmpty()) {
-            item { Ayuda(stringResource(R.string.apps_none)) }
-        }
-
-        items(appsInstaladas, key = { it.paquete }) { app ->
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Checkbox(
-                    checked = app.paquete in appsEscuchadas,
-                    onCheckedChange = { onCambiarApp(app.paquete, it) }
-                )
-                Column(modifier = Modifier.padding(start = 4.dp)) {
-                    Text(app.nombre, fontWeight = FontWeight.Medium)
-                    if (!app.exponeDireccion) {
-                        Text(
-                            text = stringResource(R.string.app_no_address),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                }
-            }
-        }
-
-        item { Titulo(stringResource(R.string.section_rules)) }
-
+        // c) Reglas: el producto
         item {
-            Button(
-                onClick = {
-                    reglaEnEdicion = null
-                    mostrandoDialogo = true
-                },
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(14.dp)
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(top = 12.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(stringResource(R.string.action_new_rule), fontWeight = FontWeight.Bold)
+                Titulo(stringResource(R.string.section_rules), Modifier.weight(1f))
+                TextButton(onClick = nuevaRegla) { Text("+ " + stringResource(R.string.action_new_rule)) }
             }
         }
-
-        if (reglas.isEmpty()) {
-            item {
-                Ayuda(stringResource(R.string.rules_empty))
-            }
-        }
-
         items(reglas, key = { it.id }) { regla ->
             FilaDeRegla(
                 regla = regla,
@@ -147,15 +146,75 @@ fun PantallaPrincipal(
             )
         }
 
+        // d) Historial: la prueba de que la app esta viva
         item {
-            TextButton(
-                onClick = onDetenerAlarma,
-                modifier = Modifier.fillMaxWidth().padding(top = 12.dp)
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(top = 12.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = stringResource(R.string.action_stop_alarm),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                Column(Modifier.weight(1f)) {
+                    Titulo(stringResource(R.string.section_history))
+                    Ayuda(stringResource(R.string.history_hint))
+                }
+                if (detecciones.isNotEmpty()) {
+                    TextButton(onClick = onBorrarHistorial) { Text(stringResource(R.string.history_clear)) }
+                }
+            }
+        }
+        if (detecciones.isEmpty()) {
+            item { Tarjeta { Ayuda(stringResource(R.string.history_empty)) } }
+        } else {
+            item {
+                Tarjeta {
+                    detecciones.forEachIndexed { i, d ->
+                        if (i > 0) Separador()
+                        FilaDeDeteccion(d)
+                    }
+                }
+            }
+        }
+
+        // e) Permisos: una linea; suelto, solo lo pendiente
+        item {
+            val concedidos = permisos.count { it.concedido }
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(top = 12.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Titulo(
+                    (if (pendientes.isEmpty()) "✓ " else "") +
+                        stringResource(R.string.permissions_summary, concedidos, permisos.size),
+                    Modifier.weight(1f)
                 )
+                TextButton(onClick = { permisosAbiertos = !permisosAbiertos }) {
+                    Text(
+                        stringResource(
+                            if (permisosAbiertos) R.string.permissions_hide else R.string.permissions_show
+                        )
+                    )
+                }
+            }
+        }
+        val visibles = if (permisosAbiertos) permisos else pendientes
+        items(visibles, key = { it.clave }) { permiso ->
+            FilaDePermiso(permiso) { onResolverPermiso(permiso) }
+        }
+
+        // f) Apps que escucho
+        item { Titulo(stringResource(R.string.section_apps), Modifier.padding(top = 12.dp)) }
+        if (appsInstaladas.isEmpty()) {
+            item { Ayuda(stringResource(R.string.apps_none)) }
+        }
+        items(appsInstaladas, key = { it.paquete }) { app ->
+            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+                Checkbox(
+                    checked = app.paquete in appsEscuchadas,
+                    onCheckedChange = { onCambiarApp(app.paquete, it) }
+                )
+                Column(modifier = Modifier.padding(start = 4.dp)) {
+                    Text(app.nombre, fontWeight = FontWeight.Medium)
+                    if (!app.exponeDireccion) Ayuda(stringResource(R.string.app_no_address))
+                }
             }
         }
     }
@@ -173,204 +232,96 @@ fun PantallaPrincipal(
 }
 
 @Composable
-private fun Encabezado() {
-    Column(modifier = Modifier.padding(bottom = 6.dp)) {
-        Text(
-            text = stringResource(R.string.app_name),
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold
-        )
-        Text(
-            text = stringResource(R.string.tagline),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-    }
-}
-
-/**
- * Lo primero que se ve: si la app esta en condiciones de sonar o no.
- * Un permiso imprescindible faltante la deja muda, y eso no puede estar
- * escondido abajo en una lista.
- */
-@Composable
-private fun Resumen(
-    permisos: List<EstadoDePermiso>,
-    reglas: List<Regla>,
-    suscripcion: Suscripcion.Estado
-) {
-    val faltaEsencial = permisos.any { it.imprescindible && !it.concedido }
-    val faltaOpcional = permisos.any { !it.imprescindible && !it.concedido }
-    val sinReglas = reglas.none { it.activa }
-
-    val (color, titulo, detalle) = when {
-        faltaEsencial -> Triple(
-            MaterialTheme.colorScheme.error,
-            R.string.status_blocked_title,
-            R.string.status_blocked_body
-        )
-        // Sin suscripcion la alarma no suena: tiene que verse igual de fuerte
-        // que un permiso faltante.
-        suscripcion == Suscripcion.Estado.VENCIDA -> Triple(
-            MaterialTheme.colorScheme.error,
-            R.string.status_expired_title,
-            R.string.status_expired_body
-        )
-        suscripcion == Suscripcion.Estado.NUNCA -> Triple(
-            MaterialTheme.colorScheme.primary,
-            R.string.status_no_sub_title,
-            R.string.status_no_sub_body
-        )
-        sinReglas -> Triple(
-            MaterialTheme.colorScheme.error,
-            R.string.status_no_rules_title,
-            R.string.status_no_rules_body
-        )
-        faltaOpcional -> Triple(
-            MaterialTheme.colorScheme.primary,
-            R.string.status_limited_title,
-            R.string.status_limited_body
-        )
-        else -> Triple(
-            MaterialTheme.colorScheme.primary,
-            R.string.status_ready_title,
-            R.string.status_ready_body
-        )
-    }
-
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = color.copy(alpha = 0.10f))
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
+private fun Encabezado(onAbrirAjustes: () -> Unit) {
+    Row(verticalAlignment = Alignment.Top, modifier = Modifier.fillMaxWidth()) {
+        Column(Modifier.weight(1f)) {
             Text(
-                text = stringResource(titulo),
-                fontWeight = FontWeight.Bold,
-                color = color,
-                fontSize = 17.sp
+                text = stringResource(R.string.app_name),
+                fontSize = 32.sp,
+                fontWeight = FontWeight.ExtraBold,
+                letterSpacing = (-0.5).sp,
+                color = MaterialTheme.colorScheme.onBackground
             )
-            Text(
-                text = stringResource(detalle),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface
-            )
+            Ayuda(stringResource(R.string.tagline))
         }
+        TextButton(onClick = onAbrirAjustes) { Text(stringResource(R.string.action_settings)) }
     }
 }
 
 /**
- * Estado de la suscripcion y como cambiarlo. Los precios salen de Google Play,
- * ya en la moneda de la persona; nunca se escriben a mano en la app.
+ * Lo primero que se ve: si la alarma puede sonar, y el boton que arregla lo
+ * que falte. El problema y su solucion van juntos, no a dos pantallas.
  */
 @Composable
-private fun TarjetaSuscripcion(
-    estado: Suscripcion.Estado,
-    oferta: Suscripcion.Oferta?,
+private fun TarjetaDeEstado(
+    estado: EstadoGeneral,
+    faltantes: List<EstadoDePermiso>,
+    onResolverPermiso: (EstadoDePermiso) -> Unit,
     onSuscribirse: () -> Unit,
-    onGestionar: () -> Unit
+    onCrearRegla: () -> Unit,
+    onProbarAhora: () -> Unit,
+    onProbarDespues: () -> Unit
 ) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            if (estado == Suscripcion.Estado.ACTIVA) {
-                Text(stringResource(R.string.sub_active), fontWeight = FontWeight.Bold)
-                Text(
-                    text = stringResource(R.string.sub_active_body),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                TextButton(onClick = onGestionar) { Text(stringResource(R.string.sub_manage)) }
-                return@Column
-            }
+    val error = MaterialTheme.colorScheme.error
+    val verde = MaterialTheme.colorScheme.primary
+    val (color, titulo, detalle) = when (estado) {
+        EstadoGeneral.BLOQUEADA -> Triple(error, R.string.status_blocked_title, R.string.status_blocked_body)
+        EstadoGeneral.VENCIDA -> Triple(error, R.string.status_expired_title, R.string.status_expired_body)
+        EstadoGeneral.SIN_REGLAS -> Triple(error, R.string.status_no_rules_title, R.string.status_no_rules_body)
+        EstadoGeneral.SIN_SUSCRIPCION -> Triple(verde, R.string.status_no_sub_title, R.string.status_no_sub_body)
+        EstadoGeneral.LIMITADA -> Triple(verde, R.string.status_limited_title, R.string.status_limited_body)
+        EstadoGeneral.LISTA -> Triple(verde, R.string.status_ready_title, R.string.status_ready_body)
+    }
 
-            if (oferta == null) {
-                Text(
-                    text = stringResource(R.string.sub_unavailable),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                return@Column
-            }
+    // El permiso a resolver: primero los imprescindibles.
+    val aResolver = faltantes.firstOrNull { it.imprescindible } ?: faltantes.firstOrNull()
 
-            val dias = oferta.diasGratis
-            Text(
-                text = if (dias != null) {
-                    stringResource(R.string.sub_trial_terms, dias, oferta.precioAnual)
-                } else {
-                    stringResource(R.string.sub_terms, oferta.precioAnual)
-                },
-                style = MaterialTheme.typography.bodyMedium
-            )
-            Button(
-                onClick = onSuscribirse,
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(14.dp)
-            ) {
-                Text(
-                    text = when {
-                        estado == Suscripcion.Estado.VENCIDA -> stringResource(R.string.sub_renew)
-                        dias != null -> stringResource(R.string.sub_start_trial, dias)
-                        else -> stringResource(R.string.sub_subscribe)
-                    },
-                    fontWeight = FontWeight.Bold
-                )
-            }
+    Tarjeta(color = color.copy(alpha = 0.09f)) {
+        Text(stringResource(titulo), fontWeight = FontWeight.Bold, color = color, fontSize = 19.sp)
+        Text(stringResource(detalle), color = MaterialTheme.colorScheme.onSurface)
+        if (aResolver != null && (estado == EstadoGeneral.BLOQUEADA || estado == EstadoGeneral.LIMITADA)) {
+            Ayuda(stringResource(aResolver.titulo) + " — " + stringResource(aResolver.explicacion))
         }
-    }
-}
 
-@Composable
-private fun FilaDePermiso(permiso: EstadoDePermiso, onResolver: () -> Unit) {
-    val color = when {
-        permiso.concedido -> MaterialTheme.colorScheme.primary
-        permiso.imprescindible -> MaterialTheme.colorScheme.error
-        else -> MaterialTheme.colorScheme.onSurfaceVariant
-    }
+        val accion: Pair<Int, () -> Unit>? = when (estado) {
+            EstadoGeneral.BLOQUEADA, EstadoGeneral.LIMITADA ->
+                aResolver?.let { R.string.action_enable_permission to { onResolverPermiso(it) } }
+            EstadoGeneral.VENCIDA -> R.string.sub_renew to onSuscribirse
+            EstadoGeneral.SIN_REGLAS -> R.string.action_create_first_rule to onCrearRegla
+            EstadoGeneral.SIN_SUSCRIPCION -> R.string.action_start_free_month to onSuscribirse
+            EstadoGeneral.LISTA -> null
+        }
 
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(14.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(14.dp),
-            verticalAlignment = Alignment.CenterVertically
+        Column(
+            modifier = Modifier.padding(top = 6.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Box(
-                modifier = Modifier
-                    .size(24.dp)
-                    .background(color.copy(alpha = if (permiso.concedido) 1f else 0.18f), CircleShape),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = if (permiso.concedido) "✓" else "!",
-                    color = if (permiso.concedido) Color.White else color,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 14.sp
-                )
+            if (accion != null) {
+                Button(
+                    onClick = accion.second,
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(14.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = color)
+                ) { Text(stringResource(accion.first), fontWeight = FontWeight.Bold) }
             }
-
-            Column(modifier = Modifier.weight(1f).padding(start = 12.dp)) {
-                Text(stringResource(permiso.titulo), fontWeight = FontWeight.Medium)
-                if (!permiso.concedido) {
-                    Text(
-                        text = stringResource(permiso.explicacion),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
+            // Probar siempre esta a mano: sin probarla, nadie confia en una alarma.
+            if (accion == null) {
+                Button(
+                    onClick = onProbarAhora,
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(14.dp)
+                ) { Text(stringResource(R.string.action_test_alarm), fontWeight = FontWeight.Bold) }
+            } else {
+                OutlinedButton(
+                    onClick = onProbarAhora,
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(14.dp)
+                ) { Text(stringResource(R.string.action_test_alarm)) }
             }
-
-            if (!permiso.concedido && permiso.intent != null) {
-                TextButton(onClick = onResolver) { Text(stringResource(R.string.action_enable)) }
+            TextButton(onClick = onProbarDespues, modifier = Modifier.fillMaxWidth()) {
+                Text(stringResource(R.string.action_test_alarm_later))
             }
+            Ayuda(stringResource(R.string.test_alarm_later_hint))
         }
     }
 }
@@ -383,208 +334,178 @@ private fun FilaDeRegla(
     onEditar: () -> Unit,
     onBorrar: () -> Unit
 ) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(14.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = regla.nombre,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.weight(1f)
-                )
-                Switch(checked = regla.activa, onCheckedChange = onCambiarActiva)
-            }
-
-            // Frases completas por caso: armarlas concatenando se rompe al traducir.
-            val descripcion = when {
-                regla.remitente.isNotBlank() && regla.palabraClave.isNotBlank() ->
-                    stringResource(R.string.rule_when_both, regla.remitente, regla.palabraClave)
-                regla.remitente.isNotBlank() ->
-                    stringResource(R.string.rule_when_sender, regla.remitente)
-                else ->
-                    stringResource(R.string.rule_when_keyword, regla.palabraClave)
-            }
+    Tarjeta {
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
             Text(
-                text = descripcion,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                text = regla.nombre,
+                fontWeight = FontWeight.Bold,
+                fontSize = 17.sp,
+                modifier = Modifier.weight(1f)
             )
+            Switch(checked = regla.activa, onCheckedChange = onCambiarActiva)
+        }
 
-            if (avisoDeDireccion) {
-                Text(
-                    text = stringResource(R.string.rule_address_warning),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.error,
-                    modifier = Modifier.padding(top = 6.dp)
-                )
-            }
+        // Frases completas por caso: armarlas concatenando se rompe al traducir.
+        val descripcion = when {
+            regla.remitente.isNotBlank() && regla.palabraClave.isNotBlank() ->
+                stringResource(R.string.rule_when_both, regla.remitente, regla.palabraClave)
+            regla.remitente.isNotBlank() -> stringResource(R.string.rule_when_sender, regla.remitente)
+            else -> stringResource(R.string.rule_when_keyword, regla.palabraClave)
+        }
+        Text(descripcion, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        if (regla.sonido != null) {
+            Ayuda(stringResource(R.string.rule_sound, nombreDelSonido(regla.sonido)))
+        }
 
-            Row(modifier = Modifier.padding(top = 4.dp)) {
-                TextButton(onClick = onEditar) { Text(stringResource(R.string.action_edit)) }
-                TextButton(onClick = onBorrar) {
-                    Text(stringResource(R.string.action_delete), color = MaterialTheme.colorScheme.error)
-                }
+        if (avisoDeDireccion) {
+            Text(
+                text = stringResource(R.string.rule_address_warning),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.error
+            )
+        }
+
+        Row {
+            TextButton(onClick = onEditar) { Text(stringResource(R.string.action_edit)) }
+            TextButton(onClick = onBorrar) {
+                Text(stringResource(R.string.action_delete), color = MaterialTheme.colorScheme.error)
             }
         }
     }
 }
 
+/** "14:32 · Gmail", el remitente, el asunto, y que decidio la app. */
 @Composable
-private fun DialogoDeRegla(
-    reglaInicial: Regla?,
-    onCancelar: () -> Unit,
-    onConfirmar: (Regla) -> Unit
-) {
-    var nombre by remember { mutableStateOf(reglaInicial?.nombre ?: "") }
-    var remitente by remember { mutableStateOf(reglaInicial?.remitente ?: "") }
-    var palabraClave by remember { mutableStateOf(reglaInicial?.palabraClave ?: "") }
+private fun FilaDeDeteccion(d: Deteccion) {
+    val ahora = System.currentTimeMillis()
+    val cuando = DateUtils.formatSameDayTime(
+        d.hora, ahora, java.text.DateFormat.SHORT, java.text.DateFormat.SHORT
+    ).toString()
 
-    val hayCondicion = remitente.isNotBlank() || palabraClave.isNotBlank()
+    val resultado = runCatching { Resultado.valueOf(d.resultado) }.getOrDefault(Resultado.SIN_COINCIDENCIA)
+    val (texto, color) = when (resultado) {
+        Resultado.SONO ->
+            stringResource(R.string.history_rang, d.regla.orEmpty()) to MaterialTheme.colorScheme.primary
+        Resultado.SIN_COINCIDENCIA ->
+            stringResource(R.string.history_no_match) to MaterialTheme.colorScheme.onSurfaceVariant
+        Resultado.SIN_SUSCRIPCION ->
+            stringResource(R.string.history_no_sub, d.regla.orEmpty()) to MaterialTheme.colorScheme.error
+        Resultado.AVISO_CUENTA ->
+            stringResource(R.string.history_account) to MaterialTheme.colorScheme.error
+    }
 
-    AlertDialog(
-        onDismissRequest = onCancelar,
-        shape = RoundedCornerShape(20.dp),
-        title = {
-            Text(
-                stringResource(
-                    if (reglaInicial == null) R.string.dialog_new_rule
-                    else R.string.dialog_edit_rule
-                )
-            )
-        },
-        text = {
-            // Con el consejo de spam el dialogo se alarga: en pantallas chicas
-            // tiene que poder desplazarse para no esconder el boton Guardar.
-            Column(
-                modifier = Modifier.verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                OutlinedTextField(
-                    value = nombre,
-                    onValueChange = { nombre = it },
-                    label = { Text(stringResource(R.string.field_name)) },
-                    placeholder = { Text(stringResource(R.string.field_name_hint)) },
-                    singleLine = true
-                )
-                OutlinedTextField(
-                    value = remitente,
-                    onValueChange = { remitente = it },
-                    label = { Text(stringResource(R.string.field_sender)) },
-                    placeholder = { Text(stringResource(R.string.field_sender_hint)) },
-                    singleLine = true
-                )
-                OutlinedTextField(
-                    value = palabraClave,
-                    onValueChange = { palabraClave = it },
-                    label = { Text(stringResource(R.string.field_keyword)) },
-                    placeholder = { Text(stringResource(R.string.field_keyword_hint)) },
-                    singleLine = true
-                )
-                Text(
-                    text = stringResource(
-                        if (remitente.isNotBlank() && palabraClave.isNotBlank()) {
-                            R.string.dialog_hint_both
-                        } else {
-                            R.string.dialog_hint_one
-                        }
-                    ),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = if (hayCondicion) {
-                        MaterialTheme.colorScheme.onSurfaceVariant
-                    } else {
-                        MaterialTheme.colorScheme.error
-                    }
-                )
-                // Las reglas por palabra clave son para remitentes desconocidos
-                // (un tramite, un organismo), que son justo los que mas caen en spam.
-                if (palabraClave.isNotBlank()) {
-                    ConsejoSpam(palabraClave.trim())
-                }
-            }
-        },
-        confirmButton = {
-            TextButton(
-                enabled = hayCondicion,
-                onClick = {
-                    onConfirmar(
-                        Regla(
-                            id = reglaInicial?.id ?: 0,
-                            nombre = nombre.trim()
-                                .ifBlank { remitente.trim().ifBlank { palabraClave.trim() } },
-                            remitente = remitente.trim(),
-                            palabraClave = palabraClave.trim(),
-                            activa = reglaInicial?.activa ?: true
-                        )
-                    )
-                }
-            ) { Text(stringResource(R.string.action_save)) }
-        },
-        dismissButton = {
-            TextButton(onClick = onCancelar) { Text(stringResource(R.string.action_cancel)) }
-        }
-    )
-}
-
-/**
- * Si el correo cae en spam, la app de correo no notifica y la alarma no se
- * entera: es un falso negativo silencioso. Un filtro de Gmail con
- * "Nunca enviar a spam" lo evita aunque no se sepa el remitente.
- */
-@Composable
-private fun ConsejoSpam(palabra: String) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.primaryContainer, RoundedCornerShape(12.dp))
-            .padding(12.dp),
-        verticalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
+    Column(Modifier.padding(vertical = 4.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
         Text(
-            text = stringResource(R.string.tip_spam_title),
-            style = MaterialTheme.typography.labelLarge,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onPrimaryContainer
+            "$cuando · ${d.app}",
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
+        Text(d.remitente, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis)
         Text(
-            text = stringResource(R.string.tip_spam_body, palabra),
+            d.asunto,
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onPrimaryContainer
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+        Text(texto, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold, color = color)
+    }
+}
+
+@Composable
+private fun FilaDePermiso(permiso: EstadoDePermiso, onResolver: () -> Unit) {
+    val color = when {
+        permiso.concedido -> MaterialTheme.colorScheme.primary
+        permiso.imprescindible -> MaterialTheme.colorScheme.error
+        else -> MaterialTheme.colorScheme.onSurfaceVariant
+    }
+
+    Tarjeta {
+        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Box(
+                modifier = Modifier
+                    .size(26.dp)
+                    .background(color.copy(alpha = if (permiso.concedido) 1f else 0.16f), CircleShape),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = if (permiso.concedido) "✓" else "!",
+                    color = if (permiso.concedido) Color.White else color,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp
+                )
+            }
+            Column(modifier = Modifier.weight(1f).padding(start = 14.dp)) {
+                Text(stringResource(permiso.titulo), fontWeight = FontWeight.Medium)
+                if (!permiso.concedido) Ayuda(stringResource(permiso.explicacion))
+            }
+            if (!permiso.concedido && permiso.intent != null) {
+                TextButton(onClick = onResolver) { Text(stringResource(R.string.action_enable)) }
+            }
+        }
+    }
+}
+
+// --- Piezas compartidas con el dialogo y los ajustes ---
+
+/** Tarjeta con aire adentro y sin borde: el contenido separa, no las lineas. */
+@Composable
+internal fun Tarjeta(
+    modifier: Modifier = Modifier,
+    color: Color = MaterialTheme.colorScheme.surface,
+    contenido: @Composable ColumnScope.() -> Unit
+) {
+    Card(
+        modifier = modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = color),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            content = contenido
         )
     }
 }
 
 @Composable
-private fun Titulo(texto: String) {
-    Text(
-        text = texto.uppercase(),
-        style = MaterialTheme.typography.labelMedium,
-        fontWeight = FontWeight.Bold,
-        letterSpacing = 1.2.sp,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-        modifier = Modifier.padding(top = 14.dp, bottom = 2.dp)
-    )
-}
-
-@Composable
-private fun Ayuda(texto: String) {
+internal fun Titulo(texto: String, modifier: Modifier = Modifier) {
     Text(
         text = texto,
-        style = MaterialTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.onSurfaceVariant
+        style = MaterialTheme.typography.titleMedium,
+        fontWeight = FontWeight.Bold,
+        color = MaterialTheme.colorScheme.onBackground,
+        modifier = modifier
+    )
+}
+
+/** Texto de ayuda: siempre gris. El rojo queda solo para errores. */
+@Composable
+internal fun Ayuda(texto: String, modifier: Modifier = Modifier) {
+    Text(
+        text = texto,
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = modifier
+    )
+}
+
+@Composable
+private fun Separador() {
+    Box(
+        Modifier
+            .fillMaxWidth()
+            .padding(vertical = 6.dp)
+            .size(height = 1.dp, width = 0.dp)
+            .background(MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
     )
 }
 
 /**
- * Una regla que busca una direccion solo puede funcionar en apps que la publiquen.
- * Si el usuario escucha alguna que no lo hace, conviene avisarle antes de que
- * se pierda un correo creyendo que estaba cubierto.
+ * Una regla que busca una direccion puede fallar en apps que solo publican el
+ * nombre (si el nombre no se parece a la parte antes de la @). Se avisa antes
+ * de que la persona se pierda un correo creyendo que estaba cubierta.
  */
 private fun necesitaAvisoDeDireccion(
     regla: Regla,

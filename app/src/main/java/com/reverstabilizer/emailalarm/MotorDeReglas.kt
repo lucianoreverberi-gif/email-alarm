@@ -91,12 +91,41 @@ object MotorDeReglas {
         // Alcanza con que se cumpla una. Perderse un correo es peor que sonar
         // de mas, asi que ante la duda la regla dispara.
         val remitenteCoincide = buscaRemitente &&
-            correo.textoDelRemitente().contains(regla.remitente, ignoreCase = true)
+            coincideRemitente(regla.remitente, correo.textoDelRemitente())
         val palabraCoincide = buscaPalabra &&
-            correo.textoDelContenido().contains(regla.palabraClave, ignoreCase = true)
+            normalizar(correo.textoDelContenido()).contains(normalizar(regla.palabraClave.trim()))
 
         return remitenteCoincide || palabraCoincide
     }
+
+    /**
+     * Coincidencia parcial, sin mayusculas ni tildes. Si lo buscado es una
+     * direccion y la app de correo solo publica el nombre (Gmail a veces,
+     * Outlook siempre), tambien prueba con lo que va antes de la @:
+     * "lucianoreverberi@hotmail.com" coincide con "Luciano Reverberi".
+     */
+    internal fun coincideRemitente(buscado: String, textoDelRemitente: String): Boolean {
+        val texto = normalizar(textoDelRemitente)
+        val b = normalizar(buscado.trim())
+        if (texto.contains(b)) return true
+
+        val arroba = b.indexOf('@')
+        if (arroba <= 0) return false
+        val local = compacto(b.substring(0, arroba))
+        if (local.length < 4 || local in LOCALES_GENERICOS) return false
+        return compacto(texto).contains(local)
+    }
+
+    /**
+     * Partes de direccion tan comunes que usarlas haria sonar la alarma con
+     * cualquier remitente. Van compactadas (sin puntos ni guiones).
+     */
+    private val LOCALES_GENERICOS = setOf(
+        "info", "noreply", "donotreply", "contact", "contacto", "support", "soporte",
+        "admin", "hello", "hola", "mail", "email", "notification", "notifications",
+        "notificaciones", "team", "news", "newsletter", "alerts", "alertas",
+        "service", "servicio", "billing", "ventas", "sales"
+    )
 
     /** Gmail deja la direccion del remitente aca, como "mailto:alguien@dominio". */
     private fun direccionesDe(extras: Bundle): List<String> {
@@ -118,3 +147,13 @@ object MotorDeReglas {
         return (desdePersonas + desdeArray).filter { it.isNotBlank() }
     }
 }
+
+
+/** Minusculas y sin tildes: "Migración" y "migracion" son lo mismo. */
+internal fun normalizar(texto: String): String =
+    java.text.Normalizer.normalize(texto, java.text.Normalizer.Form.NFD)
+        .replace(Regex("\\p{Mn}+"), "")
+        .lowercase()
+
+/** Normalizado y solo letras y numeros: "Juan Pérez" y "juan.perez" dan igual. */
+internal fun compacto(texto: String): String = normalizar(texto).filter { it.isLetterOrDigit() }

@@ -7,6 +7,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 
+// El asunto de Outlook trae tambien la vista previa del cuerpo: se recorta
+// para el historial, que solo necesita reconocer el correo.
+private const val LARGO_ASUNTO_HISTORIAL = 140
 
 class MailListener : NotificationListenerService() {
 
@@ -27,14 +30,16 @@ class MailListener : NotificationListenerService() {
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         if (sbn.packageName !in Ajustes.appsEscuchadas(this)) return
+        val app = AppsDeCorreo.porPaquete(sbn.packageName)?.nombre ?: sbn.packageName
 
         MotorDeReglas.avisoDeSincronizacion(sbn)?.let { aviso ->
             Registro.w("CUENTA CON PROBLEMA DE SINCRONIZACION -> $aviso")
+            // Tambien al historial: una cuenta caida explica un "no sono".
+            scope.launch { registrar(app, app, aviso, Resultado.AVISO_CUENTA, null) }
             return
         }
 
         val correo = MotorDeReglas.leerCorreo(sbn) ?: return
-        val app = AppsDeCorreo.porPaquete(correo.paquete)?.nombre ?: correo.paquete
 
         scope.launch {
             val reglas = BaseDeDatos.obtener(this@MailListener).reglaDao().activas()
@@ -43,6 +48,7 @@ class MailListener : NotificationListenerService() {
             if (regla == null) {
                 Registro.d("[$app] IGNORADO -> DE: ${correo.remitente} | ASUNTO: ${correo.asunto}")
                 Registro.d("   remitente: ${correo.textoDelRemitente()}")
+                registrar(app, correo.remitente, correo.asunto, Resultado.SIN_COINCIDENCIA, null)
                 return@launch
             }
 
@@ -54,11 +60,35 @@ class MailListener : NotificationListenerService() {
                 Suscripcion.verificar(this@MailListener)
             if (!activa) {
                 Registro.d("   sin suscripcion activa: no suena, se avisa")
+                registrar(app, correo.remitente, correo.asunto, Resultado.SIN_SUSCRIPCION, regla.nombre)
                 AvisoSuscripcion.correoSinAlarma(this@MailListener, correo.remitente)
                 return@launch
             }
 
-            Alarma.disparar(this@MailListener, correo.remitente, correo.asunto)
+            // Primero suena, despues se anota: el historial nunca demora la alarma.
+            Alarma.disparar(this@MailListener, correo.remitente, correo.asunto, regla.sonido)
+            registrar(app, correo.remitente, correo.asunto, Resultado.SONO, regla.nombre)
         }
+    }
+
+    private suspend fun registrar(
+        app: String,
+        remitente: String,
+        asunto: String,
+        resultado: Resultado,
+        regla: String?
+    ) {
+        val dao = BaseDeDatos.obtener(this).deteccionDao()
+        dao.guardar(
+            Deteccion(
+                hora = System.currentTimeMillis(),
+                app = app,
+                remitente = remitente,
+                asunto = asunto.take(LARGO_ASUNTO_HISTORIAL),
+                resultado = resultado.name,
+                regla = regla
+            )
+        )
+        dao.recortar()
     }
 }
