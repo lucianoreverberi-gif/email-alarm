@@ -1,0 +1,62 @@
+<resources>
+    <string name="app_name">Email Alarm</string>
+    <string name="tagline">El correo que no te podés perder</string>
+
+    <string name="section_permissions">Permisos</string>
+    <string name="section_apps">Apps que escucho</string>
+    <string name="section_rules">Reglas</string>
+
+    <string name="status_blocked_title">La alarma no puede sonar</string>
+    <string name="status_blocked_body">Falta un permiso imprescindible.</string>
+    <string name="status_no_rules_title">No hay ninguna regla activa</string>
+    <string name="status_no_rules_body">La app está escuchando, pero nada la hace sonar.</string>
+    <string name="status_limited_title">Funcionando, con limitaciones</string>
+    <string name="status_limited_body">Falta algún permiso opcional: revisalos abajo.</string>
+    <string name="status_ready_title">Todo listo</string>
+    <string name="status_ready_body">La alarma va a sonar aunque el teléfono esté bloqueado.</string>
+
+    <string name="action_enable">Activar</string>
+    <string name="action_edit">Editar</string>
+    <string name="action_delete">Borrar</string>
+    <string name="action_save">Guardar</string>
+    <string name="action_cancel">Cancelar</string>
+    <string name="action_new_rule">Nueva regla</string>
+    <string name="action_stop_alarm">Detener alarma</string>
+    <string name="action_stop">DETENER</string>
+
+    <string name="apps_none">No encontré apps de correo conocidas en este teléfono.</string>
+    <string name="app_no_address">solo publica el nombre del remitente, no la dirección</string>
+
+    <string name="rules_empty">Todavía no hay ninguna regla. Sin reglas la alarma no suena nunca. Creá una con el remitente que esperás, o con una palabra que sepas que va a estar en el asunto.</string>
+
+    <string name="rule_when_sender">Suena si viene de \"%1$s\"</string>
+    <string name="rule_when_keyword">Suena si dice \"%1$s\"</string>
+    <string name="rule_when_both">Suena si viene de \"%1$s\" o dice \"%2$s\"</string>
+    <string name="rule_address_warning">Esta regla busca una dirección de correo. Las apps que tenés activadas además de Gmail solo publican el nombre del remitente, así que ahí esa condición no va a coincidir nunca.</string>
+
+    <string name="dialog_new_rule">Nueva regla</string>
+    <string name="dialog_edit_rule">Editar regla</string>
+    <string name="field_name">Nombre</string>
+    <string name="field_name_hint">Turnos del restaurante</string>
+    <string name="field_sender">Remitente</string>
+    <string name="field_sender_hint">turnos@empresa.com</string>
+    <string name="field_keyword">Palabra clave</string>
+    <string name="field_keyword_hint">turno</string>
+    <string name="dialog_hint_both">Va a sonar si se cumple cualquiera de las dos.</string>
+    <string name="dialog_hint_one">Con una de las dos alcanza. La palabra clave se busca en el asunto y en el resumen del cuerpo.</string>
+
+    <string name="perm_listener_title">Leer notificaciones</string>
+    <string name="perm_listener_body">Es como la app se entera de que llegó un correo. Sin esto no funciona nada.</string>
+    <string name="perm_post_title">Mostrar notificaciones</string>
+    <string name="perm_post_body">Necesario para que aparezca la alarma y el botón DETENER.</string>
+    <string name="perm_fullscreen_title">Alarma a pantalla completa</string>
+    <string name="perm_fullscreen_body">Deja que la alarma tome la pantalla aunque el teléfono esté bloqueado.</string>
+    <string name="perm_dnd_title">Atravesar No Molestar</string>
+    <string name="perm_dnd_body">Sin esto, con No Molestar activado la alarma no suena.</string>
+    <string name="perm_battery_title">Sin optimización de batería</string>
+    <string name="perm_battery_body">Evita que el sistema duerma la app y se pierdan correos.</string>
+
+    <string name="alarm_banner">CORREO IMPORTANTE</string>
+    <string name="channel_name">Alarma de correo</string>
+    <string name="channel_description">Suena cuando llega un correo que coincide con una regla</string>
+</resources>

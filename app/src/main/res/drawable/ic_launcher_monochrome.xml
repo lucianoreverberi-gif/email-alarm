@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generado por play/generar_iconos.py. No editar a mano: editar el script. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54.00,43.22 C61.88,43.22 66.60,49.00 66.60,56.88 L66.60,62.65 C66.60,64.22 67.65,65.80 69.22,66.85 L70.80,67.90 C71.85,68.64 71.33,70.00 70.06,70.00 L37.94,70.00 C36.67,70.00 36.15,68.64 37.20,67.90 L38.77,66.85 C40.35,65.80 41.40,64.22 41.40,62.65 L41.40,56.88 C41.40,49.00 46.12,43.22 54.00,43.22 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M50.64,41.12 a3.36,3.36 0 1,0 6.72,0 a3.36,3.36 0 1,0 -6.72,0 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M49.3,72.1 A4.7,4.7 0 0 0 58.7,72.1 Z" />
+</vector>

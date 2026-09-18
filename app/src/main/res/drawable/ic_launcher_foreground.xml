@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generado por play/generar_iconos.py. No editar a mano: editar el script. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Sobre -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M36,37 L72,37 A5,5 0 0 1 77,42 L77,66 A5,5 0 0 1 72,71 L36,71 A5,5 0 0 1 31,66 L31,42 A5,5 0 0 1 36,37 Z" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M34,40 L54,55.5 L74,40" />
+    <!-- Halo del color del fondo: despega la campana de las lineas del sobre -->
+    <path
+        android:fillColor="#17A05A"
+        android:strokeColor="#17A05A"
+        android:strokeWidth="6"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M54.00,46.59 C59.48,46.59 62.76,50.60 62.76,56.08 L62.76,60.09 C62.76,61.19 63.49,62.28 64.58,63.01 L65.68,63.74 C66.41,64.25 66.05,65.20 65.17,65.20 L42.83,65.20 C41.95,65.20 41.59,64.25 42.32,63.74 L43.41,63.01 C44.51,62.28 45.24,61.19 45.24,60.09 L45.24,56.08 C45.24,50.60 48.52,46.59 54.00,46.59 Z" />
+    <path
+        android:fillColor="#17A05A"
+        android:strokeColor="#17A05A"
+        android:strokeWidth="6"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M51.66,45.12 a2.34,2.34 0 1,0 4.67,0 a2.34,2.34 0 1,0 -4.67,0 Z" />
+    <path
+        android:fillColor="#17A05A"
+        android:strokeColor="#17A05A"
+        android:strokeWidth="6"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M51.00,71.00 a3.00,3.00 0 1,0 6.00,0 a3.00,3.00 0 1,0 -6.00,0 Z" />
+    <!-- Campana -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54.00,46.59 C59.48,46.59 62.76,50.60 62.76,56.08 L62.76,60.09 C62.76,61.19 63.49,62.28 64.58,63.01 L65.68,63.74 C66.41,64.25 66.05,65.20 65.17,65.20 L42.83,65.20 C41.95,65.20 41.59,64.25 42.32,63.74 L43.41,63.01 C44.51,62.28 45.24,61.19 45.24,60.09 L45.24,56.08 C45.24,50.60 48.52,46.59 54.00,46.59 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M51.66,45.12 a2.34,2.34 0 1,0 4.67,0 a2.34,2.34 0 1,0 -4.67,0 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M51.00,71.00 a3.00,3.00 0 1,0 6.00,0 a3.00,3.00 0 1,0 -6.00,0 Z" />
+</vector>

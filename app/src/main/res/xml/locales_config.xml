@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Declara los idiomas que la app soporta. Desde Android 13 esto habilita el
+  selector "Idioma de la app" en los ajustes del sistema, para que alguien
+  pueda usar la app en un idioma distinto al del telefono.
+-->
+<locale-config xmlns:android="http://schemas.android.com/apk/res/android">
+    <locale android:name="en" />
+    <locale android:name="es" />
+</locale-config>

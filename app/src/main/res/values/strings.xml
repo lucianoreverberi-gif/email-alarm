@@ -1,0 +1,63 @@
+<resources>
+    <string name="app_name">Email Alarm</string>
+    <string name="tagline">The email you can\'t afford to miss</string>
+
+    <string name="section_permissions">Permissions</string>
+    <string name="section_apps">Apps I listen to</string>
+    <string name="section_rules">Rules</string>
+
+    <string name="status_blocked_title">The alarm can\'t ring</string>
+    <string name="status_blocked_body">A required permission is missing.</string>
+    <string name="status_no_rules_title">No active rules</string>
+    <string name="status_no_rules_body">The app is listening, but nothing will make it ring.</string>
+    <string name="status_limited_title">Working, with limitations</string>
+    <string name="status_limited_body">An optional permission is missing — check below.</string>
+    <string name="status_ready_title">All set</string>
+    <string name="status_ready_body">The alarm will ring even if the phone is locked.</string>
+
+    <string name="action_enable">Enable</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_save">Save</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_new_rule">New rule</string>
+    <string name="action_stop_alarm">Stop alarm</string>
+    <string name="action_stop">STOP</string>
+
+    <string name="apps_none">I couldn\'t find any known email apps on this phone.</string>
+    <string name="app_no_address">only publishes the sender\'s name, not the address</string>
+
+    <string name="rules_empty">No rules yet. Without rules the alarm never rings. Create one with the sender you\'re expecting, or a word you know will be in the subject.</string>
+
+    <!-- Frases completas, no armadas por partes: en otros idiomas el orden cambia. -->
+    <string name="rule_when_sender">Rings when it comes from \"%1$s\"</string>
+    <string name="rule_when_keyword">Rings when it says \"%1$s\"</string>
+    <string name="rule_when_both">Rings when it comes from \"%1$s\" or says \"%2$s\"</string>
+    <string name="rule_address_warning">This rule looks for an email address. The apps you have enabled besides Gmail only publish the sender\'s name, so that condition will never match there.</string>
+
+    <string name="dialog_new_rule">New rule</string>
+    <string name="dialog_edit_rule">Edit rule</string>
+    <string name="field_name">Name</string>
+    <string name="field_name_hint">Restaurant shifts</string>
+    <string name="field_sender">Sender</string>
+    <string name="field_sender_hint">shifts@company.com</string>
+    <string name="field_keyword">Keyword</string>
+    <string name="field_keyword_hint">shift</string>
+    <string name="dialog_hint_both">It will ring if either one matches.</string>
+    <string name="dialog_hint_one">One of the two is enough. The keyword is searched in the subject and in the body preview.</string>
+
+    <string name="perm_listener_title">Read notifications</string>
+    <string name="perm_listener_body">This is how the app finds out an email arrived. Nothing works without it.</string>
+    <string name="perm_post_title">Show notifications</string>
+    <string name="perm_post_body">Needed to show the alarm and the STOP button.</string>
+    <string name="perm_fullscreen_title">Full-screen alarm</string>
+    <string name="perm_fullscreen_body">Lets the alarm take over the screen even when the phone is locked.</string>
+    <string name="perm_dnd_title">Override Do Not Disturb</string>
+    <string name="perm_dnd_body">Without this, the alarm stays silent while Do Not Disturb is on.</string>
+    <string name="perm_battery_title">Ignore battery optimization</string>
+    <string name="perm_battery_body">Stops the system from putting the app to sleep and missing emails.</string>
+
+    <string name="alarm_banner">IMPORTANT EMAIL</string>
+    <string name="channel_name">Email alarm</string>
+    <string name="channel_description">Rings when an email matches one of your rules</string>
+</resources>

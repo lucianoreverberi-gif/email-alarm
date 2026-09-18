@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!--
+      Desde Android 11 una app no ve que otras apps hay instaladas, salvo las que
+      declara aca. Sin esto la app cree que no hay ninguna app de correo y no
+      escucha a nadie. Tiene que coincidir con la lista de AppsDeCorreo.kt.
+      No se usa QUERY_ALL_PACKAGES porque Google Play lo restringe.
+    -->
+    <queries>
+        <package android:name="com.google.android.gm" />
+        <package android:name="com.microsoft.office.outlook" />
+        <package android:name="com.samsung.android.email.provider" />
+        <package android:name="com.yahoo.mobile.client.android.mail" />
+        <package android:name="ch.protonmail.android" />
+        <package android:name="me.bluemail.mail" />
+        <package android:name="com.fsck.k9" />
+    </queries>
+
+    <!--
+      allowBackup en false: las reglas no se suben a Google Drive. Es lo que hace
+      verdadera la politica de privacidad ("nada sale del telefono"). Desde
+      Android 12 esto no bloquea la transferencia directa de telefono a telefono,
+      asi que al cambiar de telefono las reglas se migran igual.
+    -->
+    <application
+        android:allowBackup="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:localeConfig="@xml/locales_config"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Emailalarm">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Emailalarm"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".AlarmaActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:showWhenLocked="true"
+            android:turnScreenOn="true"
+            android:theme="@style/Theme.Emailalarm" />
+
+        <service
+            android:name=".MailListener"
+            android:label="@string/app_name"
+            android:exported="true"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+
+        <receiver
+            android:name=".DetenerAlarmaReceiver"
+            android:exported="false" />
+    </application>
+
+</manifest>
