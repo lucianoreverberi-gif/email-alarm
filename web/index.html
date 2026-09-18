@@ -30,32 +30,98 @@
       <!-- Cuando la app este publicada, reemplazar por el badge oficial de Google Play con el link a la ficha. -->
       <span class="proximamente">Coming soon to Google Play</span>
     </div>
-    <div class="telefono" role="img" aria-label="The Email Alarm alarm screen, showing an email from Shift Scheduler and a Stop button">
-      <div>
-        <div class="etiqueta">IMPORTANT EMAIL</div>
-        <div class="remitente">Shift Scheduler</div>
-        <div class="asunto">Next week's shifts are open — sign up now</div>
+    <div class="marco">
+      <img src="/img/alarma-en.png" width="1080" height="2400" fetchpriority="high"
+           alt="The Email Alarm alarm screen: an email from Shift Scheduler, with a large Stop button">
+    </div>
+  </section>
+
+  <section class="tesis">
+    <div class="contenedor">
+      <div class="aviso-comun" aria-hidden="true">
+        <span class="punto"></span>
+        <div><b>Gmail · now</b><span>Shift Scheduler — Next week's shifts are open…</span></div>
       </div>
-      <div class="detener">STOP</div>
+      <p class="debil">A normal notification is easy to miss.</p>
+      <p class="fuerte">An alarm isn't.</p>
+      <ul class="hechos">
+        <li><svg class="icono" aria-hidden="true"><use href="/icons.svg#i-volume"/></svg>Rings on silent</li>
+        <li><svg class="icono" aria-hidden="true"><use href="/icons.svg#i-lock"/></svg>Takes over the lock screen</li>
+        <li><svg class="icono" aria-hidden="true"><use href="/icons.svg#i-moon"/></svg>Cuts through Do Not Disturb</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="contenedor seccion">
+    <h2>Same email. Two different mornings.</h2>
+    <p class="bajada">The shift sign-up email lands at 9:02. What happens next is up to your phone.</p>
+    <div class="mananas">
+      <div class="manana mala">
+        <div class="manana-titulo">
+          <span class="marca-fin"><svg class="icono" aria-hidden="true"><use href="/icons.svg#i-x"/></svg></span>
+          With a normal notification
+        </div>
+        <div class="pasos">
+          <div><time>9:02</time><p>The email arrives. A small notification, phone in your pocket.</p></div>
+          <div><time>10:15</time><p>Still unseen, buried under other notifications.</p></div>
+          <div><time>11:40</time><p>You open it. The good shifts are gone.</p></div>
+        </div>
+      </div>
+      <div class="manana buena">
+        <div class="manana-titulo">
+          <span class="marca-fin"><svg class="icono" aria-hidden="true"><use href="/icons.svg#i-check"/></svg></span>
+          With Email Alarm
+        </div>
+        <div class="pasos">
+          <div><time>9:02</time><p>The email arrives.</p></div>
+          <div><time>9:02</time><p>Your phone rings like an alarm, full screen.</p></div>
+          <div><time>9:03</time><p>You're signed up. First pick.</p></div>
+        </div>
+      </div>
     </div>
   </section>
 
   <section class="contenedor seccion">
     <h2>For the emails where minutes matter</h2>
-    <p class="bajada">A normal notification is easy to miss. An alarm isn't.</p>
+    <p class="bajada">Some emails can wait. These can't.</p>
     <div class="grilla">
       <div class="tarjeta">
+        <span class="icono-caja"><svg class="icono" aria-hidden="true"><use href="/icons.svg#i-calendar"/></svg></span>
         <h3>First-come shift sign-ups</h3>
         <p>The sign-up link arrives by email, and the best shifts are gone in minutes.</p>
       </div>
       <div class="tarjeta">
+        <span class="icono-caja"><svg class="icono" aria-hidden="true"><use href="/icons.svg#i-document"/></svg></span>
         <h3>The email you're waiting on</h3>
         <p>Immigration, a visa, a job offer. You don't know when it lands or which address it comes from.</p>
       </div>
       <div class="tarjeta">
+        <span class="icono-caja"><svg class="icono" aria-hidden="true"><use href="/icons.svg#i-briefcase"/></svg></span>
         <h3>The customer who decides</h3>
         <p>When the deal is on the table, the first reply wins.</p>
       </div>
+    </div>
+  </section>
+
+  <section class="contenedor seccion">
+    <h2>See it in action</h2>
+    <p class="bajada">Plain words, no settings maze.</p>
+    <div class="galeria">
+      <figure>
+        <div class="marco"><img src="/img/reglas-en.png" width="1080" height="2400" loading="lazy"
+             alt="The rules screen, with rules for restaurant shifts, an immigration appointment and a client"></div>
+        <figcaption><b>Rules in plain words</b><span>Each rule tells you exactly when it rings.</span></figcaption>
+      </figure>
+      <figure>
+        <div class="marco"><img src="/img/consejo-en.png" width="1080" height="2400" loading="lazy"
+             alt="Editing a rule with the keyword USCIS, with a tip on keeping the email out of spam"></div>
+        <figcaption><b>Help where it matters</b><span>Like how to keep an important email out of spam.</span></figcaption>
+      </figure>
+      <figure>
+        <div class="marco"><img src="/img/pantalla-en.png" width="1080" height="2400" loading="lazy"
+             alt="The main screen showing All set, with every permission granted"></div>
+        <figcaption><b>Always know it's ready</b><span>One glance tells you the alarm will ring.</span></figcaption>
+      </figure>
     </div>
   </section>
 
@@ -64,17 +130,20 @@
     <p class="bajada">No account, no sign-in, no setup wizard.</p>
     <div class="grilla">
       <div class="tarjeta">
-        <span class="paso">1</span>
+        <span class="icono-caja"><svg class="icono" aria-hidden="true"><use href="/icons.svg#i-filter"/></svg></span>
+        <div class="paso-num">STEP 1</div>
         <h3>Create a rule</h3>
         <p>A sender, a keyword, or both. If either one matches, it rings.</p>
       </div>
       <div class="tarjeta">
-        <span class="paso">2</span>
+        <span class="icono-caja"><svg class="icono" aria-hidden="true"><use href="/icons.svg#i-mail"/></svg></span>
+        <div class="paso-num">STEP 2</div>
         <h3>It watches your email apps</h3>
         <p>Gmail, Outlook and more — every account you already have on your phone.</p>
       </div>
       <div class="tarjeta">
-        <span class="paso">3</span>
+        <span class="icono-caja"><svg class="icono" aria-hidden="true"><use href="/icons.svg#i-bell"/></svg></span>
+        <div class="paso-num">STEP 3</div>
         <h3>It rings until you stop it</h3>
         <p>Full screen, over the lock screen, through Do Not Disturb.</p>
       </div>
@@ -83,6 +152,7 @@
 
   <section class="contenedor seccion">
     <div class="privacidad">
+      <span class="escudo"><svg class="icono" aria-hidden="true"><use href="/icons.svg#i-shield"/></svg></span>
       <h2>No internet permission. Not a promise — a fact.</h2>
       <p>Email Alarm can't send your data anywhere, because Android doesn't let it use the internet at all. It never logs into your email either: it only reads the notifications your email app already shows. No accounts, no ads, no tracking.</p>
     </div>
@@ -90,14 +160,28 @@
 
   <section class="contenedor seccion">
     <h2>Good to know</h2>
+    <p class="bajada">What it needs to work, stated plainly.</p>
     <ul class="notas">
-      <li><strong>Your email app has to be on the phone</strong>, with notifications on. If an account stops syncing, there's no notification to hear.</li>
-      <li><strong>Emails that land in spam don't create a notification</strong>, so they can't ring either. For senders you don't know yet — an immigration office, a government agency — create a filter on the Gmail website with a word that will be in the email, and check “Never send it to Spam”. It works even if you don't know the address.</li>
-      <li><strong>Outlook and some other apps only show the sender's name</strong>, not the address. For those, use the name or a keyword — the app tells you when a rule can't match.</li>
-      <li><strong>Android only.</strong> iPhone doesn't let one app read another app's notifications, so this approach isn't possible there.</li>
+      <li><span class="icono-caja"><svg class="icono" aria-hidden="true"><use href="/icons.svg#i-mail"/></svg></span>
+        <div><strong>Your email app has to be on the phone</strong>, with notifications on. If an account stops syncing, there's no notification to hear.</div></li>
+      <li><span class="icono-caja"><svg class="icono" aria-hidden="true"><use href="/icons.svg#i-alert"/></svg></span>
+        <div><strong>Emails that land in spam don't create a notification</strong>, so they can't ring either. For senders you don't know yet — an immigration office, a government agency — create a filter on the Gmail website with a word that will be in the email, and check “Never send it to Spam”. It works even if you don't know the address.</div></li>
+      <li><span class="icono-caja"><svg class="icono" aria-hidden="true"><use href="/icons.svg#i-filter"/></svg></span>
+        <div><strong>Outlook and some other apps only show the sender's name</strong>, not the address. For those, use the name or a keyword — the app tells you when a rule can't match.</div></li>
+      <li><span class="icono-caja"><svg class="icono" aria-hidden="true"><use href="/icons.svg#i-phone"/></svg></span>
+        <div><strong>Android only.</strong> iPhone doesn't let one app read another app's notifications, so this approach isn't possible there.</div></li>
     </ul>
   </section>
 </main>
+
+<section class="cierre">
+  <div class="contenedor">
+    <img src="/icon.svg" alt="">
+    <p class="antes">Stop checking your inbox every two minutes.</p>
+    <h2>Relax. Email Alarm will let you know the moment it arrives.</h2>
+    <span class="proximamente">Coming soon to Google Play</span>
+  </div>
+</section>
 
 <footer class="contenedor pie">
   <span>© 2026 Email Alarm</span>
