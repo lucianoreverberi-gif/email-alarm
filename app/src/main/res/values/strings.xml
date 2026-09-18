@@ -37,10 +37,10 @@
     <!-- Barra de arriba: solo cuando una alarma no va a sonar -->
     <string name="alert_permission">Your alarms can\'t ring: \"%1$s\" is missing.</string>
     <string name="alert_expired">Your subscription ended. Your alarms won\'t ring until you renew.</string>
-    <string name="alert_no_sub">Your alarms won\'t ring until you start your free month.</string>
+    <string name="alert_no_sub">Your alarms won\'t ring until you start your free trial.</string>
 
     <string name="action_enable_permission">Enable permission</string>
-    <string name="action_start_free_month">Start free month</string>
+    <string name="action_start_free_month">Start free trial</string>
     <string name="action_create_first_rule">Create my first alarm</string>
     <string name="test_alarm_scheduled">Lock your phone now. The alarm rings in 10 seconds.</string>
     <string name="test_alarm_sender">Email Alarm</string>
@@ -112,8 +112,14 @@
     <string name="sub_active">Subscription active</string>
     <string name="sub_active_body">The alarm is on.</string>
     <string name="sub_none">No subscription</string>
-    <string name="sub_trial_terms">Free for %1$d days, then %2$s per year. Renews automatically. Cancel anytime in Google Play.</string>
-    <string name="sub_terms">%1$s per year. Renews automatically. Cancel anytime in Google Play.</string>
+    <string name="plan_annual">Yearly</string>
+    <string name="plan_monthly">Monthly</string>
+    <string name="plan_price_year">%1$s per year</string>
+    <string name="plan_price_month">%1$s per month</string>
+    <string name="plan_save">Save %1$d%%</string>
+    <string name="plan_trial">%1$d days free</string>
+    <string name="sub_trial_terms">Free for %1$d days, then %2$s. Renews automatically. Cancel anytime in Google Play.</string>
+    <string name="sub_terms">%1$s. Renews automatically. Cancel anytime in Google Play.</string>
     <string name="sub_start_trial">Start %1$d-day free trial</string>
     <string name="sub_subscribe">Subscribe</string>
     <string name="sub_renew">Renew</string>
@@ -133,6 +139,6 @@
     <string name="aviso_vencida_titulo">Your subscription ended</string>
     <string name="aviso_vencida_texto">Email Alarm won\'t ring until you renew. Tap to renew.</string>
     <string name="aviso_correo_titulo">An important email arrived — the alarm didn\'t ring</string>
-    <string name="aviso_correo_nunca">Email from %1$s matched one of your alarms. Start your free month so it rings next time.</string>
+    <string name="aviso_correo_nunca">Email from %1$s matched one of your alarms. Start your free trial so it rings next time.</string>
     <string name="aviso_correo_vencida">Email from %1$s matched one of your alarms, but your subscription ended. Renew so it rings next time.</string>
 </resources>

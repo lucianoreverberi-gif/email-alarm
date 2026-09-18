@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Email Alarm</string>
-    <string name="tagline">El correo que no te podés perder</string>
+    <string name="tagline">El correo que no te puedes perder</string>
 
     <!-- Pantalla principal -->
     <string name="action_settings">Ajustes</string>
@@ -22,7 +22,7 @@
 
     <!-- Probar -->
     <string name="test_title">Probar la alarma</string>
-    <string name="test_body">Escuchala ahora, o tocá \"En 10 s\" y bloqueá el teléfono: es la prueba real.</string>
+    <string name="test_body">Escúchala ahora, o toca \"En 10 s\" y bloquea el teléfono: es la prueba real.</string>
     <string name="test_now">Ahora</string>
     <string name="test_later">En 10 s</string>
 
@@ -31,28 +31,28 @@
     <string name="history_show_less">Ver menos</string>
 
     <!-- Primera alarma -->
-    <string name="empty_alarms_title">Creá tu primera alarma</string>
-    <string name="empty_alarms_body">Decile de quién o qué palabra estás esperando. Cuando llegue ese correo, suena como un despertador, aunque el teléfono esté bloqueado.</string>
+    <string name="empty_alarms_title">Crea tu primera alarma</string>
+    <string name="empty_alarms_body">Dile de quién o qué palabra estás esperando. Cuando llegue ese correo, suena como un despertador, aunque el teléfono esté bloqueado.</string>
 
     <!-- Barra de arriba: solo cuando una alarma no va a sonar -->
-    <string name="alert_permission">Tus alarmas no pueden sonar: falta "%1$s".</string>
+    <string name="alert_permission">Tus alarmas no pueden sonar: falta \"%1$s\".</string>
     <string name="alert_expired">Tu suscripción terminó. Tus alarmas no van a sonar hasta que la renueves.</string>
-    <string name="alert_no_sub">Tus alarmas no van a sonar hasta que empieces tu mes gratis.</string>
+    <string name="alert_no_sub">Tus alarmas no van a sonar hasta que empieces tu prueba gratis.</string>
 
     <string name="action_enable_permission">Activar permiso</string>
-    <string name="action_start_free_month">Empezar mes gratis</string>
+    <string name="action_start_free_month">Empezar prueba gratis</string>
     <string name="action_create_first_rule">Crear mi primera alarma</string>
-    <string name="test_alarm_scheduled">Bloqueá el teléfono ahora. La alarma suena en 10 segundos.</string>
+    <string name="test_alarm_scheduled">Bloquea el teléfono ahora. La alarma suena en 10 segundos.</string>
     <string name="test_alarm_sender">Email Alarm</string>
-    <string name="test_alarm_subject">Esto es una prueba. Si la escuchás, funciona.</string>
+    <string name="test_alarm_subject">Esto es una prueba. Si la escuchas, funciona.</string>
 
     <!-- Reglas -->
     <string name="action_new_rule">Nueva alarma</string>
     <string name="action_delete">Borrar</string>
-    <string name="rule_address_warning">Outlook solo muestra el nombre del remitente y con esta dirección no se puede deducir. Usá el nombre tal como aparece en la notificación.</string>
+    <string name="rule_address_warning">Outlook solo muestra el nombre del remitente y con esta dirección no se puede deducir. Usa el nombre tal como aparece en la notificación.</string>
 
     <!-- Historial -->
-    <string name="history_empty">Todavía no llegó ningún correo desde que se activó la app. Cuando llegue uno, aparece acá aunque no coincida con ninguna alarma.</string>
+    <string name="history_empty">Todavía no llegó ningún correo desde que se activó la app. Cuando llegue uno, aparece aquí aunque no coincida con ninguna alarma.</string>
     <string name="history_hint">Los últimos 20, guardados solo en este teléfono.</string>
     <string name="history_clear">Borrar</string>
     <string name="history_rang">Sonó · %1$s</string>
@@ -88,11 +88,11 @@
     <string name="field_name_help">Solo para que la reconozcas en la lista.</string>
     <string name="field_sender">Viene de</string>
     <string name="field_sender_hint">Ej: rrhh@empresa.com o RRHH</string>
-    <string name="field_sender_help">Nombre o dirección del remitente. Funciona con coincidencia parcial: si escribís \"uscis\" también dispara con \"USCIS Online Account\". Ojo: Gmail suele mostrar el NOMBRE, no la dirección. Si dudás, usá el nombre tal como lo ves en la notificación.</string>
+    <string name="field_sender_help">Nombre o dirección del remitente. Funciona con coincidencia parcial: si escribes \"uscis\" también suena con \"USCIS Online Account\". Importante: Gmail suele mostrar el NOMBRE, no la dirección. Si dudas, usa el nombre tal como lo ves en la notificación.</string>
     <string name="field_keyword">Contiene la palabra</string>
     <string name="field_keyword_hint">Ej: turno disponible</string>
     <string name="field_keyword_help">Se busca en el asunto y en la vista previa del mensaje.</string>
-    <string name="dialog_combination">Completá al menos uno de los dos últimos. Si completás ambos, la alarma suena cuando se cumple cualquiera de los dos.</string>
+    <string name="dialog_combination">Completa al menos uno de los dos últimos. Si completas ambos, la alarma suena cuando se cumple cualquiera de los dos.</string>
     <string name="dialog_missing">Falta el remitente o la palabra clave</string>
     <string name="field_sound">Sonido de la alarma</string>
     <string name="sound_default">Tono de alarma del sistema</string>
@@ -101,7 +101,7 @@
     <string name="action_save">Guardar</string>
     <string name="action_cancel">Cancelar</string>
     <string name="tip_spam_title">Consejo: que no caiga en spam</string>
-    <string name="tip_spam_body">Si este correo cae en spam, tu app de correo no avisa y Email Alarm no suena. En Gmail desde la web (en la app del teléfono no se puede), creá un filtro con la palabra \"%1$s\" y marcá \"Nunca enviar a spam\".</string>
+    <string name="tip_spam_body">Si este correo cae en spam, tu app de correo no avisa y Email Alarm no suena. En Gmail desde la web (en la app del teléfono no se puede), crea un filtro con la palabra \"%1$s\" y marca \"Nunca enviarlo a spam\".</string>
 
     <!-- Ajustes y suscripcion -->
     <string name="settings_title">Ajustes</string>
@@ -110,17 +110,23 @@
     <string name="sub_active">Suscripción activa</string>
     <string name="sub_active_body">La alarma está encendida.</string>
     <string name="sub_none">Sin suscripción</string>
-    <string name="sub_trial_terms">Gratis por %1$d días, después %2$s por año. Se renueva sola. Cancelás cuando quieras desde Google Play.</string>
-    <string name="sub_terms">%1$s por año. Se renueva sola. Cancelás cuando quieras desde Google Play.</string>
+    <string name="plan_annual">Anual</string>
+    <string name="plan_monthly">Mensual</string>
+    <string name="plan_price_year">%1$s por año</string>
+    <string name="plan_price_month">%1$s por mes</string>
+    <string name="plan_save">Ahorra %1$d%%</string>
+    <string name="plan_trial">%1$d días gratis</string>
+    <string name="sub_trial_terms">Gratis por %1$d días, después %2$s. Se renueva sola. Cancela cuando quieras desde Google Play.</string>
+    <string name="sub_terms">%1$s. Se renueva sola. Cancela cuando quieras desde Google Play.</string>
     <string name="sub_start_trial">Empezar %1$d días gratis</string>
     <string name="sub_subscribe">Suscribirme</string>
     <string name="sub_renew">Renovar</string>
     <string name="sub_manage">Gestionar o cancelar suscripción</string>
     <string name="sub_manage_hint">Se abre Google Play</string>
-    <string name="sub_unavailable">No se pudo conectar con Google Play. Revisá la conexión y probá de nuevo.</string>
+    <string name="sub_unavailable">No se pudo conectar con Google Play. Revisa la conexión y vuelve a intentarlo.</string>
     <string name="section_alarm">Alarma</string>
     <string name="action_stop_alarm">Detener alarma</string>
-    <string name="stop_alarm_hint">Por si una alarma sigue sonando y no llegás a su pantalla.</string>
+    <string name="stop_alarm_hint">Por si una alarma sigue sonando y no llegas a su pantalla.</string>
 
     <!-- Pantalla de alarma y notificaciones -->
     <string name="alarm_banner">CORREO IMPORTANTE</string>
@@ -129,8 +135,8 @@
     <string name="channel_description">Suena cuando llega un correo que coincide con una de tus alarmas</string>
     <string name="canal_cuenta">Suscripción</string>
     <string name="aviso_vencida_titulo">Tu suscripción terminó</string>
-    <string name="aviso_vencida_texto">Email Alarm no va a sonar hasta que la renueves. Tocá para renovar.</string>
+    <string name="aviso_vencida_texto">Email Alarm no va a sonar hasta que la renueves. Toca para renovar.</string>
     <string name="aviso_correo_titulo">Llegó un correo importante y la alarma no sonó</string>
-    <string name="aviso_correo_nunca">Un correo de %1$s coincidió con una de tus alarmas. Empezá tu mes gratis para que la próxima vez suene.</string>
-    <string name="aviso_correo_vencida">Un correo de %1$s coincidió con una de tus alarmas, pero tu suscripción terminó. Renovala para que la próxima vez suene.</string>
+    <string name="aviso_correo_nunca">Un correo de %1$s coincidió con una de tus alarmas. Empieza tu prueba gratis para que la próxima vez suene.</string>
+    <string name="aviso_correo_vencida">Un correo de %1$s coincidió con una de tus alarmas, pero tu suscripción terminó. Renuévala para que la próxima vez suene.</string>
 </resources>

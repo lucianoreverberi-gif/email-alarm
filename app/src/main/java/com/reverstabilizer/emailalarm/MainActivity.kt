@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
 
     private val permisos = mutableStateOf<List<EstadoDePermiso>>(emptyList())
     private val appsEscuchadas = mutableStateOf<Set<String>>(emptySet())
-    private val oferta = mutableStateOf<Suscripcion.Oferta?>(null)
+    private val planes = mutableStateOf<List<Suscripcion.Plan>>(emptyList())
 
     private val pedirPermisoNotificaciones =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {
@@ -60,23 +60,17 @@ class MainActivity : ComponentActivity() {
                 // El boton "atras" del telefono vuelve de Ajustes a la principal.
                 BackHandler(enabled = enAjustes) { enAjustes = false }
 
-                // Si Play no pudo dar la oferta, se manda a Ajustes, que explica por que.
-                val suscribirse: () -> Unit = {
-                    val o = oferta.value
-                    if (o != null) {
-                        scope.launch { Suscripcion.comprar(this@MainActivity, o) }
-                    } else {
-                        enAjustes = true
-                    }
-                }
+                // Hay dos planes: suscribirse lleva a Ajustes, donde se elige
+                // (y donde se explica si Play no responde).
+                val suscribirse: () -> Unit = { enAjustes = true }
 
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     if (enAjustes) {
                         PantallaAjustes(
                             suscripcion = suscripcion,
-                            oferta = oferta.value,
+                            planes = planes.value,
                             onVolver = { enAjustes = false },
-                            onSuscribirse = { suscribirse() },
+                            onComprar = { plan -> scope.launch { Suscripcion.comprar(this@MainActivity, plan) } },
                             onGestionarSuscripcion = { Suscripcion.abrirGestion(this@MainActivity) },
                             onDetenerAlarma = { Alarma.detener() },
                             modifier = Modifier.padding(innerPadding)
@@ -135,7 +129,7 @@ class MainActivity : ComponentActivity() {
         // Play, el estado puede haber cambiado.
         lifecycleScope.launch {
             Suscripcion.verificar(this@MainActivity)
-            oferta.value = Suscripcion.oferta(this@MainActivity)
+            planes.value = Suscripcion.planes(this@MainActivity)
         }
     }
 

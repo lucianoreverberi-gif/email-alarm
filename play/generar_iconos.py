@@ -185,7 +185,7 @@ def escribir_play() -> None:
 
     textos = {
         "en": ("Email Alarm", "The email you can&#8217;t afford to miss"),
-        "es": ("Email Alarm", "El correo que no te pod&#233;s perder"),
+        "es": ("Email Alarm", "El correo que no te puedes perder"),
     }
     for idioma, (titulo, bajada) in textos.items():
         grafico = f'''<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="500" viewBox="0 0 1024 500">

@@ -31,10 +31,12 @@ import kotlinx.coroutines.sync.withLock
 import kotlin.coroutines.resume
 
 /**
- * La suscripcion anual, con la prueba gratis que maneja Google Play.
+ * Una suscripcion con dos planes (mensual y anual), cada uno con la prueba
+ * gratis que maneja Google Play.
  *
  * La prueba NO se cuenta en la app: es una oferta configurada en Play Console
- * sobre el plan anual. Google garantiza una sola prueba por cuenta, cosa que
+ * sobre cada plan, para "clientes que nunca tuvieron esta suscripcion". Asi
+ * Google garantiza una sola prueba por cuenta aunque haya dos planes, cosa que
  * sin servidor no podriamos garantizar nosotros.
  *
  * Principio de todo este archivo: si no se puede confirmar el estado (sin red,
@@ -49,12 +51,16 @@ object Suscripcion {
 
     enum class Estado { NUNCA, ACTIVA, VENCIDA }
 
-    /** Lo que se le muestra a la persona para suscribirse, con precios de Play. */
-    data class Oferta(
+    enum class Periodo { ANUAL, MENSUAL }
+
+    /** Un plan para elegir, con los precios que da Play en la moneda del usuario. */
+    data class Plan(
+        val periodo: Periodo,
         val detalles: ProductDetails,
         val token: String,
-        /** Precio anual ya formateado en la moneda del usuario, p. ej. "US$9.99". */
-        val precioAnual: String,
+        /** Precio de cada renovacion ya formateado, p. ej. "US$9.99". */
+        val precio: String,
+        val precioMicros: Long,
         /** Dias de prueba gratis, o null si esta cuenta ya uso su prueba. */
         val diasGratis: Int?
     )
@@ -136,10 +142,14 @@ object Suscripcion {
         return procesar(ctx, resultado.purchasesList)
     }
 
-    /** La oferta a mostrar: la de prueba gratis si esta cuenta todavia puede usarla. */
-    suspend fun oferta(context: Context): Oferta? {
+    /**
+     * Los planes a ofrecer, el anual primero. De cada plan se elige la oferta
+     * con prueba gratis si esta cuenta todavia puede usarla (Google solo la
+     * devuelve si es elegible).
+     */
+    suspend fun planes(context: Context): List<Plan> {
         val c = cliente(context.applicationContext)
-        if (!conectar(c)) return null
+        if (!conectar(c)) return emptyList()
 
         val parametros = QueryProductDetailsParams.newBuilder()
             .setProductList(
@@ -153,36 +163,41 @@ object Suscripcion {
             .build()
 
         val resultado = c.queryProductDetails(parametros)
-        val detalles = resultado.productDetailsList?.firstOrNull() ?: return null
-        val ofertas = detalles.subscriptionOfferDetails.orEmpty()
-        if (ofertas.isEmpty()) return null
+        val detalles = resultado.productDetailsList?.firstOrNull() ?: return emptyList()
 
-        // Google solo devuelve la oferta de prueba si esta cuenta es elegible.
-        val conPrueba = ofertas.firstOrNull { o ->
-            o.pricingPhases.pricingPhaseList.any { it.priceAmountMicros == 0L }
-        }
-        val elegida = conPrueba ?: ofertas.first()
-        val fases = elegida.pricingPhases.pricingPhaseList
-        val faseGratis = fases.firstOrNull { it.priceAmountMicros == 0L }
-
-        return Oferta(
-            detalles = detalles,
-            token = elegida.offerToken,
-            precioAnual = fases.last().formattedPrice,
-            diasGratis = faseGratis?.let { diasDelPeriodo(it.billingPeriod) }
-        )
+        return detalles.subscriptionOfferDetails.orEmpty()
+            .groupBy { it.basePlanId }
+            .values
+            .mapNotNull { ofertas ->
+                val elegida = ofertas.firstOrNull { o ->
+                    o.pricingPhases.pricingPhaseList.any { it.priceAmountMicros == 0L }
+                } ?: ofertas.first()
+                val fases = elegida.pricingPhases.pricingPhaseList
+                val recurrente = fases.last()
+                val periodo = periodoDe(recurrente.billingPeriod) ?: return@mapNotNull null
+                Plan(
+                    periodo = periodo,
+                    detalles = detalles,
+                    token = elegida.offerToken,
+                    precio = recurrente.formattedPrice,
+                    precioMicros = recurrente.priceAmountMicros,
+                    diasGratis = fases.firstOrNull { it.priceAmountMicros == 0L }
+                        ?.let { diasDelPeriodo(it.billingPeriod) }
+                )
+            }
+            .sortedBy { it.periodo.ordinal }
     }
 
     /** Abre la hoja de pago de Google Play. El resultado llega al listener del cliente. */
-    suspend fun comprar(activity: Activity, oferta: Oferta) {
+    suspend fun comprar(activity: Activity, plan: Plan) {
         val c = cliente(activity.applicationContext)
         if (!conectar(c)) return
         val parametros = BillingFlowParams.newBuilder()
             .setProductDetailsParamsList(
                 listOf(
                     BillingFlowParams.ProductDetailsParams.newBuilder()
-                        .setProductDetails(oferta.detalles)
-                        .setOfferToken(oferta.token)
+                        .setProductDetails(plan.detalles)
+                        .setOfferToken(plan.token)
                         .build()
                 )
             )
@@ -264,4 +279,21 @@ internal fun diasDelPeriodo(periodo: String): Int? {
         "Y" -> n * 365
         else -> null
     }
+}
+
+/** El periodo de renovacion de un plan: "P1Y" es anual, "P1M" mensual. */
+internal fun periodoDe(periodo: String): Suscripcion.Periodo? = when (periodo) {
+    "P1Y", "P12M" -> Suscripcion.Periodo.ANUAL
+    "P1M", "P4W" -> Suscripcion.Periodo.MENSUAL
+    else -> null
+}
+
+/**
+ * Cuanto se ahorra pagando el anual en vez de 12 meses, en porcentaje entero
+ * hacia abajo (nunca prometer de mas): US$9.99 contra US$1.99 da 58.
+ */
+internal fun ahorroAnual(mensualMicros: Long, anualMicros: Long): Int? {
+    if (mensualMicros <= 0 || anualMicros <= 0) return null
+    val ahorro = (100 - anualMicros * 100.0 / (mensualMicros * 12)).toInt()
+    return ahorro.takeIf { it > 0 }
 }
