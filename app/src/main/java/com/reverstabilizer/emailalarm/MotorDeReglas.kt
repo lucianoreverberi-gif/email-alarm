@@ -29,9 +29,9 @@ object MotorDeReglas {
      * Si la notificacion es un aviso de la app de correo de que una cuenta no
      * puede sincronizar, devuelve su texto. Si no, null.
      *
-     * Importa: una cuenta caida no genera correos, y una app que no suena
-     * "porque no llego nada" es indistinguible de una que anda bien. Es el
-     * falso negativo silencioso que esta app existe para evitar.
+     * No es un correo: se descarta. Mostrarlo resulto ser ruido, porque suele
+     * ser una cuenta que la persona lee en otra app (una Hotmail agregada en
+     * Gmail que en realidad se lee en Outlook).
      */
     fun avisoDeSincronizacion(sbn: StatusBarNotification): String? {
         val extras = sbn.notification.extras
@@ -125,10 +125,6 @@ object MotorDeReglas {
         val local = compacto(b.substring(0, arroba))
         return local.takeUnless { it.length < 4 || it in LOCALES_GENERICOS }
     }
-
-    /** La direccion de correo dentro de un aviso de cuenta, para agrupar e ignorar por cuenta. */
-    fun cuentaDelAviso(aviso: String): String =
-        Regex("""[\w.+-]+@[\w-]+(?:\.[\w-]+)+""").find(aviso)?.value?.lowercase() ?: aviso
 
     /**
      * Partes de direccion tan comunes que usarlas haria sonar la alarma con

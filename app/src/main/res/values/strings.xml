@@ -26,12 +26,6 @@
     <string name="test_now">Now</string>
     <string name="test_later">In 10 s</string>
 
-    <!-- Aviso de cuenta -->
-    <string name="account_problem_title">%1$s can\'t sign in to %2$s</string>
-    <string name="account_problem_generic">%1$s reports a problem with an account</string>
-    <string name="account_problem_body">Emails from that account aren\'t reaching %1$s. If you read it in another app, ignore this.</string>
-    <string name="account_ignore">Ignore</string>
-
     <!-- Actividad -->
     <string name="history_show_all">Show all %1$d</string>
     <string name="history_show_less">Show less</string>

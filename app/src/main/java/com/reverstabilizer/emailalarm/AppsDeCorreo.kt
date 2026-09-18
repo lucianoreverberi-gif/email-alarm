@@ -48,24 +48,7 @@ object Ajustes {
 
     private const val ARCHIVO = "ajustes"
     private const val CLAVE_APPS = "apps_escuchadas"
-    private const val CLAVE_CUENTAS_IGNORADAS = "cuentas_ignoradas"
 
-    /**
-     * Cuentas cuyo aviso de "no puedo sincronizar" la persona decidio ignorar
-     * (por ejemplo, una Hotmail agregada en Gmail que en realidad lee en Outlook).
-     */
-    fun cuentasIgnoradas(context: Context): Set<String> =
-        context.getSharedPreferences(ARCHIVO, Context.MODE_PRIVATE)
-            .getStringSet(CLAVE_CUENTAS_IGNORADAS, emptySet()).orEmpty()
-
-    fun ignorarCuenta(context: Context, cuenta: String): Set<String> {
-        val nuevas = cuentasIgnoradas(context) + cuenta
-        context.getSharedPreferences(ARCHIVO, Context.MODE_PRIVATE)
-            .edit()
-            .putStringSet(CLAVE_CUENTAS_IGNORADAS, nuevas)
-            .apply()
-        return nuevas
-    }
 
     fun appsEscuchadas(context: Context): Set<String> {
         val prefs = context.getSharedPreferences(ARCHIVO, Context.MODE_PRIVATE)

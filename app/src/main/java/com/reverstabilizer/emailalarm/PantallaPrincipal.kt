@@ -42,7 +42,6 @@ import androidx.compose.material.icons.rounded.PriorityHigh
 import androidx.compose.material.icons.rounded.Shield
 import androidx.compose.material.icons.rounded.Timer
 import androidx.compose.material.icons.rounded.VerifiedUser
-import androidx.compose.material.icons.rounded.WarningAmber
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -100,9 +99,6 @@ internal fun alertaCritica(
     else -> null
 }
 
-/** Un aviso de cuenta vale mientras es reciente: si se arreglo, deja de llegar. */
-private const val VIGENCIA_AVISO_CUENTA = 3 * DateUtils.DAY_IN_MILLIS
-
 /** Cuantos correos se ven sin expandir. Con mas, la lista tapa lo demas. */
 private const val CORREOS_VISIBLES = 4
 
@@ -114,7 +110,6 @@ fun PantallaPrincipal(
     reglas: List<Regla>,
     detecciones: List<Deteccion>,
     suscripcion: Suscripcion.Estado,
-    cuentasIgnoradas: Set<String>,
     onResolverPermiso: (EstadoDePermiso) -> Unit,
     onCambiarApp: (String, Boolean) -> Unit,
     onGuardarRegla: (Regla) -> Unit,
@@ -124,7 +119,6 @@ fun PantallaPrincipal(
     onProbarDespues: () -> Unit,
     onSuscribirse: () -> Unit,
     onBorrarHistorial: () -> Unit,
-    onIgnorarCuenta: (String) -> Unit,
     onAbrirAjustes: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -145,13 +139,7 @@ fun PantallaPrincipal(
         hayAlarmasActivas = reglas.any { it.activa }
     )
 
-    // Los avisos de cuenta no son correos: van aparte, uno por cuenta, y
-    // solo mientras sean recientes y nadie los haya ignorado.
-    val ahora = System.currentTimeMillis()
-    val avisosDeCuenta = detecciones
-        .filter { it.resultado == Resultado.AVISO_CUENTA.name && ahora - it.hora < VIGENCIA_AVISO_CUENTA }
-        .distinctBy { MotorDeReglas.cuentaDelAviso(it.asunto) }
-        .filter { MotorDeReglas.cuentaDelAviso(it.asunto) !in cuentasIgnoradas }
+    // Historiales viejos pueden tener avisos de cuenta: no son correos.
     val correos = detecciones.filter { it.resultado != Resultado.AVISO_CUENTA.name }
     val correosVisibles = if (historialAbierto) correos else correos.take(CORREOS_VISIBLES)
 
@@ -201,9 +189,6 @@ fun PantallaPrincipal(
 
             item { TarjetaDePrueba(onProbarAhora, onProbarDespues) }
 
-            items(avisosDeCuenta, key = { "aviso-" + it.id }) { aviso ->
-                AvisoDeCuenta(aviso, onIgnorar = { onIgnorarCuenta(MotorDeReglas.cuentaDelAviso(aviso.asunto)) })
-            }
 
             // Actividad reciente
             item {
@@ -407,37 +392,6 @@ private fun BarraDeAlerta(
             shape = RoundedCornerShape(14.dp),
             colors = ButtonDefaults.buttonColors(containerColor = color)
         ) { Text(stringResource(boton)) }
-    }
-}
-
-/**
- * Ambar, no rojo: la app de correo avisa que no puede entrar a una cuenta. Es
- * importante (de esa cuenta no llega nada), pero puede ser una cuenta que la
- * persona lee en otra app. Por eso se puede ignorar.
- */
-@Composable
-private fun AvisoDeCuenta(aviso: Deteccion, onIgnorar: () -> Unit) {
-    val cuenta = MotorDeReglas.cuentaDelAviso(aviso.asunto)
-    val titulo = if (cuenta.contains('@')) {
-        stringResource(R.string.account_problem_title, aviso.app, cuenta)
-    } else {
-        stringResource(R.string.account_problem_generic, aviso.app)
-    }
-    Tarjeta(color = Aviso.fondo, relleno = PaddingValues(start = 16.dp, end = 4.dp, top = 12.dp, bottom = 12.dp)) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(Icons.Rounded.WarningAmber, contentDescription = null, tint = Aviso.texto, modifier = Modifier.size(20.dp))
-            Column(Modifier.weight(1f).padding(start = 12.dp)) {
-                Text(titulo, style = MaterialTheme.typography.labelMedium, color = Aviso.texto)
-                Text(
-                    stringResource(R.string.account_problem_body, aviso.app),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-            }
-            TextButton(onClick = onIgnorar) {
-                Text(stringResource(R.string.account_ignore), color = Aviso.texto)
-            }
-        }
     }
 }
 

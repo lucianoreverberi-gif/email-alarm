@@ -32,10 +32,11 @@ class MailListener : NotificationListenerService() {
         if (sbn.packageName !in Ajustes.appsEscuchadas(this)) return
         val app = AppsDeCorreo.porPaquete(sbn.packageName)?.nombre ?: sbn.packageName
 
+        // Los avisos de cuenta de la app de correo ("no puedo entrar a x@hotmail.com")
+        // no son correos. Suelen ser de una cuenta que la persona lee en otra app,
+        // asi que mostrarlos seria ruido: se ignoran.
         MotorDeReglas.avisoDeSincronizacion(sbn)?.let { aviso ->
-            Registro.w("CUENTA CON PROBLEMA DE SINCRONIZACION -> $aviso")
-            // Tambien al historial: una cuenta caida explica un "no sono".
-            scope.launch { registrar(app, app, aviso, Resultado.AVISO_CUENTA, null) }
+            Registro.d("[$app] aviso de cuenta ignorado -> $aviso")
             return
         }
 
@@ -81,7 +82,6 @@ class MailListener : NotificationListenerService() {
         val dao = BaseDeDatos.obtener(this).deteccionDao()
         // La firma automatica no ayuda a reconocer el correo: se guarda sin ella.
         val texto = sinFirmasParaMostrar(asunto).take(LARGO_ASUNTO_HISTORIAL)
-        if (resultado == Resultado.AVISO_CUENTA) dao.borrarAvisosIguales(texto)
         dao.guardar(
             Deteccion(
                 hora = System.currentTimeMillis(),

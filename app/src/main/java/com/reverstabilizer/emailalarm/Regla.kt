@@ -37,6 +37,7 @@ data class Regla(
 )
 
 /** Que paso con un correo que la app vio. */
+// AVISO_CUENTA ya no se guarda; queda para leer historiales viejos.
 enum class Resultado { SONO, SIN_COINCIDENCIA, SIN_SUSCRIPCION, AVISO_CUENTA }
 
 /**
@@ -98,13 +99,6 @@ interface DeteccionDao {
             "(SELECT id FROM detecciones ORDER BY hora DESC LIMIT ${Deteccion.MAXIMO})"
     )
     suspend fun recortar()
-
-    /**
-     * Gmail repite el mismo aviso de cuenta cada tanto. Se guarda solo el
-     * ultimo, para que no desplace de la lista a los correos de verdad.
-     */
-    @Query("DELETE FROM detecciones WHERE resultado = 'AVISO_CUENTA' AND asunto = :asunto")
-    suspend fun borrarAvisosIguales(asunto: String)
 
     @Query("DELETE FROM detecciones")
     suspend fun borrarTodo()
