@@ -69,10 +69,13 @@ class DemoReceiver : BroadcastReceiver() {
                 Deteccion(hora = ahora - 3 * min, app = "Gmail", remitente = "Turnos del restaurante",
                     asunto = "Ya están abiertos los turnos de la semana que viene",
                     resultado = Resultado.SONO.name, regla = "Turnos del restaurante"),
-                Deteccion(hora = ahora - 41 * min, app = "Gmail", remitente = "Banco Galicia",
-                    asunto = "Tu resumen de cuenta ya está disponible", resultado = Resultado.SIN_COINCIDENCIA.name),
-                Deteccion(hora = ahora - 95 * min, app = "Outlook", remitente = "Mercado Libre",
-                    asunto = "Tu compra está en camino", resultado = Resultado.SIN_COINCIDENCIA.name)
+                Deteccion(hora = ahora - 41 * min, app = "Gmail", remitente = "Chase",
+                    asunto = "Tu estado de cuenta está disponible", resultado = Resultado.SIN_COINCIDENCIA.name),
+                Deteccion(hora = ahora - 95 * min, app = "Gmail", remitente = "USCIS Online Account",
+                    asunto = "USCIS: se actualizó el estado de tu caso",
+                    resultado = Resultado.SONO.name, regla = "Cita de migraciones"),
+                Deteccion(hora = ahora - 160 * min, app = "Gmail", remitente = "Amazon",
+                    asunto = "Tu pedido está en camino", resultado = Resultado.SIN_COINCIDENCIA.name)
             )
         } else {
             listOf(
@@ -81,7 +84,10 @@ class DemoReceiver : BroadcastReceiver() {
                     resultado = Resultado.SONO.name, regla = "Restaurant shifts"),
                 Deteccion(hora = ahora - 41 * min, app = "Gmail", remitente = "Chase",
                     asunto = "Your statement is ready", resultado = Resultado.SIN_COINCIDENCIA.name),
-                Deteccion(hora = ahora - 95 * min, app = "Outlook", remitente = "Amazon",
+                Deteccion(hora = ahora - 95 * min, app = "Gmail", remitente = "USCIS Online Account",
+                    asunto = "USCIS: your case status was updated",
+                    resultado = Resultado.SONO.name, regla = "Immigration appointment"),
+                Deteccion(hora = ahora - 160 * min, app = "Gmail", remitente = "Amazon",
                     asunto = "Your package is on the way", resultado = Resultado.SIN_COINCIDENCIA.name)
             )
         }

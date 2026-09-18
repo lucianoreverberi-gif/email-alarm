@@ -5,7 +5,7 @@
 #   bash play/capturas.sh
 #
 # Requiere el build de DEBUG instalado: usa DemoReceiver (src/debug) para
-# cargar reglas de ejemplo y abrir la pantalla de alarma sin tipear a mano.
+# cargar alarmas e historial de ejemplo y abrir la pantalla de alarma sin tipear a mano.
 # Deja las capturas en web/img/ (el sitio las usa directo).
 
 set -euo pipefail
@@ -38,7 +38,7 @@ abrir_app() {
     sleep 3
 }
 
-# --- Preparacion: todos los permisos, para que la app diga "Todo listo" ---
+# --- Preparacion: todos los permisos, para que no aparezca ninguna alerta ---
 adb_ shell pm grant $P android.permission.POST_NOTIFICATIONS
 adb_ shell cmd notification allow_listener $P/$P.MailListener
 adb_ shell cmd notification allow_dnd $P
@@ -60,25 +60,24 @@ demo notifications -e visible false
 for idioma in en es; do
     adb_ shell cmd locale set-app-locales $P --locales $idioma
     receptor --es accion reglas --es idioma $idioma
+    receptor --es accion historial --es idioma $idioma
     sleep 1
 
-    # 1. Pantalla principal: estado "Todo listo" y permisos
+    # 1. Pantalla principal: las alarmas primero
     abrir_app
-    captura "pantalla-$idioma"
+    captura "principal-$idioma"
 
-    # 2. Las reglas. Arrastre lento para que la lista no siga de largo.
-    adb_ shell input swipe 540 2100 540 820 1500
-    sleep 1
-    captura "reglas-$idioma"
-
-    # 3. Editar la regla por palabra clave, para que se vea el consejo de spam.
-    #    Las reglas se listan de la mas nueva a la mas vieja: la de palabra
-    #    clave (USCIS) es la segunda.
-    adb_ shell input tap $(centro 'text="Edit"\|text="Editar"' 2)
+    # 2. Editar la alarma de migraciones: palabra clave USCIS y consejo de spam
+    adb_ shell input tap $(centro 'text="Cita de migraciones"\|text="Immigration appointment"')
     sleep 2
-    captura "consejo-$idioma"
+    captura "editar-$idioma"
     adb_ shell input keyevent KEYCODE_BACK
     sleep 1
+
+    # 3. Probar y actividad reciente. Arrastre lento para que no siga de largo.
+    adb_ shell input swipe 540 1900 540 ${ARRASTRE_FIN:-1050} 1500
+    sleep 1
+    captura "actividad-$idioma"
 
     # 4. La pantalla de alarma
     receptor --es accion alarma --es idioma $idioma
