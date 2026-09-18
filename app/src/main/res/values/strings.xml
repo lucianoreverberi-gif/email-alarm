@@ -4,29 +4,23 @@
 
     <!-- Pantalla principal -->
     <string name="action_settings">Settings</string>
-    <string name="section_rules">Rules</string>
+    <string name="section_rules">My alarms</string>
     <string name="section_history">Recent emails</string>
     <string name="section_permissions">Permissions</string>
     <string name="section_apps">Apps I listen to</string>
 
-    <!-- Estado general: titulo, detalle y la accion que lo resuelve -->
-    <string name="status_blocked_title">The alarm can\'t ring</string>
-    <string name="status_blocked_body">A required permission is missing.</string>
-    <string name="status_no_rules_title">No rules yet</string>
-    <string name="status_no_rules_body">The app is listening, but nothing will make it ring.</string>
-    <string name="status_limited_title">Working, with limitations</string>
-    <string name="status_limited_body">An optional permission is missing.</string>
-    <string name="status_ready_title">All set</string>
-    <string name="status_ready_body">The alarm will ring even if the phone is locked.</string>
-    <string name="status_no_sub_title">Start your free month</string>
-    <string name="status_no_sub_body">The alarm only rings with an active subscription.</string>
-    <string name="status_expired_title">Your subscription ended</string>
-    <string name="status_expired_body">The alarm won\'t ring until you renew.</string>
+    <!-- Primera alarma -->
+    <string name="empty_alarms_title">Create your first alarm</string>
+    <string name="empty_alarms_body">Tell it who or what word you\'re waiting for. When that email arrives, it rings like an alarm clock, even with the phone locked.</string>
+
+    <!-- Barra de arriba: solo cuando una alarma no va a sonar -->
+    <string name="alert_permission">Your alarms can\'t ring: \"%1$s\" is missing.</string>
+    <string name="alert_expired">Your subscription ended. Your alarms won\'t ring until you renew.</string>
+    <string name="alert_no_sub">Your alarms won\'t ring until you start your free month.</string>
 
     <string name="action_enable_permission">Enable permission</string>
     <string name="action_start_free_month">Start free month</string>
-    <string name="action_create_first_rule">Create my first rule</string>
-    <string name="action_review_permissions">Review permissions</string>
+    <string name="action_create_first_rule">Create my first alarm</string>
     <string name="action_test_alarm">Test alarm</string>
     <string name="action_test_alarm_later">Test in 10 seconds</string>
     <string name="test_alarm_later_hint">Lock your phone after tapping. It\'s the real test: the alarm has to wake you up with the screen off.</string>
@@ -35,18 +29,17 @@
     <string name="test_alarm_subject">This is a test. If you can hear it, it works.</string>
 
     <!-- Reglas -->
-    <string name="action_new_rule">New rule</string>
-    <string name="action_edit">Edit</string>
+    <string name="action_new_rule">New alarm</string>
     <string name="action_delete">Delete</string>
     <!-- Frases completas, no armadas por partes: en otros idiomas el orden cambia. -->
     <string name="rule_when_sender">Rings when it comes from \"%1$s\"</string>
     <string name="rule_when_keyword">Rings when it says \"%1$s\"</string>
     <string name="rule_when_both">Rings when it comes from \"%1$s\" or says \"%2$s\"</string>
     <string name="rule_sound">Sound: %1$s</string>
-    <string name="rule_address_warning">Outlook and some other apps only show the sender\'s name. This rule also tries the part before the @, but if the visible name is different it won\'t match there. Safer: use the name exactly as you see it in the notification.</string>
+    <string name="rule_address_warning">Outlook and some other apps only show the sender\'s name. This alarm also tries the part before the @, but if the visible name is different it won\'t match there. Safer: use the name exactly as you see it in the notification.</string>
 
     <!-- Historial -->
-    <string name="history_empty">No emails yet since the app was turned on. When one arrives it shows up here, even if it matches no rule.</string>
+    <string name="history_empty">No emails yet since the app was turned on. When one arrives it shows up here, even if it matches none of your alarms.</string>
     <string name="history_hint">The last 20, stored only on this phone.</string>
     <string name="history_clear">Clear</string>
     <string name="history_rang">Rang · %1$s</string>
@@ -75,10 +68,10 @@
     <string name="app_no_address">only publishes the sender\'s name, not the address</string>
 
     <!-- Dialogo de regla -->
-    <string name="dialog_new_rule">New rule</string>
-    <string name="dialog_edit_rule">Edit rule</string>
+    <string name="dialog_new_rule">New alarm</string>
+    <string name="dialog_edit_rule">Edit alarm</string>
     <string name="optional">optional</string>
-    <string name="field_name">Rule name</string>
+    <string name="field_name">Alarm name</string>
     <string name="field_name_hint">E.g. Work shifts</string>
     <string name="field_name_help">Just so you can recognize it in the list.</string>
     <string name="field_sender">From</string>
@@ -122,11 +115,11 @@
     <string name="alarm_banner">IMPORTANT EMAIL</string>
     <string name="action_stop">STOP</string>
     <string name="channel_name">Email alarm</string>
-    <string name="channel_description">Rings when an email matches one of your rules</string>
+    <string name="channel_description">Rings when an email matches one of your alarms</string>
     <string name="canal_cuenta">Subscription</string>
     <string name="aviso_vencida_titulo">Your subscription ended</string>
     <string name="aviso_vencida_texto">Email Alarm won\'t ring until you renew. Tap to renew.</string>
     <string name="aviso_correo_titulo">An important email arrived — the alarm didn\'t ring</string>
-    <string name="aviso_correo_nunca">Email from %1$s matched one of your rules. Start your free month so the alarm rings next time.</string>
-    <string name="aviso_correo_vencida">Email from %1$s matched one of your rules, but your subscription ended. Renew so the alarm rings next time.</string>
+    <string name="aviso_correo_nunca">Email from %1$s matched one of your alarms. Start your free month so it rings next time.</string>
+    <string name="aviso_correo_vencida">Email from %1$s matched one of your alarms, but your subscription ended. Renew so it rings next time.</string>
 </resources>

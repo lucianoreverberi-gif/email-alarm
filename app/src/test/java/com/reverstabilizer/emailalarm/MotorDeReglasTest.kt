@@ -120,4 +120,53 @@ class MotorDeReglasTest {
         val regla = Regla(nombre = "x", remitente = "otra@persona.com")
         assertFalse(MotorDeReglas.coincide(regla, correo()))
     }
+
+    // --- Coincidencia amplia: el falso negativo es el peor error posible ---
+
+    @Test
+    fun `caso real, uscis suena con USCIS Online Account`() {
+        val regla = Regla(nombre = "x", remitente = "uscis")
+        assertTrue(
+            MotorDeReglas.coincide(regla, correo(remitente = "USCIS Online Account", direcciones = emptyList()))
+        )
+    }
+
+    // --- Firmas automaticas: no son contenido ---
+
+    @Test
+    fun `una palabra que solo aparece en la firma no dispara`() {
+        val casos = mapOf(
+            "android" to "Hola, te confirmo.\n\nGet Outlook for Android",
+            "iphone" to "Nos vemos el lunes\nSent from my iPhone",
+            "samsung" to "Dale, gracias\nEnviado desde mi smartphone Samsung Galaxy",
+            "bluemail" to "Ok\nGet BlueMail for Android",
+            "yahoo" to "Listo\nSent from Yahoo Mail on Android",
+            "ios" to "Perfecto\nGet Outlook for iOS"
+        )
+        for ((palabra, cuerpo) in casos) {
+            val regla = Regla(nombre = "x", palabraClave = palabra)
+            assertFalse(palabra, MotorDeReglas.coincide(regla, correo(asunto = "Re: hola", cuerpo = cuerpo)))
+        }
+    }
+
+    @Test
+    fun `la palabra sigue disparando si esta en el contenido ademas de la firma`() {
+        val regla = Regla(nombre = "x", palabraClave = "android")
+        val cuerpo = "Salio la nueva version de Android\nGet Outlook for Android"
+        assertTrue(MotorDeReglas.coincide(regla, correo(cuerpo = cuerpo)))
+    }
+
+    @Test
+    fun `cortar la firma no se come el texto que sigue en la misma linea`() {
+        // Algunas apps publican el cuerpo en una sola linea.
+        val regla = Regla(nombre = "x", palabraClave = "turno disponible")
+        val cuerpo = "Sent from my iPhone turno disponible el martes"
+        assertTrue(MotorDeReglas.coincide(regla, correo(cuerpo = cuerpo)))
+    }
+
+    @Test
+    fun `la firma no afecta al remitente`() {
+        val regla = Regla(nombre = "x", remitente = "iphone")
+        assertTrue(MotorDeReglas.coincide(regla, correo(remitente = "iPhone Support", direcciones = emptyList())))
+    }
 }

@@ -4,29 +4,23 @@
 
     <!-- Pantalla principal -->
     <string name="action_settings">Ajustes</string>
-    <string name="section_rules">Reglas</string>
+    <string name="section_rules">Mis alarmas</string>
     <string name="section_history">Últimos correos</string>
     <string name="section_permissions">Permisos</string>
     <string name="section_apps">Apps que escucho</string>
 
-    <!-- Estado general: titulo, detalle y la accion que lo resuelve -->
-    <string name="status_blocked_title">La alarma no puede sonar</string>
-    <string name="status_blocked_body">Falta un permiso imprescindible.</string>
-    <string name="status_no_rules_title">Todavía no hay reglas</string>
-    <string name="status_no_rules_body">La app está escuchando, pero nada la hace sonar.</string>
-    <string name="status_limited_title">Funcionando, con limitaciones</string>
-    <string name="status_limited_body">Falta algún permiso opcional.</string>
-    <string name="status_ready_title">Todo listo</string>
-    <string name="status_ready_body">La alarma va a sonar aunque el teléfono esté bloqueado.</string>
-    <string name="status_no_sub_title">Empezá tu mes gratis</string>
-    <string name="status_no_sub_body">La alarma solo suena con una suscripción activa.</string>
-    <string name="status_expired_title">Tu suscripción terminó</string>
-    <string name="status_expired_body">La alarma no va a sonar hasta que la renueves.</string>
+    <!-- Primera alarma -->
+    <string name="empty_alarms_title">Creá tu primera alarma</string>
+    <string name="empty_alarms_body">Decile de quién o qué palabra estás esperando. Cuando llegue ese correo, suena como un despertador, aunque el teléfono esté bloqueado.</string>
+
+    <!-- Barra de arriba: solo cuando una alarma no va a sonar -->
+    <string name="alert_permission">Tus alarmas no pueden sonar: falta "%1$s".</string>
+    <string name="alert_expired">Tu suscripción terminó. Tus alarmas no van a sonar hasta que la renueves.</string>
+    <string name="alert_no_sub">Tus alarmas no van a sonar hasta que empieces tu mes gratis.</string>
 
     <string name="action_enable_permission">Activar permiso</string>
     <string name="action_start_free_month">Empezar mes gratis</string>
-    <string name="action_create_first_rule">Crear mi primera regla</string>
-    <string name="action_review_permissions">Revisar permisos</string>
+    <string name="action_create_first_rule">Crear mi primera alarma</string>
     <string name="action_test_alarm">Probar alarma</string>
     <string name="action_test_alarm_later">Probar en 10 segundos</string>
     <string name="test_alarm_later_hint">Después de tocarlo, bloqueá el teléfono. Es la prueba de verdad: la alarma te tiene que despertar con la pantalla apagada.</string>
@@ -35,17 +29,16 @@
     <string name="test_alarm_subject">Esto es una prueba. Si la escuchás, funciona.</string>
 
     <!-- Reglas -->
-    <string name="action_new_rule">Nueva regla</string>
-    <string name="action_edit">Editar</string>
+    <string name="action_new_rule">Nueva alarma</string>
     <string name="action_delete">Borrar</string>
     <string name="rule_when_sender">Suena si viene de \"%1$s\"</string>
     <string name="rule_when_keyword">Suena si dice \"%1$s\"</string>
     <string name="rule_when_both">Suena si viene de \"%1$s\" o dice \"%2$s\"</string>
     <string name="rule_sound">Sonido: %1$s</string>
-    <string name="rule_address_warning">Outlook y algunas otras apps solo muestran el nombre del remitente. Esta regla también prueba con lo que va antes de la @, pero si el nombre visible es otro, ahí no va a coincidir. Más seguro: usá el nombre tal como lo ves en la notificación.</string>
+    <string name="rule_address_warning">Outlook y algunas otras apps solo muestran el nombre del remitente. Esta alarma también prueba con lo que va antes de la @, pero si el nombre visible es otro, ahí no va a coincidir. Más seguro: usá el nombre tal como lo ves en la notificación.</string>
 
     <!-- Historial -->
-    <string name="history_empty">Todavía no llegó ningún correo desde que se activó la app. Cuando llegue uno, aparece acá aunque no coincida con ninguna regla.</string>
+    <string name="history_empty">Todavía no llegó ningún correo desde que se activó la app. Cuando llegue uno, aparece acá aunque no coincida con ninguna alarma.</string>
     <string name="history_hint">Los últimos 20, guardados solo en este teléfono.</string>
     <string name="history_clear">Borrar</string>
     <string name="history_rang">Sonó · %1$s</string>
@@ -74,10 +67,10 @@
     <string name="app_no_address">solo publica el nombre del remitente, no la dirección</string>
 
     <!-- Dialogo de regla -->
-    <string name="dialog_new_rule">Nueva regla</string>
-    <string name="dialog_edit_rule">Editar regla</string>
+    <string name="dialog_new_rule">Nueva alarma</string>
+    <string name="dialog_edit_rule">Editar alarma</string>
     <string name="optional">opcional</string>
-    <string name="field_name">Nombre de la regla</string>
+    <string name="field_name">Nombre de la alarma</string>
     <string name="field_name_hint">Ej: Turnos del trabajo</string>
     <string name="field_name_help">Solo para que la reconozcas en la lista.</string>
     <string name="field_sender">Viene de</string>
@@ -120,11 +113,11 @@
     <string name="alarm_banner">CORREO IMPORTANTE</string>
     <string name="action_stop">DETENER</string>
     <string name="channel_name">Alarma de correo</string>
-    <string name="channel_description">Suena cuando llega un correo que coincide con una regla</string>
+    <string name="channel_description">Suena cuando llega un correo que coincide con una de tus alarmas</string>
     <string name="canal_cuenta">Suscripción</string>
     <string name="aviso_vencida_titulo">Tu suscripción terminó</string>
     <string name="aviso_vencida_texto">Email Alarm no va a sonar hasta que la renueves. Tocá para renovar.</string>
     <string name="aviso_correo_titulo">Llegó un correo importante y la alarma no sonó</string>
-    <string name="aviso_correo_nunca">Un correo de %1$s coincidió con una de tus reglas. Empezá tu mes gratis para que la próxima vez suene.</string>
-    <string name="aviso_correo_vencida">Un correo de %1$s coincidió con una de tus reglas, pero tu suscripción terminó. Renovala para que la próxima vez suene.</string>
+    <string name="aviso_correo_nunca">Un correo de %1$s coincidió con una de tus alarmas. Empezá tu mes gratis para que la próxima vez suene.</string>
+    <string name="aviso_correo_vencida">Un correo de %1$s coincidió con una de tus alarmas, pero tu suscripción terminó. Renovala para que la próxima vez suene.</string>
 </resources>

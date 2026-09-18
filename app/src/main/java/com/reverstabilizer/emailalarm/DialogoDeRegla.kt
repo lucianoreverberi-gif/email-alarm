@@ -11,6 +11,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -43,7 +44,9 @@ import androidx.compose.ui.unit.dp
 fun DialogoDeRegla(
     reglaInicial: Regla?,
     onCancelar: () -> Unit,
-    onConfirmar: (Regla) -> Unit
+    onConfirmar: (Regla) -> Unit,
+    /** Solo al editar: borrar vive aca adentro, como en el reloj. */
+    onBorrar: (() -> Unit)? = null
 ) {
     var nombre by remember { mutableStateOf(reglaInicial?.nombre ?: "") }
     var remitente by remember { mutableStateOf(reglaInicial?.remitente ?: "") }
@@ -148,7 +151,16 @@ fun DialogoDeRegla(
             // abajo se dice que falta. Los dos botones van en esta misma fila
             // para que el motivo quede debajo de ambos sin desarmarla.
             Column(horizontalAlignment = Alignment.End) {
-                Row {
+                Row(
+                    modifier = if (onBorrar != null) Modifier.fillMaxWidth() else Modifier,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                if (onBorrar != null) {
+                    TextButton(onClick = onBorrar) {
+                        Text(stringResource(R.string.action_delete), color = MaterialTheme.colorScheme.error)
+                    }
+                    Spacer(Modifier.weight(1f))
+                }
                 TextButton(onClick = onCancelar) { Text(stringResource(R.string.action_cancel)) }
                 TextButton(
                     enabled = hayCondicion,

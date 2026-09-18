@@ -65,7 +65,7 @@ fun PantallaAjustes(
                 else -> {
                     Text(
                         stringResource(
-                            if (suscripcion == Suscripcion.Estado.VENCIDA) R.string.status_expired_title
+                            if (suscripcion == Suscripcion.Estado.VENCIDA) R.string.aviso_vencida_titulo
                             else R.string.sub_none
                         ),
                         fontWeight = FontWeight.Bold,

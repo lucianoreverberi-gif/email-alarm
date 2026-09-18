@@ -93,7 +93,7 @@ object MotorDeReglas {
         val remitenteCoincide = buscaRemitente &&
             coincideRemitente(regla.remitente, correo.textoDelRemitente())
         val palabraCoincide = buscaPalabra &&
-            normalizar(correo.textoDelContenido()).contains(normalizar(regla.palabraClave.trim()))
+            sinFirmas(normalizar(correo.textoDelContenido())).contains(normalizar(regla.palabraClave.trim()))
 
         return remitenteCoincide || palabraCoincide
     }
@@ -154,6 +154,33 @@ internal fun normalizar(texto: String): String =
     java.text.Normalizer.normalize(texto, java.text.Normalizer.Form.NFD)
         .replace(Regex("\\p{Mn}+"), "")
         .lowercase()
+
+/**
+ * Las firmas automaticas ("Sent from my iPhone") estan en casi todos los
+ * correos y no son contenido: una palabra clave como "iphone" sonaria siempre.
+ *
+ * Solo se borra la frase de la firma y, detras, palabras de dispositivo
+ * conocidas ("Samsung Galaxy"). Nunca "hasta el fin de linea": algunas apps
+ * publican el cuerpo en una sola linea, y cortar de mas seria perder un
+ * correo, que es mucho peor que sonar de mas.
+ */
+private val DISPOSITIVO =
+    "(?:\\s+(?:iphone|ipad|android|ios|samsung|galaxy|smartphone|mobile|phone|" +
+        "telefono|celular|movil|huawei|xiaomi|pixel|motorola|tablet)){0,3}"
+
+private val FIRMAS = Regex(
+    listOf(
+        "get (?:outlook|bluemail) for (?:android|ios|iphone)",
+        "(?:obtener|descargar|descarga) (?:outlook|bluemail) para (?:android|ios)",
+        "sent from (?:my|yahoo mail|mail for windows)(?: (?:for|on) (?:android|ios|iphone))?$DISPOSITIVO",
+        "enviado desde (?:mi|yahoo mail|correo para windows)(?: (?:para|con|en) (?:android|ios|iphone))?$DISPOSITIVO"
+    ).joinToString("|", prefix = "\\b(?:", postfix = ")\\b")
+        // Entre palabras puede haber varios espacios o un salto de linea.
+        .replace(" ", "\\s+")
+)
+
+/** Recibe texto ya [normalizar]do. Deja un espacio para no pegar las palabras vecinas. */
+internal fun sinFirmas(texto: String): String = texto.replace(FIRMAS, " ")
 
 /** Normalizado y solo letras y numeros: "Juan Pérez" y "juan.perez" dan igual. */
 internal fun compacto(texto: String): String = normalizar(texto).filter { it.isLetterOrDigit() }
