@@ -44,6 +44,9 @@ adb_ shell cmd notification allow_listener $P/$P.MailListener
 adb_ shell cmd notification allow_dnd $P
 adb_ shell dumpsys deviceidle whitelist +$P >/dev/null
 adb_ shell appops set $P USE_FULL_SCREEN_INTENT allow
+# Suscripcion simulada (solo existe en debug): las capturas muestran la app
+# como la ve alguien suscripto.
+receptor --es accion pro
 
 # --- Barra de estado limpia: 9:41, bateria llena, wifi lleno, sin iconos ---
 adb_ shell settings put global sysui_demo_allowed 1

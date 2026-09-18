@@ -59,6 +59,28 @@
     <string name="perm_battery_title">Sin optimización de batería</string>
     <string name="perm_battery_body">Evita que el sistema duerma la app y se pierdan correos.</string>
 
+    <string name="section_subscription">Suscripción</string>
+    <string name="status_no_sub_title">Empezá tu mes gratis</string>
+    <string name="status_no_sub_body">La alarma solo suena con una suscripción activa.</string>
+    <string name="status_expired_title">Tu suscripción terminó</string>
+    <string name="status_expired_body">La alarma no va a sonar hasta que la renueves.</string>
+    <string name="sub_trial_terms">Gratis por %1$d días, después %2$s por año. Se renueva sola. Cancelás cuando quieras desde Google Play.</string>
+    <string name="sub_terms">%1$s por año. Se renueva sola. Cancelás cuando quieras desde Google Play.</string>
+    <string name="sub_start_trial">Empezar %1$d días gratis</string>
+    <string name="sub_subscribe">Suscribirme</string>
+    <string name="sub_renew">Renovar</string>
+    <string name="sub_active">Suscripción activa</string>
+    <string name="sub_active_body">La alarma está encendida. Podés cambiar o cancelar la suscripción desde Google Play.</string>
+    <string name="sub_manage">Administrar suscripción</string>
+    <string name="sub_unavailable">No se pudo conectar con Google Play. Revisá la conexión y probá de nuevo.</string>
+
+    <string name="canal_cuenta">Suscripción</string>
+    <string name="aviso_vencida_titulo">Tu suscripción terminó</string>
+    <string name="aviso_vencida_texto">Email Alarm no va a sonar hasta que la renueves. Tocá para renovar.</string>
+    <string name="aviso_correo_titulo">Llegó un correo importante y la alarma no sonó</string>
+    <string name="aviso_correo_nunca">Un correo de %1$s coincidió con una de tus reglas. Empezá tu mes gratis para que la próxima vez suene.</string>
+    <string name="aviso_correo_vencida">Un correo de %1$s coincidió con una de tus reglas, pero tu suscripción terminó. Renovala para que la próxima vez suene.</string>
+
     <string name="alarm_banner">CORREO IMPORTANTE</string>
     <string name="channel_name">Alarma de correo</string>
     <string name="channel_description">Suena cuando llega un correo que coincide con una regla</string>

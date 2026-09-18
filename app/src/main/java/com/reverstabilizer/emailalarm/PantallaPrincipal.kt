@@ -50,6 +50,10 @@ fun PantallaPrincipal(
     onCambiarActiva: (Regla, Boolean) -> Unit,
     onBorrarRegla: (Regla) -> Unit,
     onDetenerAlarma: () -> Unit,
+    suscripcion: Suscripcion.Estado,
+    oferta: Suscripcion.Oferta?,
+    onSuscribirse: () -> Unit,
+    onGestionarSuscripcion: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var reglaEnEdicion by remember { mutableStateOf<Regla?>(null) }
@@ -64,7 +68,16 @@ fun PantallaPrincipal(
     ) {
         item { Encabezado() }
 
-        item { Resumen(permisos, reglas) }
+        item { Resumen(permisos, reglas, suscripcion) }
+
+        item {
+            TarjetaSuscripcion(
+                estado = suscripcion,
+                oferta = oferta,
+                onSuscribirse = onSuscribirse,
+                onGestionar = onGestionarSuscripcion
+            )
+        }
 
         item { Titulo(stringResource(R.string.section_permissions)) }
 
@@ -181,7 +194,11 @@ private fun Encabezado() {
  * escondido abajo en una lista.
  */
 @Composable
-private fun Resumen(permisos: List<EstadoDePermiso>, reglas: List<Regla>) {
+private fun Resumen(
+    permisos: List<EstadoDePermiso>,
+    reglas: List<Regla>,
+    suscripcion: Suscripcion.Estado
+) {
     val faltaEsencial = permisos.any { it.imprescindible && !it.concedido }
     val faltaOpcional = permisos.any { !it.imprescindible && !it.concedido }
     val sinReglas = reglas.none { it.activa }
@@ -191,6 +208,18 @@ private fun Resumen(permisos: List<EstadoDePermiso>, reglas: List<Regla>) {
             MaterialTheme.colorScheme.error,
             R.string.status_blocked_title,
             R.string.status_blocked_body
+        )
+        // Sin suscripcion la alarma no suena: tiene que verse igual de fuerte
+        // que un permiso faltante.
+        suscripcion == Suscripcion.Estado.VENCIDA -> Triple(
+            MaterialTheme.colorScheme.error,
+            R.string.status_expired_title,
+            R.string.status_expired_body
+        )
+        suscripcion == Suscripcion.Estado.NUNCA -> Triple(
+            MaterialTheme.colorScheme.primary,
+            R.string.status_no_sub_title,
+            R.string.status_no_sub_body
         )
         sinReglas -> Triple(
             MaterialTheme.colorScheme.error,
@@ -226,6 +255,73 @@ private fun Resumen(permisos: List<EstadoDePermiso>, reglas: List<Regla>) {
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
+        }
+    }
+}
+
+/**
+ * Estado de la suscripcion y como cambiarlo. Los precios salen de Google Play,
+ * ya en la moneda de la persona; nunca se escriben a mano en la app.
+ */
+@Composable
+private fun TarjetaSuscripcion(
+    estado: Suscripcion.Estado,
+    oferta: Suscripcion.Oferta?,
+    onSuscribirse: () -> Unit,
+    onGestionar: () -> Unit
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            if (estado == Suscripcion.Estado.ACTIVA) {
+                Text(stringResource(R.string.sub_active), fontWeight = FontWeight.Bold)
+                Text(
+                    text = stringResource(R.string.sub_active_body),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                TextButton(onClick = onGestionar) { Text(stringResource(R.string.sub_manage)) }
+                return@Column
+            }
+
+            if (oferta == null) {
+                Text(
+                    text = stringResource(R.string.sub_unavailable),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                return@Column
+            }
+
+            val dias = oferta.diasGratis
+            Text(
+                text = if (dias != null) {
+                    stringResource(R.string.sub_trial_terms, dias, oferta.precioAnual)
+                } else {
+                    stringResource(R.string.sub_terms, oferta.precioAnual)
+                },
+                style = MaterialTheme.typography.bodyMedium
+            )
+            Button(
+                onClick = onSuscribirse,
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(14.dp)
+            ) {
+                Text(
+                    text = when {
+                        estado == Suscripcion.Estado.VENCIDA -> stringResource(R.string.sub_renew)
+                        dias != null -> stringResource(R.string.sub_start_trial, dias)
+                        else -> stringResource(R.string.sub_subscribe)
+                    },
+                    fontWeight = FontWeight.Bold
+                )
+            }
         }
     }
 }

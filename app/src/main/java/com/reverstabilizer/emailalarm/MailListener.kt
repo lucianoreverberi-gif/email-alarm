@@ -16,6 +16,9 @@ class MailListener : NotificationListenerService() {
 
     override fun onListenerConnected() {
         Registro.d("Listener CONECTADO: ya estoy recibiendo notificaciones")
+        // Se conecta al arrancar el telefono: buen momento para detectar una
+        // suscripcion que vencio mientras la app no se abria, y avisar.
+        scope.launch { Suscripcion.verificar(this@MailListener) }
     }
 
     override fun onListenerDisconnected() {
@@ -44,6 +47,17 @@ class MailListener : NotificationListenerService() {
             }
 
             Registro.d("[$app] COINCIDE regla '${regla.nombre}' -> DE: ${correo.remitente} | ASUNTO: ${correo.asunto}")
+
+            // Si lo guardado dice "sin suscripcion", se confirma con Google Play
+            // antes de silenciar: puede haber pagado recien y no estar actualizado.
+            val activa = Suscripcion.estaActiva(this@MailListener) ||
+                Suscripcion.verificar(this@MailListener)
+            if (!activa) {
+                Registro.d("   sin suscripcion activa: no suena, se avisa")
+                AvisoSuscripcion.correoSinAlarma(this@MailListener, correo.remitente)
+                return@launch
+            }
+
             Alarma.disparar(this@MailListener, correo.remitente, correo.asunto)
         }
     }

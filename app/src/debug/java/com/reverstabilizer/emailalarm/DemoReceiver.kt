@@ -17,7 +17,10 @@ import kotlinx.coroutines.launch
  *   adb shell am broadcast -n com.reverstabilizer.emailalarm/.DemoReceiver \
  *       --es accion reglas --es idioma en
  *
- * accion: reglas | alarma | detener      idioma: en | es
+ * accion: reglas | alarma | detener | pro | sinpro      idioma: en | es
+ *
+ * "pro" simula una suscripcion activa (solo debug), para capturas y para usar
+ * la app antes de que exista el producto en Play Console. "sinpro" la quita.
  */
 class DemoReceiver : BroadcastReceiver() {
 
@@ -27,6 +30,8 @@ class DemoReceiver : BroadcastReceiver() {
             "reglas" -> cargarReglas(context, espanol)
             "alarma" -> mostrarAlarma(context, espanol)
             "detener" -> Alarma.detener()
+            "pro" -> Suscripcion.simularActiva(context, true)
+            "sinpro" -> Suscripcion.simularActiva(context, false)
         }
     }
 

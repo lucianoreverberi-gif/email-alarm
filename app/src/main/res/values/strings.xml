@@ -60,6 +60,30 @@
     <string name="perm_battery_title">Ignore battery optimization</string>
     <string name="perm_battery_body">Stops the system from putting the app to sleep and missing emails.</string>
 
+    <!-- Suscripcion. Google exige mostrar duracion de la prueba, precio,
+         renovacion automatica y como cancelar. -->
+    <string name="section_subscription">Subscription</string>
+    <string name="status_no_sub_title">Start your free month</string>
+    <string name="status_no_sub_body">The alarm only rings with an active subscription.</string>
+    <string name="status_expired_title">Your subscription ended</string>
+    <string name="status_expired_body">The alarm won\'t ring until you renew.</string>
+    <string name="sub_trial_terms">Free for %1$d days, then %2$s per year. Renews automatically. Cancel anytime in Google Play.</string>
+    <string name="sub_terms">%1$s per year. Renews automatically. Cancel anytime in Google Play.</string>
+    <string name="sub_start_trial">Start %1$d-day free trial</string>
+    <string name="sub_subscribe">Subscribe</string>
+    <string name="sub_renew">Renew</string>
+    <string name="sub_active">Subscription active</string>
+    <string name="sub_active_body">The alarm is on. You can change or cancel your subscription in Google Play.</string>
+    <string name="sub_manage">Manage subscription</string>
+    <string name="sub_unavailable">Can\'t reach Google Play right now. Check your connection and try again.</string>
+
+    <string name="canal_cuenta">Subscription</string>
+    <string name="aviso_vencida_titulo">Your subscription ended</string>
+    <string name="aviso_vencida_texto">Email Alarm won\'t ring until you renew. Tap to renew.</string>
+    <string name="aviso_correo_titulo">An important email arrived — the alarm didn\'t ring</string>
+    <string name="aviso_correo_nunca">Email from %1$s matched one of your rules. Start your free month so the alarm rings next time.</string>
+    <string name="aviso_correo_vencida">Email from %1$s matched one of your rules, but your subscription ended. Renew so the alarm rings next time.</string>
+
     <string name="alarm_banner">IMPORTANT EMAIL</string>
     <string name="channel_name">Email alarm</string>
     <string name="channel_description">Rings when an email matches one of your rules</string>

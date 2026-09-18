@@ -90,6 +90,9 @@ img { max-width: 100%; }
   background: var(--superficie); border: 1px solid var(--borde);
   font-weight: 600; color: var(--suave);
 }
+.precio, .portada .precio { font-size: 15px; color: var(--suave); margin: 14px 0 0; }
+.cierre .precio { color: rgba(255, 255, 255, .82); }
+
 .proximamente::before {
   content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--verde);
 }

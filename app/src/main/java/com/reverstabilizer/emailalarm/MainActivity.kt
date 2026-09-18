@@ -19,12 +19,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
 import com.reverstabilizer.emailalarm.ui.theme.EmailalarmTheme
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
 
     private val permisos = mutableStateOf<List<EstadoDePermiso>>(emptyList())
     private val appsEscuchadas = mutableStateOf<Set<String>>(emptySet())
+    private val oferta = mutableStateOf<Suscripcion.Oferta?>(null)
 
     private val pedirPermisoNotificaciones =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {
@@ -37,6 +39,7 @@ class MainActivity : ComponentActivity() {
         pedirNotificacionesSiHaceFalta()
 
         appsEscuchadas.value = Ajustes.appsEscuchadas(this)
+        Suscripcion.inicializar(this)
         val instaladas = AppsDeCorreo.instaladas(this)
 
         setContent {
@@ -45,6 +48,7 @@ class MainActivity : ComponentActivity() {
                 val flujoDeReglas = remember { dao.observarTodas() }
                 val reglas by flujoDeReglas.collectAsState(initial = emptyList())
                 val scope = rememberCoroutineScope()
+                val suscripcion by Suscripcion.estadoFlujo.collectAsState()
 
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     PantallaPrincipal(
@@ -72,6 +76,14 @@ class MainActivity : ComponentActivity() {
                         },
                         onBorrarRegla = { regla -> scope.launch { dao.borrar(regla) } },
                         onDetenerAlarma = { Alarma.detener() },
+                        suscripcion = suscripcion,
+                        oferta = oferta.value,
+                        onSuscribirse = {
+                            oferta.value?.let { o ->
+                                scope.launch { Suscripcion.comprar(this@MainActivity, o) }
+                            }
+                        },
+                        onGestionarSuscripcion = { Suscripcion.abrirGestion(this@MainActivity) },
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -83,6 +95,12 @@ class MainActivity : ComponentActivity() {
         super.onResume()
         // Se revisan al volver de Ajustes, asi la pantalla queda al dia sola.
         permisos.value = Permisos.revisarTodos(this)
+        // Al volver de la hoja de pago o de la pantalla de suscripciones de
+        // Play, el estado puede haber cambiado.
+        lifecycleScope.launch {
+            Suscripcion.verificar(this@MainActivity)
+            oferta.value = Suscripcion.oferta(this@MainActivity)
+        }
     }
 
     /** Desde Android 13 hace falta permiso para que la app muestre notificaciones propias. */
