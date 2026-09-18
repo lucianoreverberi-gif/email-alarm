@@ -14,7 +14,7 @@ Los límites de caracteres son los de Play; todos los textos están verificados 
 | Público objetivo | **18 años o más** — evita entrar en las políticas de Familias, que no aportan nada para esta app |
 | Contiene anuncios | No |
 | Compras dentro de la app | No |
-| Política de privacidad | `https://<dominio>/privacy/` (fuente: `web/privacy/index.html`) |
+| Política de privacidad | `https://email-alarm.vercel.app/privacy/` (fuente: `web/privacy/index.html`) |
 
 ---
 
