@@ -31,6 +31,12 @@ class DemoReceiver : BroadcastReceiver() {
             "historial" -> cargarHistorial(context, espanol)
             "alarma" -> mostrarAlarma(context, espanol)
             "detener" -> Alarma.detener()
+            // Dos alarmas en el mismo instante desde dos hilos, como cuando
+            // Gmail publica la misma notificacion dos veces. Tiene que quedar
+            // un solo reproductor, y DETENER tiene que callarla.
+            "doble" -> repeat(2) {
+                Thread { Alarma.disparar(context, "Prueba doble", "Dos a la vez") }.start()
+            }
             "pro" -> Suscripcion.simularActiva(context, true)
             "sinpro" -> Suscripcion.simularActiva(context, false)
         }

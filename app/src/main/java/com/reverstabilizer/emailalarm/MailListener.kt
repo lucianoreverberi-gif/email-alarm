@@ -16,6 +16,7 @@ class MailListener : NotificationListenerService() {
     // Las consultas a Room no pueden correr en el hilo principal, y
     // onNotificationPosted llega justamente en el principal.
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private val duplicados = Duplicados()
 
     override fun onListenerConnected() {
         Registro.d("Listener CONECTADO: ya estoy recibiendo notificaciones")
@@ -41,6 +42,10 @@ class MailListener : NotificationListenerService() {
         }
 
         val correo = MotorDeReglas.leerCorreo(sbn) ?: return
+        if (!duplicados.esNuevo("${sbn.packageName}|${correo.remitente}|${correo.asunto}")) {
+            Registro.d("[$app] repetida, se ignora -> ${correo.asunto}")
+            return
+        }
 
         scope.launch {
             val reglas = BaseDeDatos.obtener(this@MailListener).reglaDao().activas()

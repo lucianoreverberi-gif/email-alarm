@@ -20,34 +20,44 @@ private const val DURACION_MAXIMA_MS = 2 * 60 * 1000L
  */
 object AlarmPlayer {
 
-    private var player: MediaPlayer? = null
+    // Todos los reproductores que se arrancaron y no se pararon. Deberia haber
+    // uno como mucho, pero si alguna vez hubiera dos, DETENER los para a todos:
+    // una alarma que no se puede callar es el peor error que puede tener la app.
+    private val activos = mutableListOf<MediaPlayer>()
     private val handler = Handler(Looper.getMainLooper())
     private val corteDeSeguridad = Runnable { detener() }
     private var alDetener: (() -> Unit)? = null
 
-    fun estaSonando(): Boolean = player != null
+    @Synchronized
+    fun estaSonando(): Boolean = activos.isNotEmpty()
 
     /**
-     * Idempotente: llamarla dos veces no arranca dos alarmas.
+     * Idempotente: llamarla dos veces no arranca dos alarmas, aunque las dos
+     * llamadas lleguen a la vez desde hilos distintos (Gmail a veces publica
+     * la misma notificacion dos veces en el mismo instante). Por eso es
+     * @Synchronized: sin eso, las dos veian "no hay nada sonando" y cada una
+     * arrancaba su reproductor.
      *
      * [sonido] es el tono elegido en la regla (una Uri en texto), o null para
      * el de alarma del sistema. Si el elegido falla, suena el del sistema:
      * un tono borrado o sin permiso de lectura nunca puede dejarla muda.
      */
+    @Synchronized
     fun sonar(context: Context, sonido: String? = null, alDetener: (() -> Unit)? = null) {
         this.alDetener = alDetener ?: this.alDetener
-        if (player != null) return
+        if (activos.isNotEmpty()) return
 
         val ctx = context.applicationContext
         val delSistema = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
             ?: RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
         val elegido = sonido?.let { runCatching { Uri.parse(it) }.getOrNull() }
 
-        player = crear(ctx, elegido) ?: crear(ctx, delSistema)
+        val player = crear(ctx, elegido) ?: crear(ctx, delSistema)
         if (player == null) {
             Registro.w("No se pudo reproducir ningun tono")
             return
         }
+        activos += player
 
         handler.postDelayed(corteDeSeguridad, DURACION_MAXIMA_MS)
         Registro.d(">>> ALARMA SONANDO <<<")
@@ -76,14 +86,16 @@ object AlarmPlayer {
         }
     }
 
+    @Synchronized
     fun detener() {
         handler.removeCallbacks(corteDeSeguridad)
 
-        player?.let { p ->
-            if (p.isPlaying) p.stop()
-            p.release()
+        activos.forEach { p ->
+            // Uno que fallo al parar no puede impedir que se paren los demas.
+            runCatching { if (p.isPlaying) p.stop() }
+            runCatching { p.release() }
         }
-        player = null
+        activos.clear()
 
         alDetener?.invoke()
         alDetener = null
