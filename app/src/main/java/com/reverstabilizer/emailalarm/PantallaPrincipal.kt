@@ -37,7 +37,6 @@ import androidx.compose.material.icons.rounded.ExpandLess
 import androidx.compose.material.icons.rounded.ExpandMore
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.NotificationsActive
-import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material.icons.rounded.PriorityHigh
 import androidx.compose.material.icons.rounded.Shield
 import androidx.compose.material.icons.rounded.Timer
@@ -187,8 +186,15 @@ fun PantallaPrincipal(
                 )
             }
 
-            item { TarjetaDePrueba(onProbarAhora, onProbarDespues) }
-
+            // Probar: su propia seccion, sin tarjeta. Las tarjetas blancas son
+            // solo alarmas; esto es una accion, y tiene que verse distinto.
+            item {
+                Seccion(
+                    titulo = stringResource(R.string.test_title),
+                    subtitulo = stringResource(R.string.test_body)
+                )
+            }
+            item { BotonesDePrueba(onProbarAhora, onProbarDespues) }
 
             // Actividad reciente
             item {
@@ -540,26 +546,27 @@ private fun Condicion(icono: ImageVector, texto: String, descripcion: String) {
 
 /** Probar a mano pero sin robar protagonismo a las alarmas. */
 @Composable
-private fun TarjetaDePrueba(onProbarAhora: () -> Unit, onProbarDespues: () -> Unit) {
-    Tarjeta {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Circulo(Icons.Rounded.NotificationsActive)
-            Column(Modifier.weight(1f).padding(start = 14.dp)) {
-                Text(stringResource(R.string.test_title), style = MaterialTheme.typography.titleMedium)
-                Ayuda(stringResource(R.string.test_body))
-            }
+private fun BotonesDePrueba(onProbarAhora: () -> Unit, onProbarDespues: () -> Unit) {
+    Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
+        FilledTonalButton(
+            onClick = onProbarAhora,
+            modifier = Modifier.weight(1f),
+            shape = RoundedCornerShape(14.dp),
+            contentPadding = PaddingValues(vertical = 14.dp)
+        ) {
+            Icon(Icons.Rounded.NotificationsActive, contentDescription = null, modifier = Modifier.size(20.dp))
+            Spacer(Modifier.width(8.dp))
+            Text(stringResource(R.string.test_now))
         }
-        Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(top = 4.dp)) {
-            FilledTonalButton(onClick = onProbarAhora, modifier = Modifier.weight(1f), shape = RoundedCornerShape(14.dp)) {
-                Icon(Icons.Rounded.PlayArrow, contentDescription = null, modifier = Modifier.size(20.dp))
-                Spacer(Modifier.width(6.dp))
-                Text(stringResource(R.string.test_now))
-            }
-            OutlinedButton(onClick = onProbarDespues, modifier = Modifier.weight(1f), shape = RoundedCornerShape(14.dp)) {
-                Icon(Icons.Rounded.Timer, contentDescription = null, modifier = Modifier.size(20.dp))
-                Spacer(Modifier.width(6.dp))
-                Text(stringResource(R.string.test_later))
-            }
+        OutlinedButton(
+            onClick = onProbarDespues,
+            modifier = Modifier.weight(1f),
+            shape = RoundedCornerShape(14.dp),
+            contentPadding = PaddingValues(vertical = 14.dp)
+        ) {
+            Icon(Icons.Rounded.Timer, contentDescription = null, modifier = Modifier.size(20.dp))
+            Spacer(Modifier.width(8.dp))
+            Text(stringResource(R.string.test_later))
         }
     }
 }
