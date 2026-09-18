@@ -95,7 +95,8 @@
     <string name="dialog_combination">Completa al menos uno de los dos últimos. Si completas ambos, la alarma suena cuando se cumple cualquiera de los dos.</string>
     <string name="dialog_missing">Falta el remitente o la palabra clave</string>
     <string name="field_sound">Sonido de la alarma</string>
-    <string name="sound_default">Tono de alarma del sistema</string>
+    <string name="field_sound_help">Elige un tono distinto para cada alarma y sabrás qué correo llegó sin mirar el teléfono.</string>
+    <string name="sound_default">Tono del sistema</string>
     <string name="sound_custom">Tono elegido</string>
     <string name="sound_change">Cambiar</string>
     <string name="action_save">Guardar</string>

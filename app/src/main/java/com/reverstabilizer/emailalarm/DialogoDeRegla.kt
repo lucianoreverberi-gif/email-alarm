@@ -8,6 +8,8 @@ import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,7 +19,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.MusicNote
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -29,9 +34,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 
 /**
@@ -114,36 +121,54 @@ fun DialogoDeRegla(
 
                 Ayuda(stringResource(R.string.dialog_combination))
 
+                // El sonido va con los campos, no al fondo: un tono distinto por
+                // alarma dice que correo llego sin mirar el telefono.
+                val elegirSonido = {
+                    val predeterminado = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
+                    selectorDeSonido.launch(
+                        Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
+                            .putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALARM)
+                            .putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
+                            // Nunca "Silencio": una alarma muda no sirve.
+                            .putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, false)
+                            .putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, predeterminado)
+                            .putExtra(
+                                RingtoneManager.EXTRA_RINGTONE_EXISTING_URI,
+                                sonido?.let(Uri::parse) ?: predeterminado
+                            )
+                            .putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, tituloSonido)
+                    )
+                }
+                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Text(tituloSonido, fontWeight = FontWeight.SemiBold)
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(4.dp))
+                            .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(4.dp))
+                            .clickable(onClick = elegirSonido)
+                            .padding(start = 14.dp, top = 6.dp, bottom = 6.dp)
+                    ) {
+                        Icon(
+                            Icons.Outlined.MusicNote,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                        Text(
+                            nombreDelSonido(sonido),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.weight(1f).padding(start = 12.dp)
+                        )
+                        TextButton(onClick = elegirSonido) { Text(stringResource(R.string.sound_change)) }
+                    }
+                    Ayuda(stringResource(R.string.field_sound_help))
+                }
+
                 // Las reglas por palabra clave son para remitentes desconocidos
                 // (un tramite, un organismo), que son justo los que mas caen en spam.
                 if (palabraClave.isNotBlank()) ConsejoSpam(palabraClave.trim())
-
-                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Text(tituloSonido, fontWeight = FontWeight.SemiBold)
-                    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
-                        Text(
-                            nombreDelSonido(sonido),
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.weight(1f)
-                        )
-                        TextButton(onClick = {
-                            val predeterminado = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
-                            selectorDeSonido.launch(
-                                Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
-                                    .putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALARM)
-                                    .putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
-                                    // Nunca "Silencio": una alarma muda no sirve.
-                                    .putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, false)
-                                    .putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, predeterminado)
-                                    .putExtra(
-                                        RingtoneManager.EXTRA_RINGTONE_EXISTING_URI,
-                                        sonido?.let(Uri::parse) ?: predeterminado
-                                    )
-                                    .putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, tituloSonido)
-                            )
-                        }) { Text(stringResource(R.string.sound_change)) }
-                    }
-                }
             }
         },
         confirmButton = {

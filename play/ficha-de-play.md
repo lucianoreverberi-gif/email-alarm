@@ -75,6 +75,7 @@ Keep as many alarms as you want and turn them on or off anytime. If you set both
 ✓ Full screen over the lock screen: it wakes you up
 ✓ Works with Gmail, Outlook, Samsung Email, Yahoo Mail and more, across all your accounts
 ✓ Test button: check that it works before you need it
+✓ A different sound for each alarm: know which email arrived without looking
 ✓ Flexible matching: "uscis" also rings for "USCIS Online Account". Capitals and accents don't matter.
 ✓ Recent activity: see the latest emails it detected and whether it rang
 ✓ No account, no sign-up, no passwords
@@ -159,6 +160,7 @@ Puedes tener todas las alarmas que quieras y encenderlas o apagarlas cuando quie
 ✓ Pantalla completa sobre la pantalla de bloqueo: te despierta
 ✓ Funciona con Gmail, Outlook, Samsung Email, Yahoo Mail y más, en todas tus cuentas
 ✓ Botón de prueba: compruebas que funciona antes de necesitarlo
+✓ Un sonido distinto para cada alarma: sabes qué email llegó sin mirar el teléfono
 ✓ Búsqueda flexible: si pones "uscis", también suena con "USCIS Online Account". No importan mayúsculas ni tildes.
 ✓ Actividad reciente: ves los últimos emails detectados y si sonó o no
 ✓ Sin cuenta, sin registro, sin contraseñas

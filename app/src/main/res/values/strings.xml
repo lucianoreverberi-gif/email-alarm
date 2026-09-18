@@ -96,7 +96,8 @@
     <string name="dialog_combination">Fill in at least one of the last two. If you fill in both, the alarm rings when either one matches.</string>
     <string name="dialog_missing">Missing the sender or the keyword</string>
     <string name="field_sound">Alarm sound</string>
-    <string name="sound_default">System alarm tone</string>
+    <string name="field_sound_help">Pick a different tone for each alarm and you\'ll know which email arrived without looking.</string>
+    <string name="sound_default">System tone</string>
     <string name="sound_custom">Chosen tone</string>
     <string name="sound_change">Change</string>
     <string name="action_save">Save</string>
