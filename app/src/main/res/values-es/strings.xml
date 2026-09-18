@@ -45,6 +45,9 @@
     <string name="dialog_hint_both">Va a sonar si se cumple cualquiera de las dos.</string>
     <string name="dialog_hint_one">Con una de las dos alcanza. La palabra clave se busca en el asunto y en el resumen del cuerpo.</string>
 
+    <string name="tip_spam_title">Consejo: que no caiga en spam</string>
+    <string name="tip_spam_body">Si este correo cae en spam, tu app de correo no avisa y Email Alarm no suena. En Gmail desde la web (en la app del teléfono no se puede), creá un filtro con la palabra \"%1$s\" y marcá \"Nunca enviar a spam\".</string>
+
     <string name="perm_listener_title">Leer notificaciones</string>
     <string name="perm_listener_body">Es como la app se entera de que llegó un correo. Sin esto no funciona nada.</string>
     <string name="perm_post_title">Mostrar notificaciones</string>

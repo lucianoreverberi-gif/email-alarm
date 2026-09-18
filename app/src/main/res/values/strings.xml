@@ -46,6 +46,9 @@
     <string name="dialog_hint_both">It will ring if either one matches.</string>
     <string name="dialog_hint_one">One of the two is enough. The keyword is searched in the subject and in the body preview.</string>
 
+    <string name="tip_spam_title">Tip: keep it out of spam</string>
+    <string name="tip_spam_body">If this email lands in spam, your email app won\'t notify you and Email Alarm won\'t ring. On the Gmail website (it can\'t be done in the phone app), create a filter with the word \"%1$s\" and check \"Never send it to Spam\".</string>
+
     <string name="perm_listener_title">Read notifications</string>
     <string name="perm_listener_body">This is how the app finds out an email arrived. Nothing works without it.</string>
     <string name="perm_post_title">Show notifications</string>

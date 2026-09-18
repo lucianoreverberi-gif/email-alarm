@@ -55,6 +55,7 @@ Email Alarm has no internet permission: it physically cannot send your data anyw
 
 GOOD TO KNOW
 • Your email app must be installed on this phone with notifications turned on. If an account stops syncing, there is no notification to hear.
+• Emails that land in spam don't create a notification. For senders you don't know yet, create a filter on the Gmail website with a keyword and check "Never send it to Spam".
 • Outlook and some other apps only show the sender's name, not the address. For those, use the name or a keyword in your rule — the app warns you when a rule can't match.
 • The app walks you through each permission and shows at a glance whether the alarm is ready to ring.
 ```
@@ -98,6 +99,7 @@ Email Alarm no tiene permiso de internet: físicamente no puede mandar tus datos
 
 PARA TENER EN CUENTA
 • Tu app de correo tiene que estar instalada en este teléfono y con las notificaciones activadas. Si una cuenta deja de sincronizar, no hay notificación que escuchar.
+• Los correos que caen en spam no generan notificación. Para remitentes que todavía no conocés, creá un filtro en Gmail desde la web con una palabra clave y marcá "Nunca enviar a spam".
 • Outlook y algunas otras apps solo muestran el nombre del remitente, no la dirección. Para esas, usá el nombre o una palabra clave: la app te avisa cuando una regla no puede coincidir.
 • La app te guía por cada permiso y te muestra de un vistazo si la alarma está lista para sonar.
 ```

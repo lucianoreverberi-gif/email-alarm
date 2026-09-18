@@ -11,8 +11,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -362,7 +364,12 @@ private fun DialogoDeRegla(
             )
         },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            // Con el consejo de spam el dialogo se alarga: en pantallas chicas
+            // tiene que poder desplazarse para no esconder el boton Guardar.
+            Column(
+                modifier = Modifier.verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
                 OutlinedTextField(
                     value = nombre,
                     onValueChange = { nombre = it },
@@ -399,6 +406,11 @@ private fun DialogoDeRegla(
                         MaterialTheme.colorScheme.error
                     }
                 )
+                // Las reglas por palabra clave son para remitentes desconocidos
+                // (un tramite, un organismo), que son justo los que mas caen en spam.
+                if (palabraClave.isNotBlank()) {
+                    ConsejoSpam(palabraClave.trim())
+                }
             }
         },
         confirmButton = {
@@ -422,6 +434,34 @@ private fun DialogoDeRegla(
             TextButton(onClick = onCancelar) { Text(stringResource(R.string.action_cancel)) }
         }
     )
+}
+
+/**
+ * Si el correo cae en spam, la app de correo no notifica y la alarma no se
+ * entera: es un falso negativo silencioso. Un filtro de Gmail con
+ * "Nunca enviar a spam" lo evita aunque no se sepa el remitente.
+ */
+@Composable
+private fun ConsejoSpam(palabra: String) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.primaryContainer, RoundedCornerShape(12.dp))
+            .padding(12.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        Text(
+            text = stringResource(R.string.tip_spam_title),
+            style = MaterialTheme.typography.labelLarge,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onPrimaryContainer
+        )
+        Text(
+            text = stringResource(R.string.tip_spam_body, palabra),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onPrimaryContainer
+        )
+    }
 }
 
 @Composable
