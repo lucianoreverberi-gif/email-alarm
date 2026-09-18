@@ -299,6 +299,10 @@ Completar el cuestionario como **app de utilidad / productividad**, respondiendo
 | Ícono | `icono-play-512.png` | 512×512 PNG |
 | Gráfico destacado (en) | `grafico-destacado-en.png` | 1024×500 |
 | Gráfico destacado (es) | `grafico-destacado-es.png` | 1024×500 |
-| Capturas de teléfono | *pendiente: rehacer con el diseño nuevo* | mínimo 2, recomendado 4 a 8; relación máxima 2:1 |
+| Capturas de teléfono (en) | `capturas-play/1..4-*-en.png` | 1080×1920, 4 capturas (mínimo 2, máximo 8; relación máxima 2:1) |
+| Capturas de teléfono (es) | `capturas-play/1..4-*-es.png` | Igual, en la ficha en español |
+
+Subirlas en orden (1 a 4): Play muestra primero la primera, y es la que más gente ve.
 
 Para regenerar el ícono y los gráficos: `python play/generar_iconos.py` y después `bash play/renderizar.sh`.
+Para regenerar las capturas: `bash play/capturas.sh` (emulador abierto, build debug instalado) y después `python play/marketing.py`.
