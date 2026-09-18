@@ -71,6 +71,12 @@ object AvisoSuscripcion {
             .setAutoCancel(true)
             .build()
 
-        gestor.notify(id, notificacion)
+        // Si la persona quito el permiso de notificaciones, Android lo rechaza:
+        // no hay a quien avisar, pero la app no puede caerse por eso.
+        try {
+            gestor.notify(id, notificacion)
+        } catch (e: SecurityException) {
+            Registro.w("Sin permiso para avisar de la suscripcion: ${e.message}")
+        }
     }
 }

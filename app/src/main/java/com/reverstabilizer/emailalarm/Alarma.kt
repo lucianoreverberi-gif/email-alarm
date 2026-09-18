@@ -37,9 +37,10 @@ object Alarma {
 
     fun disparar(context: Context, remitente: String, asunto: String, sonido: String? = null) {
         val ctx = context.applicationContext
+        // Primero el sonido: si algo de la notificacion falla, la alarma ya suena.
+        AlarmPlayer.sonar(ctx, sonido) { NotificationManagerCompat.from(ctx).cancel(ID_NOTIFICACION) }
         crearCanal(ctx)
         mostrarNotificacion(ctx, remitente, asunto)
-        AlarmPlayer.sonar(ctx, sonido) { NotificationManagerCompat.from(ctx).cancel(ID_NOTIFICACION) }
     }
 
     /**
@@ -136,7 +137,13 @@ object Alarma {
             .addAction(android.R.drawable.ic_lock_idle_alarm, ctx.getString(R.string.action_stop), detener)
             .build()
 
-        NotificationManagerCompat.from(ctx).notify(ID_NOTIFICACION, notificacion)
+        // El permiso se puede quitar entre la revision de arriba y este momento.
+        // Sin notificacion no hay pantalla de alarma, pero el sonido ya esta andando.
+        try {
+            NotificationManagerCompat.from(ctx).notify(ID_NOTIFICACION, notificacion)
+        } catch (e: SecurityException) {
+            Registro.w("Android rechazo la notificacion de alarma: ${e.message}")
+        }
     }
 
     private fun puedeNotificar(ctx: Context): Boolean =
