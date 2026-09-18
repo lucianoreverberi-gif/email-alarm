@@ -5,9 +5,36 @@
     <!-- Pantalla principal -->
     <string name="action_settings">Settings</string>
     <string name="section_rules">My alarms</string>
-    <string name="section_history">Recent emails</string>
+    <string name="section_history">Recent activity</string>
     <string name="section_permissions">Permissions</string>
     <string name="section_apps">Apps I listen to</string>
+
+    <!-- Encabezado -->
+    <string name="listening">Listening to %1$s</string>
+    <string name="listening_none">Not listening to any email app</string>
+
+    <!-- Tarjeta de alarma -->
+    <string name="rule_or_keyword">or contains “%1$s”</string>
+    <string name="rule_keyword">Contains “%1$s”</string>
+    <string name="cd_sender">Sender</string>
+    <string name="cd_keyword">Keyword</string>
+    <string name="cd_sound">Sound</string>
+
+    <!-- Probar -->
+    <string name="test_title">Test the alarm</string>
+    <string name="test_body">Hear it now, or tap \"In 10 s\" and lock your phone. That\'s the real test.</string>
+    <string name="test_now">Now</string>
+    <string name="test_later">In 10 s</string>
+
+    <!-- Aviso de cuenta -->
+    <string name="account_problem_title">%1$s can\'t sign in to %2$s</string>
+    <string name="account_problem_generic">%1$s reports a problem with an account</string>
+    <string name="account_problem_body">Emails from that account aren\'t reaching %1$s. If you read it in another app, ignore this.</string>
+    <string name="account_ignore">Ignore</string>
+
+    <!-- Actividad -->
+    <string name="history_show_all">Show all %1$d</string>
+    <string name="history_show_less">Show less</string>
 
     <!-- Primera alarma -->
     <string name="empty_alarms_title">Create your first alarm</string>
@@ -21,9 +48,6 @@
     <string name="action_enable_permission">Enable permission</string>
     <string name="action_start_free_month">Start free month</string>
     <string name="action_create_first_rule">Create my first alarm</string>
-    <string name="action_test_alarm">Test alarm</string>
-    <string name="action_test_alarm_later">Test in 10 seconds</string>
-    <string name="test_alarm_later_hint">Lock your phone after tapping. It\'s the real test: the alarm has to wake you up with the screen off.</string>
     <string name="test_alarm_scheduled">Lock your phone now. The alarm rings in 10 seconds.</string>
     <string name="test_alarm_sender">Email Alarm</string>
     <string name="test_alarm_subject">This is a test. If you can hear it, it works.</string>
@@ -32,11 +56,7 @@
     <string name="action_new_rule">New alarm</string>
     <string name="action_delete">Delete</string>
     <!-- Frases completas, no armadas por partes: en otros idiomas el orden cambia. -->
-    <string name="rule_when_sender">Rings when it comes from \"%1$s\"</string>
-    <string name="rule_when_keyword">Rings when it says \"%1$s\"</string>
-    <string name="rule_when_both">Rings when it comes from \"%1$s\" or says \"%2$s\"</string>
-    <string name="rule_sound">Sound: %1$s</string>
-    <string name="rule_address_warning">Outlook and some other apps only show the sender\'s name. This alarm also tries the part before the @, but if the visible name is different it won\'t match there. Safer: use the name exactly as you see it in the notification.</string>
+    <string name="rule_address_warning">Outlook only shows the sender\'s name, and it can\'t be guessed from this address. Use the name exactly as it appears in the notification.</string>
 
     <!-- Historial -->
     <string name="history_empty">No emails yet since the app was turned on. When one arrives it shows up here, even if it matches none of your alarms.</string>
@@ -44,11 +64,10 @@
     <string name="history_clear">Clear</string>
     <string name="history_rang">Rang · %1$s</string>
     <string name="history_no_match">No match</string>
-    <string name="history_no_sub">Matched \"%1$s\", didn\'t ring: no subscription</string>
-    <string name="history_account">Email account problem</string>
+    <string name="history_no_sub">Didn\'t ring · no subscription</string>
 
     <!-- Permisos -->
-    <string name="permissions_summary">Permissions: %1$d of %2$d</string>
+    <string name="permissions_summary">%1$d of %2$d enabled</string>
     <string name="permissions_show">Show all</string>
     <string name="permissions_hide">Hide</string>
     <string name="action_enable">Enable</string>

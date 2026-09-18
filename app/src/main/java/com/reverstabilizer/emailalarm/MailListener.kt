@@ -79,12 +79,15 @@ class MailListener : NotificationListenerService() {
         regla: String?
     ) {
         val dao = BaseDeDatos.obtener(this).deteccionDao()
+        // La firma automatica no ayuda a reconocer el correo: se guarda sin ella.
+        val texto = sinFirmasParaMostrar(asunto).take(LARGO_ASUNTO_HISTORIAL)
+        if (resultado == Resultado.AVISO_CUENTA) dao.borrarAvisosIguales(texto)
         dao.guardar(
             Deteccion(
                 hora = System.currentTimeMillis(),
                 app = app,
                 remitente = remitente,
-                asunto = asunto.take(LARGO_ASUNTO_HISTORIAL),
+                asunto = texto,
                 resultado = resultado.name,
                 regla = regla
             )

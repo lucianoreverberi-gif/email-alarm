@@ -5,9 +5,36 @@
     <!-- Pantalla principal -->
     <string name="action_settings">Ajustes</string>
     <string name="section_rules">Mis alarmas</string>
-    <string name="section_history">Últimos correos</string>
+    <string name="section_history">Actividad reciente</string>
     <string name="section_permissions">Permisos</string>
     <string name="section_apps">Apps que escucho</string>
+
+    <!-- Encabezado -->
+    <string name="listening">Escuchando %1$s</string>
+    <string name="listening_none">No estás escuchando ninguna app de correo</string>
+
+    <!-- Tarjeta de alarma -->
+    <string name="rule_or_keyword">o contiene “%1$s”</string>
+    <string name="rule_keyword">Contiene “%1$s”</string>
+    <string name="cd_sender">Remitente</string>
+    <string name="cd_keyword">Palabra clave</string>
+    <string name="cd_sound">Sonido</string>
+
+    <!-- Probar -->
+    <string name="test_title">Probar la alarma</string>
+    <string name="test_body">Escuchala ahora, o tocá \"En 10 s\" y bloqueá el teléfono: es la prueba real.</string>
+    <string name="test_now">Ahora</string>
+    <string name="test_later">En 10 s</string>
+
+    <!-- Aviso de cuenta -->
+    <string name="account_problem_title">%1$s no puede entrar a %2$s</string>
+    <string name="account_problem_generic">%1$s avisa un problema con una cuenta</string>
+    <string name="account_problem_body">No llegan correos de esa cuenta a %1$s. Si la leés en otra app, ignoralo.</string>
+    <string name="account_ignore">Ignorar</string>
+
+    <!-- Actividad -->
+    <string name="history_show_all">Ver los %1$d</string>
+    <string name="history_show_less">Ver menos</string>
 
     <!-- Primera alarma -->
     <string name="empty_alarms_title">Creá tu primera alarma</string>
@@ -21,9 +48,6 @@
     <string name="action_enable_permission">Activar permiso</string>
     <string name="action_start_free_month">Empezar mes gratis</string>
     <string name="action_create_first_rule">Crear mi primera alarma</string>
-    <string name="action_test_alarm">Probar alarma</string>
-    <string name="action_test_alarm_later">Probar en 10 segundos</string>
-    <string name="test_alarm_later_hint">Después de tocarlo, bloqueá el teléfono. Es la prueba de verdad: la alarma te tiene que despertar con la pantalla apagada.</string>
     <string name="test_alarm_scheduled">Bloqueá el teléfono ahora. La alarma suena en 10 segundos.</string>
     <string name="test_alarm_sender">Email Alarm</string>
     <string name="test_alarm_subject">Esto es una prueba. Si la escuchás, funciona.</string>
@@ -31,11 +55,7 @@
     <!-- Reglas -->
     <string name="action_new_rule">Nueva alarma</string>
     <string name="action_delete">Borrar</string>
-    <string name="rule_when_sender">Suena si viene de \"%1$s\"</string>
-    <string name="rule_when_keyword">Suena si dice \"%1$s\"</string>
-    <string name="rule_when_both">Suena si viene de \"%1$s\" o dice \"%2$s\"</string>
-    <string name="rule_sound">Sonido: %1$s</string>
-    <string name="rule_address_warning">Outlook y algunas otras apps solo muestran el nombre del remitente. Esta alarma también prueba con lo que va antes de la @, pero si el nombre visible es otro, ahí no va a coincidir. Más seguro: usá el nombre tal como lo ves en la notificación.</string>
+    <string name="rule_address_warning">Outlook solo muestra el nombre del remitente y con esta dirección no se puede deducir. Usá el nombre tal como aparece en la notificación.</string>
 
     <!-- Historial -->
     <string name="history_empty">Todavía no llegó ningún correo desde que se activó la app. Cuando llegue uno, aparece acá aunque no coincida con ninguna alarma.</string>
@@ -43,11 +63,10 @@
     <string name="history_clear">Borrar</string>
     <string name="history_rang">Sonó · %1$s</string>
     <string name="history_no_match">Sin coincidencia</string>
-    <string name="history_no_sub">Coincidió con \"%1$s\", no sonó: sin suscripción</string>
-    <string name="history_account">Problema con la cuenta de correo</string>
+    <string name="history_no_sub">No sonó · sin suscripción</string>
 
     <!-- Permisos -->
-    <string name="permissions_summary">Permisos: %1$d de %2$d</string>
+    <string name="permissions_summary">%1$d de %2$d activados</string>
     <string name="permissions_show">Ver todos</string>
     <string name="permissions_hide">Ocultar</string>
     <string name="action_enable">Activar</string>

@@ -109,12 +109,26 @@ object MotorDeReglas {
         val b = normalizar(buscado.trim())
         if (texto.contains(b)) return true
 
-        val arroba = b.indexOf('@')
-        if (arroba <= 0) return false
-        val local = compacto(b.substring(0, arroba))
-        if (local.length < 4 || local in LOCALES_GENERICOS) return false
+        val local = parteLocalUtil(b) ?: return false
         return compacto(texto).contains(local)
     }
+
+    /**
+     * Lo que va antes de la @, compacto, si sirve para reconocer el nombre
+     * visible. null si no es una direccion, o si es muy corta o generica
+     * ("info@", "rrhh@"): ahi una app que solo muestra el nombre no va a coincidir.
+     */
+    internal fun parteLocalUtil(direccion: String): String? {
+        val b = normalizar(direccion.trim())
+        val arroba = b.indexOf('@')
+        if (arroba <= 0) return null
+        val local = compacto(b.substring(0, arroba))
+        return local.takeUnless { it.length < 4 || it in LOCALES_GENERICOS }
+    }
+
+    /** La direccion de correo dentro de un aviso de cuenta, para agrupar e ignorar por cuenta. */
+    fun cuentaDelAviso(aviso: String): String =
+        Regex("""[\w.+-]+@[\w-]+(?:\.[\w-]+)+""").find(aviso)?.value?.lowercase() ?: aviso
 
     /**
      * Partes de direccion tan comunes que usarlas haria sonar la alarma con
@@ -181,6 +195,15 @@ private val FIRMAS = Regex(
 
 /** Recibe texto ya [normalizar]do. Deja un espacio para no pegar las palabras vecinas. */
 internal fun sinFirmas(texto: String): String = texto.replace(FIRMAS, " ")
+
+private val FIRMAS_VISIBLES = Regex(FIRMAS.pattern, RegexOption.IGNORE_CASE)
+
+/** Para mostrar: "Test — Luciano Get Outlook for Android" queda "Test — Luciano". */
+fun sinFirmasParaMostrar(texto: String): String =
+    texto.replace(FIRMAS_VISIBLES, " ")
+        .replace(Regex("""\s+"""), " ")
+        .trim()
+        .trimEnd('—', '-', '–', ' ')
 
 /** Normalizado y solo letras y numeros: "Juan Pérez" y "juan.perez" dan igual. */
 internal fun compacto(texto: String): String = normalizar(texto).filter { it.isLetterOrDigit() }

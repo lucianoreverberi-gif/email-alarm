@@ -1,8 +1,10 @@
 package com.reverstabilizer.emailalarm
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,18 +12,24 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.automirrored.rounded.OpenInNew
+import androidx.compose.material.icons.rounded.NotificationsOff
+import androidx.compose.material.icons.rounded.WorkspacePremium
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.reverstabilizer.emailalarm.ui.theme.Aviso
 
 /**
  * Lo que se configura una vez y no hace falta ver cada dia: la suscripcion
@@ -42,85 +50,121 @@ fun PantallaAjustes(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
             .verticalScroll(rememberScrollState())
-            .padding(horizontal = 20.dp, vertical = 16.dp),
+            .padding(horizontal = 16.dp, vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            TextButton(onClick = onVolver) { Text("← " + stringResource(R.string.action_back)) }
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 4.dp)) {
+            IconButton(onClick = onVolver) {
+                Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = stringResource(R.string.action_back))
+            }
+            Text(
+                stringResource(R.string.settings_title),
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier.padding(start = 4.dp)
+            )
         }
-        Text(
-            text = stringResource(R.string.settings_title),
-            fontSize = 32.sp,
-            fontWeight = FontWeight.ExtraBold,
-            color = MaterialTheme.colorScheme.onBackground
-        )
 
-        Titulo(stringResource(R.string.section_subscription), Modifier.padding(top = 12.dp))
+        Seccion(stringResource(R.string.section_subscription))
         Tarjeta {
-            when (suscripcion) {
-                Suscripcion.Estado.ACTIVA -> {
-                    Text(stringResource(R.string.sub_active), fontWeight = FontWeight.Bold, fontSize = 17.sp)
-                    Ayuda(stringResource(R.string.sub_active_body))
-                }
-                else -> {
+            val activa = suscripcion == Suscripcion.Estado.ACTIVA
+            val vencida = suscripcion == Suscripcion.Estado.VENCIDA
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Circulo(
+                    Icons.Rounded.WorkspacePremium,
+                    fondo = if (vencida) MaterialTheme.colorScheme.error.copy(alpha = 0.1f) else MaterialTheme.colorScheme.primaryContainer,
+                    tinte = if (vencida) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
+                )
+                Column(Modifier.weight(1f).padding(start = 14.dp)) {
                     Text(
                         stringResource(
-                            if (suscripcion == Suscripcion.Estado.VENCIDA) R.string.aviso_vencida_titulo
-                            else R.string.sub_none
+                            when {
+                                activa -> R.string.sub_active
+                                vencida -> R.string.aviso_vencida_titulo
+                                else -> R.string.sub_none
+                            }
                         ),
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 17.sp,
-                        color = if (suscripcion == Suscripcion.Estado.VENCIDA) {
-                            MaterialTheme.colorScheme.error
-                        } else {
-                            MaterialTheme.colorScheme.onSurface
-                        }
+                        style = MaterialTheme.typography.titleMedium,
+                        color = if (vencida) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface
                     )
-                    if (oferta == null) {
-                        Ayuda(stringResource(R.string.sub_unavailable))
-                    } else {
-                        // Google exige mostrar prueba, precio, renovacion y como cancelar.
-                        val dias = oferta.diasGratis
+                    if (activa) Ayuda(stringResource(R.string.sub_active_body))
+                }
+            }
+
+            if (!activa) {
+                if (oferta == null) {
+                    Text(
+                        stringResource(R.string.sub_unavailable),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Aviso.texto
+                    )
+                } else {
+                    // Google exige mostrar prueba, precio, renovacion y como cancelar.
+                    val dias = oferta.diasGratis
+                    Text(
+                        if (dias != null) stringResource(R.string.sub_trial_terms, dias, oferta.precioAnual)
+                        else stringResource(R.string.sub_terms, oferta.precioAnual),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    Button(
+                        onClick = onSuscribirse,
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(14.dp),
+                        contentPadding = PaddingValues(vertical = 14.dp)
+                    ) {
                         Text(
-                            if (dias != null) stringResource(R.string.sub_trial_terms, dias, oferta.precioAnual)
-                            else stringResource(R.string.sub_terms, oferta.precioAnual)
+                            when {
+                                vencida -> stringResource(R.string.sub_renew)
+                                dias != null -> stringResource(R.string.sub_start_trial, dias)
+                                else -> stringResource(R.string.sub_subscribe)
+                            },
+                            style = MaterialTheme.typography.labelLarge
                         )
-                        Button(
-                            onClick = onSuscribirse,
-                            modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(14.dp)
-                        ) {
-                            Text(
-                                when {
-                                    suscripcion == Suscripcion.Estado.VENCIDA -> stringResource(R.string.sub_renew)
-                                    dias != null -> stringResource(R.string.sub_start_trial, dias)
-                                    else -> stringResource(R.string.sub_subscribe)
-                                },
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
                     }
                 }
             }
 
             // Google Play exige acceso claro a la gestion de la suscripcion desde
             // la app. Va siempre visible, y abre directo la de esta app.
-            Column(Modifier.padding(top = 4.dp)) {
-                TextButton(onClick = onGestionarSuscripcion) {
-                    Text(stringResource(R.string.sub_manage), fontWeight = FontWeight.SemiBold)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 4.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .clickable(onClick = onGestionarSuscripcion)
+                    .padding(vertical = 10.dp)
+            ) {
+                Column(Modifier.weight(1f)) {
+                    Text(
+                        stringResource(R.string.sub_manage),
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    Ayuda(stringResource(R.string.sub_manage_hint))
                 }
-                Ayuda(stringResource(R.string.sub_manage_hint), Modifier.padding(start = 12.dp))
+                Icon(
+                    Icons.AutoMirrored.Rounded.OpenInNew,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary
+                )
             }
         }
 
-        Titulo(stringResource(R.string.section_alarm), Modifier.padding(top = 12.dp))
+        Seccion(stringResource(R.string.section_alarm))
         Tarjeta {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Circulo(Icons.Rounded.NotificationsOff)
+                Column(Modifier.weight(1f).padding(start = 14.dp)) {
+                    Text(stringResource(R.string.action_stop_alarm), style = MaterialTheme.typography.titleMedium)
+                    Ayuda(stringResource(R.string.stop_alarm_hint))
+                }
+            }
             OutlinedButton(
                 onClick = onDetenerAlarma,
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(14.dp)
             ) { Text(stringResource(R.string.action_stop_alarm)) }
-            Ayuda(stringResource(R.string.stop_alarm_hint))
         }
     }
 }

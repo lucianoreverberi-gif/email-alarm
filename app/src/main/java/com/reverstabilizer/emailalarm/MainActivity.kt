@@ -31,6 +31,7 @@ class MainActivity : ComponentActivity() {
     private val permisos = mutableStateOf<List<EstadoDePermiso>>(emptyList())
     private val appsEscuchadas = mutableStateOf<Set<String>>(emptySet())
     private val oferta = mutableStateOf<Suscripcion.Oferta?>(null)
+    private val cuentasIgnoradas = mutableStateOf<Set<String>>(emptySet())
 
     private val pedirPermisoNotificaciones =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {
@@ -43,6 +44,7 @@ class MainActivity : ComponentActivity() {
         pedirNotificacionesSiHaceFalta()
 
         appsEscuchadas.value = Ajustes.appsEscuchadas(this)
+        cuentasIgnoradas.value = Ajustes.cuentasIgnoradas(this)
         Suscripcion.inicializar(this)
         val instaladas = AppsDeCorreo.instaladas(this)
 
@@ -89,6 +91,7 @@ class MainActivity : ComponentActivity() {
                             reglas = reglas,
                             detecciones = detecciones,
                             suscripcion = suscripcion,
+                            cuentasIgnoradas = cuentasIgnoradas.value,
                             onResolverPermiso = { permiso -> permiso.intent?.let { startActivity(it) } },
                             onCambiarApp = { paquete, activada ->
                                 val nuevas = appsEscuchadas.value.toMutableSet().apply {
@@ -118,6 +121,9 @@ class MainActivity : ComponentActivity() {
                             },
                             onSuscribirse = { suscribirse() },
                             onBorrarHistorial = { scope.launch { base.deteccionDao().borrarTodo() } },
+                            onIgnorarCuenta = { cuenta ->
+                                cuentasIgnoradas.value = Ajustes.ignorarCuenta(this@MainActivity, cuenta)
+                            },
                             onAbrirAjustes = { enAjustes = true },
                             modifier = Modifier.padding(innerPadding)
                         )

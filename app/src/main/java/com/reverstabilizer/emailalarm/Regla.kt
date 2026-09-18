@@ -99,6 +99,13 @@ interface DeteccionDao {
     )
     suspend fun recortar()
 
+    /**
+     * Gmail repite el mismo aviso de cuenta cada tanto. Se guarda solo el
+     * ultimo, para que no desplace de la lista a los correos de verdad.
+     */
+    @Query("DELETE FROM detecciones WHERE resultado = 'AVISO_CUENTA' AND asunto = :asunto")
+    suspend fun borrarAvisosIguales(asunto: String)
+
     @Query("DELETE FROM detecciones")
     suspend fun borrarTodo()
 }
