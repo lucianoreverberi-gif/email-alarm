@@ -121,12 +121,22 @@ try {
         }
     }
 
-    "--- jarsigner ---" | Out-File $log -Append -Encoding utf8
-    & "$jbr\jarsigner.exe" -keystore $llave -storepass:env EMAIL_ALARM_PASS `
-        -signedjar $firmado $sinFirmar upload 2>&1 | Out-File $log -Append -Encoding utf8
-    if ($LASTEXITCODE -ne 0 -or -not (Test-Path $firmado)) {
-        Mensaje "No se pudo firmar el bundle. Si la llave ya existia, puede ser la contrasena.`nEl detalle quedo en:`n$log" $true
-        exit 1
+    # Con la contrasena equivocada se vuelve a pedir, sin tener que reabrir nada.
+    while ($true) {
+        "--- jarsigner ---" | Out-File $log -Append -Encoding utf8
+        $salida = & "$jbr\jarsigner.exe" -keystore $llave -storepass:env EMAIL_ALARM_PASS `
+            -signedjar $firmado $sinFirmar upload 2>&1 | Out-String
+        $salida | Out-File $log -Append -Encoding utf8
+        if ($LASTEXITCODE -eq 0 -and (Test-Path $firmado)) { break }
+        if ($salida -notmatch 'password was incorrect') {
+            Mensaje "No se pudo firmar el bundle.`nEl detalle quedo en:`n$log" $true
+            exit 1
+        }
+        Mensaje "Esa contrasena no es la de la llave.`n`nFijate que no este activado Bloq Mayus y proba de nuevo. Podes tildar 'Mostrar contrasena' para ver lo que escribis." $true
+        $pass = Pedir-Contrasena $false
+        if (-not $pass) { "Cancelado por el usuario" | Out-File $log -Append -Encoding utf8; exit 1 }
+        $env:EMAIL_ALARM_PASS = $pass
+        $pass = $null
     }
 }
 finally {

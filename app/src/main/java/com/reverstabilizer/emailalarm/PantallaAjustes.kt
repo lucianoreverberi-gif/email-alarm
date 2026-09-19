@@ -19,13 +19,16 @@ import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.automirrored.rounded.OpenInNew
 import androidx.compose.material.icons.rounded.NotificationsOff
 import androidx.compose.material.icons.rounded.WorkspacePremium
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -38,6 +41,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.reverstabilizer.emailalarm.ui.theme.Aviso
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 /**
  * Lo que se configura una vez y no hace falta ver cada dia: la suscripcion
@@ -49,6 +55,8 @@ fun PantallaAjustes(
     planes: List<Suscripcion.Plan>,
     onVolver: () -> Unit,
     onComprar: (Suscripcion.Plan) -> Unit,
+    codigoVence: LocalDate?,
+    onCanjearCodigo: (String) -> Boolean,
     onGestionarSuscripcion: () -> Unit,
     onDetenerAlarma: () -> Unit,
     modifier: Modifier = Modifier
@@ -95,7 +103,18 @@ fun PantallaAjustes(
                         style = MaterialTheme.typography.titleMedium,
                         color = if (vencida) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface
                     )
-                    if (activa) Ayuda(stringResource(R.string.sub_active_body))
+                    if (activa) {
+                        Ayuda(
+                            if (codigoVence != null) {
+                                stringResource(
+                                    R.string.sub_code_active,
+                                    codigoVence.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
+                                )
+                            } else {
+                                stringResource(R.string.sub_active_body)
+                            }
+                        )
+                    }
                 }
             }
 
@@ -108,6 +127,17 @@ fun PantallaAjustes(
                     )
                 } else {
                     SelectorDePlan(planes, vencida, onComprar)
+                }
+                // Para los revisores de Google Play, que no pueden suscribirse.
+                var pidiendoCodigo by remember { mutableStateOf(false) }
+                TextButton(onClick = { pidiendoCodigo = true }) {
+                    Text(stringResource(R.string.sub_code_link))
+                }
+                if (pidiendoCodigo) {
+                    DialogoDeCodigo(
+                        onCanjear = onCanjearCodigo,
+                        onCerrar = { pidiendoCodigo = false }
+                    )
                 }
             }
 
@@ -273,3 +303,42 @@ private fun precioConPeriodo(plan: Suscripcion.Plan): String = stringResource(
     if (plan.periodo == Suscripcion.Periodo.ANUAL) R.string.plan_price_year else R.string.plan_price_month,
     plan.precio
 )
+
+@Composable
+private fun DialogoDeCodigo(onCanjear: (String) -> Boolean, onCerrar: () -> Unit) {
+    var codigo by remember { mutableStateOf("") }
+    var invalido by remember { mutableStateOf(false) }
+    AlertDialog(
+        onDismissRequest = onCerrar,
+        shape = RoundedCornerShape(24.dp),
+        title = { Text(stringResource(R.string.sub_code_title)) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                OutlinedTextField(
+                    value = codigo,
+                    onValueChange = { codigo = it; invalido = false },
+                    placeholder = { Text(stringResource(R.string.sub_code_hint)) },
+                    singleLine = true,
+                    isError = invalido,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                if (invalido) {
+                    Text(
+                        stringResource(R.string.sub_code_invalid),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(
+                enabled = codigo.isNotBlank(),
+                onClick = { if (onCanjear(codigo)) onCerrar() else invalido = true }
+            ) { Text(stringResource(R.string.sub_code_apply)) }
+        },
+        dismissButton = {
+            TextButton(onClick = onCerrar) { Text(stringResource(R.string.action_cancel)) }
+        }
+    )
+}

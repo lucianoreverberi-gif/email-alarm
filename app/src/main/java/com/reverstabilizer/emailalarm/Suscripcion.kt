@@ -28,6 +28,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import java.security.MessageDigest
+import java.time.LocalDate
 import kotlin.coroutines.resume
 
 /**
@@ -69,6 +71,16 @@ object Suscripcion {
     private const val CLAVE_ACTIVA = "activa"
     private const val CLAVE_ALGUNA_VEZ = "alguna_vez"
     private const val CLAVE_DEMO = "demo_activa"
+    private const val CLAVE_CODIGO = "codigo_acceso"
+
+    /**
+     * Codigo de acceso para los revisores de Google Play, que no pueden
+     * suscribirse ni usar la prueba gratis. Se guarda solo su huella SHA-256,
+     * no el codigo, y vence solo: para cada version que va a revision se
+     * genera uno nuevo (el codigo en si va en Play Console, "Sign in details").
+     */
+    private const val CODIGO_HUELLA = "100d6d38eef6237d084e493b199ebd02271d44176574a3646a42df1732b93646"
+    private val CODIGO_VENCE: LocalDate = LocalDate.of(2026, 12, 18)
 
     private val alcance = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val candado = Mutex()
@@ -85,6 +97,7 @@ object Suscripcion {
         // pruebas antes de que exista el producto en Play Console. En release
         // BuildConfig.DEBUG es false y R8 elimina esta rama.
         if (BuildConfig.DEBUG && prefs.getBoolean(CLAVE_DEMO, false)) return Estado.ACTIVA
+        if (codigoVigente(context)) return Estado.ACTIVA
         return when {
             prefs.getBoolean(CLAVE_ACTIVA, false) -> Estado.ACTIVA
             prefs.getBoolean(CLAVE_ALGUNA_VEZ, false) -> Estado.VENCIDA
@@ -97,6 +110,27 @@ object Suscripcion {
     /** Arranca la UI con el ultimo estado conocido, sin esperar a Google Play. */
     fun inicializar(context: Context) {
         _estado.value = estado(context)
+    }
+
+    /**
+     * Canjea un codigo de acceso. Devuelve true si es valido y esta vigente;
+     * en ese caso la app funciona completa hasta [CODIGO_VENCE].
+     */
+    fun canjearCodigo(context: Context, codigo: String): Boolean {
+        if (!codigoValido(codigo, LocalDate.now(), CODIGO_HUELLA, CODIGO_VENCE)) return false
+        context.getSharedPreferences(ARCHIVO, Context.MODE_PRIVATE)
+            .edit().putString(CLAVE_CODIGO, CODIGO_HUELLA).apply()
+        _estado.value = estado(context)
+        return true
+    }
+
+    /** Hasta cuando vale el codigo canjeado, o null si no hay uno vigente. */
+    fun codigoVenceEl(context: Context): LocalDate? = if (codigoVigente(context)) CODIGO_VENCE else null
+
+    private fun codigoVigente(context: Context): Boolean {
+        val guardado = context.getSharedPreferences(ARCHIVO, Context.MODE_PRIVATE)
+            .getString(CLAVE_CODIGO, null)
+        return guardado == CODIGO_HUELLA && !LocalDate.now().isAfter(CODIGO_VENCE)
     }
 
     /** Solo debug: ver [estado]. */
@@ -296,4 +330,14 @@ internal fun ahorroAnual(mensualMicros: Long, anualMicros: Long): Int? {
     if (mensualMicros <= 0 || anualMicros <= 0) return null
     val ahorro = (100 - anualMicros * 100.0 / (mensualMicros * 12)).toInt()
     return ahorro.takeIf { it > 0 }
+}
+
+/**
+ * Un codigo es valido si su huella coincide y no vencio. Sin distinguir
+ * mayusculas ni espacios de mas: se escribe a mano en un telefono.
+ */
+internal fun codigoValido(codigo: String, hoy: LocalDate, huella: String, vence: LocalDate): Boolean {
+    if (hoy.isAfter(vence)) return false
+    val bytes = MessageDigest.getInstance("SHA-256").digest(codigo.trim().uppercase().toByteArray())
+    return bytes.joinToString("") { "%02x".format(it) } == huella
 }

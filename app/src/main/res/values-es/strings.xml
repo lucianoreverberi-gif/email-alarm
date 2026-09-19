@@ -122,6 +122,12 @@
     <string name="sub_start_trial">Empezar %1$d días gratis</string>
     <string name="sub_subscribe">Suscribirme</string>
     <string name="sub_renew">Renovar</string>
+    <string name="sub_code_link">¿Tienes un código de acceso?</string>
+    <string name="sub_code_title">Código de acceso</string>
+    <string name="sub_code_hint">Escribe el código</string>
+    <string name="sub_code_apply">Activar</string>
+    <string name="sub_code_invalid">Ese código no es válido o ya venció.</string>
+    <string name="sub_code_active">Acceso con código hasta el %1$s.</string>
     <string name="sub_manage">Gestionar o cancelar suscripción</string>
     <string name="sub_manage_hint">Se abre Google Play</string>
     <string name="sub_unavailable">No se pudo conectar con Google Play. Revisa la conexión y vuelve a intentarlo.</string>

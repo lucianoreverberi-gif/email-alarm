@@ -124,6 +124,12 @@
     <string name="sub_start_trial">Start %1$d-day free trial</string>
     <string name="sub_subscribe">Subscribe</string>
     <string name="sub_renew">Renew</string>
+    <string name="sub_code_link">Have an access code?</string>
+    <string name="sub_code_title">Access code</string>
+    <string name="sub_code_hint">Enter the code</string>
+    <string name="sub_code_apply">Activate</string>
+    <string name="sub_code_invalid">That code isn\'t valid or has expired.</string>
+    <string name="sub_code_active">Access code active until %1$s.</string>
     <string name="sub_manage">Manage or cancel subscription</string>
     <string name="sub_manage_hint">Opens Google Play</string>
     <string name="sub_unavailable">Can\'t reach Google Play right now. Check your connection and try again.</string>

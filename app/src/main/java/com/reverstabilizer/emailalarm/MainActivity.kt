@@ -71,6 +71,9 @@ class MainActivity : ComponentActivity() {
                             planes = planes.value,
                             onVolver = { enAjustes = false },
                             onComprar = { plan -> scope.launch { Suscripcion.comprar(this@MainActivity, plan) } },
+                            // Se relee cuando cambia el estado (por ejemplo, al canjear un codigo).
+                            codigoVence = remember(suscripcion) { Suscripcion.codigoVenceEl(this@MainActivity) },
+                            onCanjearCodigo = { codigo -> Suscripcion.canjearCodigo(this@MainActivity, codigo) },
                             onGestionarSuscripcion = { Suscripcion.abrirGestion(this@MainActivity) },
                             onDetenerAlarma = { Alarma.detener() },
                             modifier = Modifier.padding(innerPadding)
