@@ -21,21 +21,21 @@
     <link rel="alternate" hreflang="es" href="/es/android/" />
     <link rel="stylesheet" href="/styles.css" />
     <link rel="canonical" href="https://www.email-alarm.com/es/android/" />
+    <link rel="stylesheet" href="/studio.css" />
   </head>
-  <body>
+  <body class="platform-android">
     <header class="contenedor encabezado">
-      <a class="marca" href="/es/android/"
-        ><img src="/icon.svg" alt="" />Email Alarm</a
-      >
-      <a class="idioma" href="/android/" hreflang="en" lang="en">English</a>
+      <a class="marca" href="/es/"><img src="/icon.svg" alt="" />Email Alarm</a>
+      <nav class="studio-nav" aria-label="Navegación">
+        <a href="/es/android/" aria-current="page">Android</a
+        ><a href="/es/ios/">iPhone</a><a href="/android/" lang="en">English</a>
+      </nav>
     </header>
 
     <main>
-      <div class="contenedor" style="padding-top: 12px">
-        <a href="/es/">← Todas las plataformas</a> · <strong>Android</strong>
-      </div>
       <section class="contenedor portada">
         <div>
+          <span class="eyebrow">EMAIL ALARM PARA ANDROID</span>
           <h1>El correo que <em>no te puedes</em> perder.</h1>
           <p>
             Email Alarm suena como una alarma de verdad cuando llega un correo
@@ -49,14 +49,18 @@
             cuando quieras.
           </p>
         </div>
-        <div class="marco">
-          <img
-            src="/img/alarma-es.png"
-            width="1080"
-            height="2400"
-            fetchpriority="high"
-            alt="La pantalla de alarma de Email Alarm: un correo de Turnos del restaurante, con un botón Detener grande"
-          />
+        <div class="device-stage">
+          <div class="orbit orbit-one"></div>
+          <div class="orbit orbit-two"></div>
+          <div class="marco">
+            <img
+              src="/img/alarma-es.png"
+              width="1080"
+              height="2400"
+              fetchpriority="high"
+              alt="La pantalla de alarma de Email Alarm: un correo de Turnos del restaurante, con un botón Detener grande"
+            />
+          </div>
         </div>
       </section>
 

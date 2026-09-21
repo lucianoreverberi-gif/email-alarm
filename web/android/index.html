@@ -21,19 +21,21 @@
     <link rel="alternate" hreflang="en" href="/android/" />
     <link rel="stylesheet" href="/styles.css" />
     <link rel="canonical" href="https://www.email-alarm.com/android/" />
+    <link rel="stylesheet" href="/studio.css" />
   </head>
-  <body>
+  <body class="platform-android">
     <header class="contenedor encabezado">
       <a class="marca" href="/"><img src="/icon.svg" alt="" />Email Alarm</a>
-      <a class="idioma" href="/es/android/" hreflang="es" lang="es">Español</a>
+      <nav class="studio-nav" aria-label="Navigation">
+        <a href="/android/" aria-current="page">Android</a
+        ><a href="/ios/">iPhone</a><a href="/es/android/" lang="es">Español</a>
+      </nav>
     </header>
 
     <main>
-      <div class="contenedor" style="padding-top: 12px">
-        <a href="/">← All platforms</a> · <strong>Android</strong>
-      </div>
       <section class="contenedor portada">
         <div>
+          <span class="eyebrow">EMAIL ALARM FOR ANDROID</span>
           <h1>The email you <em>can't afford</em> to miss.</h1>
           <p>
             Email Alarm rings like a real alarm when an important email arrives
@@ -45,14 +47,18 @@
             7 days free. Then US$1.99 a month or US$9.99 a year. Cancel anytime.
           </p>
         </div>
-        <div class="marco">
-          <img
-            src="/img/alarma-en.png"
-            width="1080"
-            height="2400"
-            fetchpriority="high"
-            alt="The Email Alarm alarm screen: an email from Shift Scheduler, with a large Stop button"
-          />
+        <div class="device-stage">
+          <div class="orbit orbit-one"></div>
+          <div class="orbit orbit-two"></div>
+          <div class="marco">
+            <img
+              src="/img/alarma-en.png"
+              width="1080"
+              height="2400"
+              fetchpriority="high"
+              alt="The Email Alarm alarm screen: an email from Shift Scheduler, with a large Stop button"
+            />
+          </div>
         </div>
       </section>
 
