@@ -23,3 +23,5 @@ keystore.properties
 
 # Configuracion local de Claude Code
 /.claude/
+.vercel
+.env*
