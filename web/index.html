@@ -3,13 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Email Alarm — Android & iPhone</title>
+    <title>Email Alarm</title>
     <meta
       name="description"
-      content="Choose which emails deserve an alarm. By sender, keyword or phrase. Email Alarm helps you notice the messages you do not want to miss."
+      content="The email you can’t afford to miss. Explore Email Alarm for Android and iPhone."
     />
-    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="/platforms.css" />
+    <link rel="icon" href="/icon.svg" />
     <link rel="canonical" href="https://www.email-alarm.com/" />
     <link rel="alternate" hreflang="en" href="https://www.email-alarm.com/" />
     <link
@@ -17,121 +16,83 @@
       hreflang="es"
       href="https://www.email-alarm.com/es/"
     />
-    <meta property="og:title" content="Email Alarm — Android & iPhone" />
-    <meta
-      property="og:description"
-      content="Choose which emails deserve an alarm. By sender, keyword or phrase. Email Alarm helps you notice the messages you do not want to miss."
-    />
-    <meta property="og:url" content="https://www.email-alarm.com/" />
+    <link rel="stylesheet" href="/styles.css" />
     <link rel="stylesheet" href="/studio.css" />
+    <link rel="stylesheet" href="/launch.css" />
   </head>
-  <body class="platform-home">
-    <header class="wrap nav">
-      <a class="brand" href="/"><img src="/icon.svg" alt="" />Email Alarm</a>
-      <nav class="links" aria-label="Navigation">
+  <body class="launch-home">
+    <header class="contenedor encabezado">
+      <a class="marca" href="/"><img src="/icon.svg" alt="" />Email Alarm</a>
+      <nav class="studio-nav" aria-label="Navigation">
         <a href="/android/">Android</a><a href="/ios/">iPhone</a
         ><a href="/es/" lang="es">Español</a>
       </nav>
     </header>
     <main>
-      <section class="wrap">
-        <div class="hero">
-          <div>
-            <span class="eyebrow">Email Alarm · Android & iPhone</span>
-            <h1>Your important email.<br /><em>Impossible to ignore.</em></h1>
-            <p class="lead">
-              Choose which emails deserve an alarm. By sender, keyword or
-              phrase. Email Alarm helps you notice the messages you do not want
-              to miss.
-            </p>
-            <div class="actions">
-              <a class="btn" href="/android/">For Android →</a
-              ><a class="btn blue" href="/ios/">For iPhone →</a>
-            </div>
-            <p class="note">
-              Two platforms. Different ways to look out for what matters.
-            </p>
-          </div>
-          <div class="scene">
-            <div class="orbit orbit-one"></div>
-            <div class="orbit orbit-two"></div>
-            <span class="stage-label">Less noise. More meaning.</span>
-            <div class="phone">
-              <div class="brand"><img src="/icon.svg" alt="" />Email Alarm</div>
-              <h3>What matters, on time.</h3>
-              <div class="tile">
-                <b>My work shifts</b><span>scheduler@example.com</span
-                ><span>Subject: shift available</span
-                ><span class="tag">Alarm enabled</span>
-              </div>
-              <div class="tile">
-                <b>An email that matters</b
-                ><span>Sender · subject · your alarm</span>
-              </div>
-            </div>
-            <p class="note">
-              Illustration of the experience. Interface varies by platform.
-            </p>
-          </div>
+      <section class="launch-hero contenedor">
+        <div class="launch-copy">
+          <span class="launch-kicker">EMAIL ALARM</span>
+          <h1>The email you <em>can’t afford</em> to miss.</h1>
+          <p class="launch-description">
+            Email Alarm rings like a real alarm when an important email arrives
+            — even with your phone on silent, locked, or in Do Not Disturb.
+          </p>
+          <span class="launch-soon"><i></i>Coming soon</span>
+          <p class="platform-note">
+            Silent and Do Not Disturb override: Android with the required
+            permissions. iPhone alerts respect your system settings.
+          </p>
         </div>
+        <figure class="launch-visual">
+          <div class="halo halo-a"></div>
+          <div class="halo halo-b"></div>
+          <div class="real-device">
+            <img
+              src="/img/principal-en.png"
+              width="1080"
+              height="2400"
+              alt="Email Alarm for Android preview"
+              fetchpriority="high"
+            />
+          </div>
+          <span class="floating-signal"
+            ><span>✓</span> Your email. Your priority.</span
+          >
+          <figcaption>
+            Android preview · Interface varies by platform.
+          </figcaption>
+        </figure>
       </section>
-      <section class="section">
-        <div class="wrap">
-          <span class="eyebrow">Choose your phone</span>
-          <h2>The right experience for you.</h2>
-          <div class="grid">
-            <article class="card android">
-              <span class="pill">Coming soon to Google Play</span>
-              <h3>Android</h3>
-              <p>
-                Uses notifications from your email apps. Set your rules on your
-                phone without signing into your mailbox through Email Alarm.
-              </p>
-              <a class="btn" href="/android/">Explore Android →</a>
-            </article>
-            <article class="card ios">
-              <span class="pill">Private beta · TestFlight coming soon</span>
-              <h3>iPhone</h3>
-              <p>
-                Connect Gmail or Hotmail/Outlook. The server checks sender and
-                subject and sends an alert when an email matches your rules.
-              </p>
-              <a class="btn blue" href="/ios/">Explore iPhone →</a>
-            </article>
-          </div>
-        </div>
-      </section>
-      <section class="wrap section">
-        <h2>For emails worth your attention.</h2>
-        <div class="features">
-          <article class="feature">
-            <span class="num"
-              ><svg aria-hidden="true"><use href="/icons.svg#i-calendar" /></svg
-            ></span>
-            <h3>Work shifts</h3>
-            <p>Know when an opportunity opens.</p>
-          </article>
-          <article class="feature">
-            <span class="num"
-              ><svg aria-hidden="true"><use href="/icons.svg#i-document" /></svg
-            ></span>
-            <h3>Important paperwork</h3>
-            <p>The reply you have been waiting for.</p>
-          </article>
-          <article class="feature">
-            <span class="num"
-              ><svg aria-hidden="true">
-                <use href="/icons.svg#i-briefcase" /></svg
-            ></span>
-            <h3>Clients and projects</h3>
-            <p>Prioritize the people you choose.</p>
-          </article>
-        </div>
+      <section
+        class="platform-select contenedor"
+        aria-label="Choose your platform"
+      >
+        <a class="platform-link" href="/android/"
+          ><svg viewBox="0 0 32 32" aria-hidden="true">
+            <path fill="currentColor" d="M5 20a11 11 0 0 1 22 0v5H5z" />
+            <path
+              d="m9 11-3-5m17 5 3-5"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+            <circle cx="11" cy="18" r="1.4" fill="#07130f" />
+            <circle cx="21" cy="18" r="1.4" fill="#07130f" /></svg
+          ><span>Android</span><span class="link-arrow">↗</span></a
+        ><a class="platform-link apple-link" href="/ios/"
+          ><svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              fill="currentColor"
+              d="M17.05 12.04c.03 3.12 2.74 4.16 2.77 4.17-.02.07-.43 1.48-1.42 2.94-.86 1.26-1.76 2.51-3.16 2.54-1.38.03-1.83-.82-3.41-.82-1.57 0-2.07.8-3.38.85-1.35.05-2.39-1.36-3.26-2.61-1.77-2.56-3.12-7.24-1.3-10.4a5.06 5.06 0 0 1 4.28-2.6c1.34-.03 2.6.9 3.42.9.81 0 2.34-1.11 3.94-.95.67.03 2.56.27 3.78 2.06-.1.06-2.26 1.31-2.26 3.92ZM14.46 4.36c.73-.88 1.22-2.1 1.09-3.32-1.05.04-2.32.7-3.07 1.58-.67.78-1.26 2.02-1.1 3.22 1.17.09 2.35-.6 3.08-1.48Z"
+            /></svg
+          ><span>iPhone</span><span class="link-arrow">↗</span></a
+        >
       </section>
     </main>
-    <footer class="wrap footer">
+    <footer class="contenedor pie">
       <span>© 2026 Email Alarm</span>
-      <nav class="links">
+      <nav>
         <a href="/privacy/">Android privacy</a
         ><a href="/privacy/ios/">iOS privacy</a
         ><a href="mailto:info@reverstabilizer.com">Contact</a>
