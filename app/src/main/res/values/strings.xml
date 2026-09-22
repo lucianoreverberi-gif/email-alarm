@@ -148,4 +148,24 @@
     <string name="aviso_correo_titulo">An important email arrived — the alarm didn\'t ring</string>
     <string name="aviso_correo_nunca">Email from %1$s matched one of your alarms. Start your free trial so it rings next time.</string>
     <string name="aviso_correo_vencida">Email from %1$s matched one of your alarms, but your subscription ended. Renew so it rings next time.</string>
+
+    <!-- Dias y horario -->
+    <string name="schedule_title">Days and hours</string>
+    <string name="schedule_always">Every day, any time</string>
+    <string name="schedule_every_day">Every day</string>
+    <string name="schedule_weekdays">Monday to Friday</string>
+    <string name="schedule_weekends">Weekends</string>
+    <string name="schedule_any_time">any time</string>
+    <string name="schedule_summary">%1$s, %2$s</string>
+    <string name="schedule_all_day">All day</string>
+    <string name="schedule_from">From</string>
+    <string name="schedule_until">Until</string>
+    <string name="schedule_help">Outside these days and hours it doesn\'t ring: you get a silent notification instead. Uses your phone\'s time; for overnight hours, the day the email arrives counts.</string>
+    <string name="schedule_missing_day">Pick at least one day</string>
+    <string name="schedule_same_time">From and until can\'t be the same time</string>
+    <string name="cd_schedule">Days and hours</string>
+    <string name="history_off_hours">Off hours · %1$s</string>
+    <string name="channel_off_hours">Emails outside alarm hours</string>
+    <string name="channel_off_hours_description">Silent: an alarm\'s email that arrived outside its days or hours.</string>
+    <string name="off_hours_title">Arrived outside hours · %1$s</string>
 </resources>

@@ -1,11 +1,13 @@
 package com.reverstabilizer.emailalarm
 
+import android.content.Context
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 
 // El asunto de Outlook trae tambien la vista previa del cuerpo: se recorta
 // para el historial, que solo necesita reconocer el correo.
@@ -47,44 +49,65 @@ class MailListener : NotificationListenerService() {
             return
         }
 
-        scope.launch {
-            val reglas = BaseDeDatos.obtener(this@MailListener).reglaDao().activas()
-            val regla = MotorDeReglas.primeraQueCoincide(reglas, correo)
+        scope.launch { ProcesarCorreo(this@MailListener, app, correo, LocalDateTime.now()) }
+    }
+}
 
-            if (regla == null) {
+/**
+ * Lo que pasa con un correo ya leido: sonar, avisar o solo anotarlo.
+ *
+ * Aparte del listener para poder probar el camino real a cualquier hora
+ * desde la version de desarrollo, sin esperar un correo verdadero.
+ */
+internal object ProcesarCorreo {
+
+    suspend operator fun invoke(context: Context, app: String, correo: CorreoDetectado, momento: LocalDateTime) {
+        val reglas = BaseDeDatos.obtener(context).reglaDao().activas()
+        val regla = when (val decision = MotorDeReglas.decidir(reglas, correo, momento)) {
+            Decision.Ninguna -> {
                 Registro.d("[$app] IGNORADO -> DE: ${correo.remitente} | ASUNTO: ${correo.asunto}")
                 Registro.d("   remitente: ${correo.textoDelRemitente()}")
-                registrar(app, correo.remitente, correo.asunto, Resultado.SIN_COINCIDENCIA, null)
-                return@launch
+                registrar(context, app, correo.remitente, correo.asunto, Resultado.SIN_COINCIDENCIA, null)
+                return
             }
-
-            Registro.d("[$app] COINCIDE regla '${regla.nombre}' -> DE: ${correo.remitente} | ASUNTO: ${correo.asunto}")
-
-            // Si lo guardado dice "sin suscripcion", se confirma con Google Play
-            // antes de silenciar: puede haber pagado recien y no estar actualizado.
-            val activa = Suscripcion.estaActiva(this@MailListener) ||
-                Suscripcion.verificar(this@MailListener)
-            if (!activa) {
-                Registro.d("   sin suscripcion activa: no suena, se avisa")
-                registrar(app, correo.remitente, correo.asunto, Resultado.SIN_SUSCRIPCION, regla.nombre)
-                AvisoSuscripcion.correoSinAlarma(this@MailListener, correo.remitente)
-                return@launch
+            // Antes que la suscripcion: fuera de horario no suena de todos
+            // modos, y un aviso de suscripcion a las 6 de la manana seria
+            // justo el ruido que la persona quiso evitar.
+            is Decision.FueraDeHorario -> {
+                Registro.d("[$app] FUERA DE HORARIO '${decision.regla.nombre}' -> ${correo.asunto}")
+                registrar(context, app, correo.remitente, correo.asunto, Resultado.FUERA_DE_HORARIO, decision.regla.nombre)
+                AvisoFueraDeHorario.mostrar(context, decision.regla.nombre, correo.remitente, correo.asunto)
+                return
             }
-
-            // Primero suena, despues se anota: el historial nunca demora la alarma.
-            Alarma.disparar(this@MailListener, correo.remitente, correo.asunto, regla.sonido)
-            registrar(app, correo.remitente, correo.asunto, Resultado.SONO, regla.nombre)
+            is Decision.Suena -> decision.regla
         }
+
+        Registro.d("[$app] COINCIDE regla '${regla.nombre}' -> DE: ${correo.remitente} | ASUNTO: ${correo.asunto}")
+
+        // Si lo guardado dice "sin suscripcion", se confirma con Google Play
+        // antes de silenciar: puede haber pagado recien y no estar actualizado.
+        val activa = Suscripcion.estaActiva(context) || Suscripcion.verificar(context)
+        if (!activa) {
+            Registro.d("   sin suscripcion activa: no suena, se avisa")
+            registrar(context, app, correo.remitente, correo.asunto, Resultado.SIN_SUSCRIPCION, regla.nombre)
+            AvisoSuscripcion.correoSinAlarma(context, correo.remitente)
+            return
+        }
+
+        // Primero suena, despues se anota: el historial nunca demora la alarma.
+        Alarma.disparar(context, correo.remitente, correo.asunto, regla.sonido)
+        registrar(context, app, correo.remitente, correo.asunto, Resultado.SONO, regla.nombre)
     }
 
     private suspend fun registrar(
+        context: Context,
         app: String,
         remitente: String,
         asunto: String,
         resultado: Resultado,
         regla: String?
     ) {
-        val dao = BaseDeDatos.obtener(this).deteccionDao()
+        val dao = BaseDeDatos.obtener(context).deteccionDao()
         // La firma automatica no ayuda a reconocer el correo: se guarda sin ella.
         val texto = sinFirmasParaMostrar(asunto).take(LARGO_ASUNTO_HISTORIAL)
         dao.guardar(

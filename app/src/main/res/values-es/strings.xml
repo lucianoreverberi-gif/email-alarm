@@ -146,4 +146,24 @@
     <string name="aviso_correo_titulo">Llegó un correo importante y la alarma no sonó</string>
     <string name="aviso_correo_nunca">Un correo de %1$s coincidió con una de tus alarmas. Empieza tu prueba gratis para que la próxima vez suene.</string>
     <string name="aviso_correo_vencida">Un correo de %1$s coincidió con una de tus alarmas, pero tu suscripción terminó. Renuévala para que la próxima vez suene.</string>
+
+    <!-- Dias y horario -->
+    <string name="schedule_title">Días y horario</string>
+    <string name="schedule_always">Todos los días, a cualquier hora</string>
+    <string name="schedule_every_day">Todos los días</string>
+    <string name="schedule_weekdays">Lunes a viernes</string>
+    <string name="schedule_weekends">Fines de semana</string>
+    <string name="schedule_any_time">a cualquier hora</string>
+    <string name="schedule_summary">%1$s, %2$s</string>
+    <string name="schedule_all_day">Todo el día</string>
+    <string name="schedule_from">Desde</string>
+    <string name="schedule_until">Hasta</string>
+    <string name="schedule_help">Fuera de estos días y horas no suena: te llega una notificación silenciosa. Usa la hora de tu teléfono; si el horario pasa la medianoche, cuenta el día en que llega el correo.</string>
+    <string name="schedule_missing_day">Elige al menos un día</string>
+    <string name="schedule_same_time">Desde y hasta no pueden ser la misma hora</string>
+    <string name="cd_schedule">Días y horario</string>
+    <string name="history_off_hours">Fuera de horario · %1$s</string>
+    <string name="channel_off_hours">Correos fuera de horario</string>
+    <string name="channel_off_hours_description">Silenciosa: un correo de una alarma que llegó fuera de sus días u horas.</string>
+    <string name="off_hours_title">Llegó fuera de horario · %1$s</string>
 </resources>

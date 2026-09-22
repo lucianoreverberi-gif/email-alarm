@@ -5,6 +5,7 @@ import android.app.Person
 import android.os.Build
 import android.os.Bundle
 import android.service.notification.StatusBarNotification
+import java.time.LocalDateTime
 
 /** Un correo tal como lo pudimos leer desde la notificacion. */
 data class CorreoDetectado(
@@ -21,6 +22,14 @@ data class CorreoDetectado(
 
     /** Donde buscamos las palabras clave: asunto y resumen del cuerpo. */
     fun textoDelContenido(): String = "$asunto $cuerpo"
+}
+
+/** Lo que corresponde hacer con un correo. */
+sealed interface Decision {
+    data object Ninguna : Decision
+    data class Suena(val regla: Regla) : Decision
+    /** Coincide, pero ninguna de sus alarmas suena a esta hora o este dia. */
+    data class FueraDeHorario(val regla: Regla) : Decision
 }
 
 object MotorDeReglas {
@@ -80,6 +89,20 @@ object MotorDeReglas {
     /** La primera regla activa que coincide, o null si no coincide ninguna. */
     fun primeraQueCoincide(reglas: List<Regla>, correo: CorreoDetectado): Regla? =
         reglas.firstOrNull { coincide(it, correo) }
+
+    /**
+     * Que hacer con un correo segun las reglas y la hora en que llego.
+     *
+     * Si coinciden varias, alcanza con que una este en horario para que suene:
+     * una alarma de "clientes, de 9 a 18" no puede silenciar a otra de
+     * "migraciones, siempre" que tambien coincide.
+     */
+    fun decidir(reglas: List<Regla>, correo: CorreoDetectado, momento: LocalDateTime): Decision {
+        val coinciden = reglas.filter { coincide(it, correo) }
+        if (coinciden.isEmpty()) return Decision.Ninguna
+        val enHorario = coinciden.firstOrNull { it.horario.permite(momento) }
+        return if (enHorario != null) Decision.Suena(enHorario) else Decision.FueraDeHorario(coinciden.first())
+    }
 
     fun coincide(regla: Regla, correo: CorreoDetectado): Boolean {
         val buscaRemitente = regla.remitente.isNotBlank()
