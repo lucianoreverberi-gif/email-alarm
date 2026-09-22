@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
  *   adb shell am broadcast -n com.reverstabilizer.emailalarm/.DemoReceiver \
  *       --es accion reglas --es idioma en
  *
- * accion: reglas | historial | alarma | detener | pro | sinpro      idioma: en | es
+ * accion: reglas | historial | alarma | detener | pro | sinpro | correo      idioma: en | es
  *
  * "pro" simula una suscripcion activa (solo debug), para capturas y para usar
  * la app antes de que exista el producto en Play Console. "sinpro" la quita.
@@ -39,6 +39,33 @@ class DemoReceiver : BroadcastReceiver() {
             }
             "pro" -> Suscripcion.simularActiva(context, true)
             "sinpro" -> Suscripcion.simularActiva(context, false)
+            "correo" -> simularCorreo(context, intent)
+        }
+    }
+
+    /**
+     * Un correo que llega a la fecha y hora dadas, por el mismo camino que uno
+     * real. Sirve para probar los horarios sin esperar a las 6 de la manana.
+     *
+     *   --es remitente "Cliente Acme" --es asunto "Nueva compra" --es cuando 2026-09-26T06:00
+     */
+    private fun simularCorreo(context: Context, intent: Intent) {
+        val correo = CorreoDetectado(
+            paquete = "com.google.android.gm",
+            remitente = intent.getStringExtra("remitente") ?: "Prueba",
+            direcciones = emptyList(),
+            asunto = intent.getStringExtra("asunto") ?: "Correo de prueba",
+            cuerpo = ""
+        )
+        val cuando = intent.getStringExtra("cuando")?.let(java.time.LocalDateTime::parse)
+            ?: java.time.LocalDateTime.now()
+        val pendiente = goAsync()
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                ProcesarCorreo(context, "Gmail", correo, cuando)
+            } finally {
+                pendiente.finish()
+            }
         }
     }
 

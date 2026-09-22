@@ -59,8 +59,16 @@ fun DialogoDeRegla(
     var remitente by remember { mutableStateOf(reglaInicial?.remitente ?: "") }
     var palabraClave by remember { mutableStateOf(reglaInicial?.palabraClave ?: "") }
     var sonido by remember { mutableStateOf(reglaInicial?.sonido) }
+    var horario by remember { mutableStateOf(reglaInicial?.horario ?: Horario()) }
 
     val hayCondicion = remitente.isNotBlank() || palabraClave.isNotBlank()
+    // Un boton deshabilitado sin explicacion es un callejon sin salida: se dice que falta.
+    val falta = when {
+        !hayCondicion -> stringResource(R.string.dialog_missing)
+        horario.dias == 0 -> stringResource(R.string.schedule_missing_day)
+        !horario.todoElDia && horario.desde == horario.hasta -> stringResource(R.string.schedule_same_time)
+        else -> null
+    }
     val tituloSonido = stringResource(R.string.field_sound)
 
     val selectorDeSonido = rememberLauncherForActivityResult(
@@ -166,15 +174,16 @@ fun DialogoDeRegla(
                     Ayuda(stringResource(R.string.field_sound_help))
                 }
 
+                SeccionDeHorario(horario) { horario = it }
+
                 // Las reglas por palabra clave son para remitentes desconocidos
                 // (un tramite, un organismo), que son justo los que mas caen en spam.
                 if (palabraClave.isNotBlank()) ConsejoSpam(palabraClave.trim())
             }
         },
         confirmButton = {
-            // Un boton deshabilitado sin explicacion es un callejon sin salida:
-            // abajo se dice que falta. Los dos botones van en esta misma fila
-            // para que el motivo quede debajo de ambos sin desarmarla.
+            // Lo que falta se dice abajo. Los botones van en esta misma fila
+            // para que el motivo quede debajo de todos sin desarmarla.
             Column(horizontalAlignment = Alignment.End) {
                 Row(
                     modifier = if (onBorrar != null) Modifier.fillMaxWidth() else Modifier,
@@ -188,7 +197,7 @@ fun DialogoDeRegla(
                 }
                 TextButton(onClick = onCancelar) { Text(stringResource(R.string.action_cancel)) }
                 TextButton(
-                    enabled = hayCondicion,
+                    enabled = falta == null,
                     onClick = {
                         onConfirmar(
                             Regla(
@@ -198,13 +207,16 @@ fun DialogoDeRegla(
                                 remitente = remitente.trim(),
                                 palabraClave = palabraClave.trim(),
                                 activa = reglaInicial?.activa ?: true,
-                                sonido = sonido
+                                sonido = sonido,
+                                dias = horario.dias,
+                                desde = horario.desde,
+                                hasta = horario.hasta
                             )
                         )
                     }
                 ) { Text(stringResource(R.string.action_save), fontWeight = FontWeight.Bold) }
                 }
-                if (!hayCondicion) Ayuda(stringResource(R.string.dialog_missing))
+                if (falta != null) Ayuda(falta)
             }
         }
     )

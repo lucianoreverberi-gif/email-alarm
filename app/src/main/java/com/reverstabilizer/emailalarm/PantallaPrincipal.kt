@@ -26,6 +26,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.MusicNote
 import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.TextFields
 import androidx.compose.material.icons.rounded.Add
@@ -37,6 +38,7 @@ import androidx.compose.material.icons.rounded.ExpandLess
 import androidx.compose.material.icons.rounded.ExpandMore
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.NotificationsActive
+import androidx.compose.material.icons.rounded.NotificationsPaused
 import androidx.compose.material.icons.rounded.PriorityHigh
 import androidx.compose.material.icons.rounded.Shield
 import androidx.compose.material.icons.rounded.Timer
@@ -501,6 +503,10 @@ private fun TarjetaDeAlarma(
                 if (regla.sonido != null) {
                     Condicion(Icons.Outlined.MusicNote, nombreDelSonido(regla.sonido), stringResource(R.string.cd_sound))
                 }
+                // Solo si tiene horario propio: "siempre" es lo esperable y no suma.
+                if (!regla.horario.esSiempre) {
+                    Condicion(Icons.Outlined.Schedule, resumenDelHorario(regla.horario), stringResource(R.string.cd_schedule))
+                }
                 if (avisoDeDireccion) {
                     Row(
                         verticalAlignment = Alignment.Top,
@@ -620,6 +626,8 @@ private fun ResultadoDelCorreo(d: Deteccion, modifier: Modifier = Modifier) {
     val (texto, color, icono) = when (resultado) {
         Resultado.SONO -> Triple(stringResource(R.string.history_rang, d.regla.orEmpty()), verde, Icons.Rounded.NotificationsActive)
         Resultado.SIN_SUSCRIPCION -> Triple(stringResource(R.string.history_no_sub), rojo, Icons.Rounded.PriorityHigh)
+        // No es un error: la persona eligio que a esa hora no suene.
+        Resultado.FUERA_DE_HORARIO -> Triple(stringResource(R.string.history_off_hours, d.regla.orEmpty()), gris, Icons.Rounded.NotificationsPaused)
         Resultado.SIN_COINCIDENCIA, Resultado.AVISO_CUENTA -> Triple(stringResource(R.string.history_no_match), gris, null)
     }
     Row(

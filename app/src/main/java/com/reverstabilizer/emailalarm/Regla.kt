@@ -1,5 +1,6 @@
 package com.reverstabilizer.emailalarm
 
+import androidx.room.ColumnInfo
 import androidx.room.Dao
 import androidx.room.Database
 import androidx.room.Delete
@@ -33,12 +34,20 @@ data class Regla(
     val palabraClave: String = "",
     val activa: Boolean = true,
     /** Uri del tono elegido. null = el tono de alarma del sistema. */
-    val sonido: String? = null
-)
+    val sonido: String? = null,
+    /** Dias en que suena, un bit por dia (lunes = bit 0). Ver [Horario]. */
+    @ColumnInfo(defaultValue = "127")
+    val dias: Int = Horario.TODOS_LOS_DIAS,
+    /** Minutos desde la medianoche. Los dos null = todo el dia. */
+    val desde: Int? = null,
+    val hasta: Int? = null
+) {
+    val horario: Horario get() = Horario(dias, desde, hasta)
+}
 
 /** Que paso con un correo que la app vio. */
 // AVISO_CUENTA ya no se guarda; queda para leer historiales viejos.
-enum class Resultado { SONO, SIN_COINCIDENCIA, SIN_SUSCRIPCION, AVISO_CUENTA }
+enum class Resultado { SONO, SIN_COINCIDENCIA, SIN_SUSCRIPCION, AVISO_CUENTA, FUERA_DE_HORARIO }
 
 /**
  * Un correo que la app vio, con lo que decidio. Se guardan los ultimos
@@ -126,7 +135,19 @@ val MIGRACION_1_2 = object : Migration(1, 2) {
     }
 }
 
-@Database(entities = [Regla::class, Deteccion::class], version = 2, exportSchema = false)
+/**
+ * De la version 2 a la 3: dias y horario por regla. Las reglas que ya
+ * existian quedan como estaban: todos los dias, a cualquier hora.
+ */
+val MIGRACION_2_3 = object : Migration(2, 3) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE reglas ADD COLUMN dias INTEGER NOT NULL DEFAULT 127")
+        db.execSQL("ALTER TABLE reglas ADD COLUMN desde INTEGER")
+        db.execSQL("ALTER TABLE reglas ADD COLUMN hasta INTEGER")
+    }
+}
+
+@Database(entities = [Regla::class, Deteccion::class], version = 3, exportSchema = false)
 abstract class BaseDeDatos : RoomDatabase() {
 
     abstract fun reglaDao(): ReglaDao
@@ -142,7 +163,7 @@ abstract class BaseDeDatos : RoomDatabase() {
                     context.applicationContext,
                     BaseDeDatos::class.java,
                     "mailalarm.db"
-                ).addMigrations(MIGRACION_1_2)
+                ).addMigrations(MIGRACION_1_2, MIGRACION_2_3)
                     .build()
                     .also { instancia = it }
             }
