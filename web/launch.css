@@ -1,0 +1,463 @@
+/* Only loaded by the home and iPhone pages. Android remains unchanged. */
+.launch-home {
+  background: #060b11;
+  color: #f7fbff;
+}
+.launch-home .encabezado {
+  border-color: #ffffff12;
+}
+.launch-home .marca,
+.launch-home .studio-nav a {
+  color: #e9f1f4;
+}
+.launch-home .studio-nav a:hover {
+  color: #83f5c5;
+}
+.launch-home main {
+  background: radial-gradient(ellipse at 78% 36%, #153a493d, transparent 50%);
+}
+.launch-hero {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  align-items: center;
+  gap: 70px;
+  padding-top: 65px;
+  padding-bottom: 35px;
+}
+.launch-kicker {
+  color: #82e6bb;
+  letter-spacing: 3px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.launch-copy h1 {
+  font-size: clamp(48px, 5.4vw, 76px);
+  line-height: 1.04;
+  letter-spacing: -3.7px;
+  margin: 24px 0;
+}
+.launch-copy h1 em {
+  color: #88f1c1;
+  font-style: normal;
+}
+.launch-description {
+  color: #bbc6d0;
+  font-size: 19px;
+  line-height: 1.65;
+  max-width: 560px;
+}
+.launch-soon {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #7ff8bf40;
+  border-radius: 100px;
+  background: #77fac30b;
+  padding: 10px 17px;
+  margin-top: 12px;
+  color: #b0f8d5;
+  font-size: 13px;
+  font-weight: 600;
+}
+.launch-soon i {
+  width: 6px;
+  height: 6px;
+  border-radius: 100%;
+  background: #9cffce;
+  box-shadow: 0 0 12px #82f4b8;
+}
+.platform-note {
+  max-width: 475px;
+  color: #8e9ba7;
+  font-size: 12px;
+  line-height: 1.6;
+  margin-top: 20px;
+}
+.launch-visual {
+  position: relative;
+  isolation: isolate;
+  margin: 0;
+  min-width: 0;
+  padding: 20px 0 0;
+  text-align: center;
+}
+.real-device {
+  position: relative;
+  width: 248px;
+  margin: auto;
+  border-radius: 39px;
+  padding: 6px;
+  background: linear-gradient(
+    145deg,
+    #a7bfc9,
+    #233b42 30%,
+    #81aca3 80%,
+    #39444d
+  );
+  box-shadow:
+    0 0 0 1px #bbddd644,
+    0 35px 60px #0008,
+    0 0 65px #49ffc21a;
+  transform: rotate(5deg);
+}
+.real-device img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 33px;
+}
+.halo {
+  position: absolute;
+  border: 1px solid #79e6c934;
+  width: 430px;
+  height: 430px;
+  left: 50%;
+  top: 47%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+  box-shadow: inset 0 0 65px #4fffaf06;
+}
+.halo-b {
+  width: 530px;
+  height: 530px;
+  border-color: #79e6c916;
+}
+.floating-signal {
+  position: absolute;
+  bottom: 94px;
+  left: -12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 17px 20px;
+  background: #14232def;
+  border: 1px solid #a8fddd35;
+  border-radius: 18px;
+  box-shadow: 0 16px 40px #0005;
+  font-size: 13px;
+  color: #edf9f4;
+}
+.floating-signal > span {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #83f3ba;
+  color: #0b3221;
+}
+.launch-visual figcaption {
+  font-size: 10px;
+  color: #8e9ba7;
+  margin-top: 25px;
+}
+.platform-select {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding-top: 35px;
+  padding-bottom: 70px;
+}
+.platform-link {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 22px 26px;
+  width: 260px;
+  color: #a2f4cc;
+  text-decoration: none;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.6px;
+  border: 1px solid #84edbd40;
+  border-radius: 22px;
+  background: linear-gradient(135deg, #203c30, #0c1c18);
+  transition:
+    transform 0.2s,
+    border-color 0.2s;
+}
+.platform-link svg {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+}
+.platform-link .link-arrow {
+  margin-left: auto;
+  color: #809b8f;
+  font-size: 22px;
+}
+.apple-link {
+  color: #f1f5fa;
+  background: linear-gradient(135deg, #25313f, #121a25);
+  border-color: #a4bed13b;
+}
+.platform-link:hover {
+  transform: translateY(-4px);
+  border-color: #aeffdb;
+}
+.launch-home .pie {
+  border-color: #ffffff12;
+  color: #8e9ba7;
+}
+.launch-home .pie a {
+  color: #9caeb9;
+  font-size: 12px;
+}
+/* iPhone uses Android's layout, with accurately labelled illustrated previews. */
+.iphone-limit {
+  font-size: 12px !important;
+  line-height: 1.55;
+  margin-top: 16px !important;
+}
+.preview-caption {
+  text-align: center;
+  font-size: 11px;
+  color: #69766e;
+  margin: 22px 0 0;
+}
+.ios-device {
+  position: relative;
+  width: 245px;
+  height: 525px;
+  max-width: 100%;
+  margin: auto;
+  padding: 13px 12px;
+  border: 6px solid #232627;
+  border-radius: 38px;
+  background: #0d1512;
+  color: #f5f8f6;
+  box-shadow:
+    0 0 0 2px #aebbb5,
+    0 24px 50px #1a3b2a25;
+  overflow: hidden;
+}
+.island {
+  position: absolute;
+  top: 9px;
+  left: 50%;
+  width: 60px;
+  height: 16px;
+  transform: translateX(-50%);
+  background: #000;
+  border-radius: 15px;
+}
+.mock-status {
+  font-size: 10px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 5px;
+  color: #edf5ef;
+}
+.alarm-view {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: calc(100% - 20px);
+  padding: 24px 5px 2px;
+}
+.alarm-symbol {
+  font-size: 37px;
+  line-height: 1;
+  color: #8df1b4;
+  margin: 12px 0 24px;
+  text-shadow: 0 0 35px #78ffb0;
+}
+.mock-label {
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: #8ddcaf;
+  font-weight: 700;
+}
+.alarm-view h3 {
+  font-size: 26px;
+  line-height: 1.1;
+  letter-spacing: -0.8px;
+  margin: 19px 0 13px;
+  color: #f5f8f6;
+}
+.alarm-view p {
+  font-size: 12px;
+  line-height: 1.5;
+  color: #a4b8ab;
+  margin: 0;
+}
+.match-chip {
+  display: inline-block;
+  padding: 7px 9px;
+  border: 1px solid #4e745c;
+  border-radius: 20px;
+  font-size: 9px;
+  color: #b4e9c7;
+  margin: 20px 0;
+}
+.mock-stop {
+  display: block;
+  width: 100%;
+  margin-top: auto;
+  background: #26ac69;
+  color: #071c10;
+  border-radius: 19px;
+  font-size: 18px;
+  padding: 16px;
+  font-weight: 750;
+  letter-spacing: 2px;
+}
+.ios-gallery {
+  gap: 32px;
+}
+.ios-gallery .ios-device {
+  width: 230px;
+  height: 500px;
+}
+.mock-dashboard {
+  color: #eff8f1;
+  padding: 28px 2px 5px;
+  text-align: left;
+}
+.mock-dashboard > img {
+  width: 34px;
+  height: 34px;
+  float: left;
+  margin-right: 8px;
+  border-radius: 8px;
+}
+.mock-dashboard h3 {
+  font-size: 19px;
+  letter-spacing: -0.6px;
+  line-height: 1.2;
+  margin: 6px 0 10px;
+}
+.mock-dashboard h4 {
+  font-size: 13px;
+  margin-top: 26px;
+  margin-bottom: 12px;
+}
+.mock-dashboard p {
+  font-size: 10px;
+  color: #a5bcad;
+}
+.mock-card {
+  position: relative;
+  padding: 17px 12px;
+  margin-top: 12px;
+  background: #203229;
+  border: 1px solid #3a5040;
+  border-radius: 17px;
+}
+.mock-card b {
+  font-size: 12px;
+}
+.mock-card small {
+  font-size: 9px;
+  color: #b6c9bd;
+}
+.mock-card .matched {
+  color: #8cefaf;
+}
+.mock-toggle {
+  float: right;
+  width: 24px;
+  height: 15px;
+  border-radius: 20px;
+  background: #4bbe7f;
+}
+.mock-toggle:after {
+  content: "";
+  display: block;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: white;
+  margin: 2px 2px 2px auto;
+}
+.mock-action {
+  display: block;
+  background: #234e34;
+  padding: 13px;
+  border-radius: 12px;
+  color: #a2e7b6;
+  font-size: 11px;
+  text-align: center;
+}
+.beta-link {
+  text-decoration: none;
+}
+@media (max-width: 900px) {
+  .launch-hero {
+    gap: 25px;
+  }
+  .launch-copy h1 {
+    font-size: 56px;
+    letter-spacing: -2.8px;
+  }
+  .floating-signal {
+    left: 0;
+  }
+  .ios-gallery {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 650px) {
+  .launch-hero {
+    grid-template-columns: 1fr;
+    text-align: center;
+    padding-top: 48px;
+    overflow: hidden;
+  }
+  .launch-copy h1 {
+    font-size: 49px;
+    letter-spacing: -2.4px;
+  }
+  .launch-description {
+    font-size: 17px;
+  }
+  .platform-note {
+    font-size: 11px;
+  }
+  .launch-visual {
+    margin-top: 16px;
+    padding-top: 22px;
+  }
+  .real-device {
+    width: 224px;
+  }
+  .floating-signal {
+    left: 0;
+    bottom: 100px;
+    font-size: 11px;
+    padding: 12px;
+  }
+  .launch-visual figcaption {
+    font-size: 9px;
+    margin-top: 30px;
+  }
+  .platform-select {
+    gap: 12px;
+    padding-top: 15px;
+    padding-bottom: 35px;
+  }
+  .platform-link {
+    width: 50%;
+    padding: 17px 14px;
+    font-size: 18px;
+    gap: 10px;
+    border-radius: 18px;
+  }
+  .platform-link svg {
+    width: 25px;
+    height: 25px;
+  }
+  .link-arrow {
+    display: none;
+  }
+  .launch-home .pie {
+    margin-top: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .platform-link {
+    transition: none;
+  }
+}
