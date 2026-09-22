@@ -15,16 +15,17 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.MusicNote
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -40,6 +41,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 
 /**
  * Crear o editar una regla.
@@ -86,20 +89,46 @@ fun DialogoDeRegla(
         sonido = if (elegido == null || elegido == predeterminado) null else elegido.toString()
     }
 
-    AlertDialog(
+    // Dialogo propio y no AlertDialog: con el teclado abierto, AlertDialog
+    // empuja los botones fuera de la pantalla y no deja llegar a Guardar. Aca
+    // los campos se desplazan y los botones quedan siempre abajo, a la vista.
+    // Tampoco se cierra tocando afuera: perder lo escrito es peor que un toque
+    // de mas en Cancelar.
+    Dialog(
         onDismissRequest = onCancelar,
-        shape = RoundedCornerShape(24.dp),
-        title = {
-            Text(
-                stringResource(if (reglaInicial == null) R.string.dialog_new_rule else R.string.dialog_edit_rule),
-                fontWeight = FontWeight.Bold
-            )
-        },
-        text = {
-            // Con toda la ayuda el dialogo es largo: en pantallas chicas tiene
-            // que desplazarse para no esconder el boton Guardar.
+        properties = DialogProperties(
+            usePlatformDefaultWidth = false,
+            dismissOnClickOutside = false,
+            decorFitsSystemWindows = false
+        )
+    ) {
+        Surface(
+            shape = RoundedCornerShape(24.dp),
+            color = MaterialTheme.colorScheme.surface,
+            // Sombra y no tinte: con tinte el blanco se vuelve verdoso.
+            shadowElevation = 6.dp,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 24.dp)
+                .imePadding()
+        ) {
+            // Todo en un solo desplazamiento, botones incluidos: con el teclado
+            // abierto en pantallas bajas (tablet, telefono acostado) cualquier
+            // otro reparto deja Guardar fuera de la pantalla.
             Column(
-                modifier = Modifier.verticalScroll(rememberScrollState()),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState())
+                    .padding(24.dp)
+            ) {
+                Text(
+                    stringResource(if (reglaInicial == null) R.string.dialog_new_rule else R.string.dialog_edit_rule),
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+            Column(
+                modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(18.dp)
             ) {
                 CampoConAyuda(
@@ -180,11 +209,10 @@ fun DialogoDeRegla(
                 // (un tramite, un organismo), que son justo los que mas caen en spam.
                 if (palabraClave.isNotBlank()) ConsejoSpam(palabraClave.trim())
             }
-        },
-        confirmButton = {
+
             // Lo que falta se dice abajo. Los botones van en esta misma fila
             // para que el motivo quede debajo de todos sin desarmarla.
-            Column(horizontalAlignment = Alignment.End) {
+            Column(horizontalAlignment = Alignment.End, modifier = Modifier.padding(top = 12.dp)) {
                 Row(
                     modifier = if (onBorrar != null) Modifier.fillMaxWidth() else Modifier,
                     verticalAlignment = Alignment.CenterVertically
@@ -218,8 +246,9 @@ fun DialogoDeRegla(
                 }
                 if (falta != null) Ayuda(falta)
             }
+            }
         }
-    )
+    }
 }
 
 @Composable
