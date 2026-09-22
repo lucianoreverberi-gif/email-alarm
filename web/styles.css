@@ -88,7 +88,7 @@ img { max-width: 100%; }
   display: inline-flex; align-items: center; gap: 10px;
   padding: 12px 20px; border-radius: 12px;
   background: var(--superficie); border: 1px solid var(--borde);
-  font-weight: 600; color: var(--suave);
+  font-weight: 600; color: var(--suave); text-decoration: none;
 }
 .precio, .portada .precio { font-size: 15px; color: var(--suave); margin: 14px 0 0; }
 .cierre .precio { color: rgba(255, 255, 255, .82); }

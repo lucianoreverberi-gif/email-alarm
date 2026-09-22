@@ -374,6 +374,7 @@ h1 em,
 }
 .proximamente {
   border: 0;
+  text-decoration: none;
   background: #087f52;
   color: white;
   border-radius: 999px;
