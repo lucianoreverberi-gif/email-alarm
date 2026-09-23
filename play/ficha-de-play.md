@@ -29,7 +29,7 @@ Email Alarm: Urgent Alert
 **Descripción corta** (máx. 80):
 
 ```
-Loud alarm when the email you're waiting for arrives. Shifts, work, sales.
+An alarm for the emails that matter. Stop waiting - we'll tell you.
 ```
 
 **Descripción completa** (máx. 4000):
@@ -114,7 +114,7 @@ Email Alarm: Alerta Urgente
 **Descripción corta** (máx. 80):
 
 ```
-Alarma fuerte cuando llega el email que esperas. Turnos, trabajo, ventas.
+Alarma para tus emails importantes. No los esperes más, nosotros te avisamos.
 ```
 
 **Descripción completa** (máx. 4000):
