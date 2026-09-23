@@ -280,3 +280,38 @@ img { max-width: 100%; }
   .pasos::before { left: 7px; right: auto; top: 8px; bottom: 8px; width: 2px; height: auto; }
   .pasos div { padding-top: 0; padding-left: 32px; padding-right: 0; }
 }
+
+/* --- Formulario de contacto --- */
+.contacto { max-width: 620px; margin: 0 auto; padding: 56px 16px 80px; }
+.contacto h1 { font-size: clamp(2rem, 5vw, 2.6rem); margin: 0 0 12px; }
+.contacto .bajada { color: var(--suave); margin: 0 0 32px; font-size: 1.05rem; }
+
+.campo { display: block; margin-bottom: 20px; }
+.campo span { display: block; font-weight: 600; margin-bottom: 6px; }
+.campo input,
+.campo textarea {
+  width: 100%; padding: 13px 14px;
+  font: inherit; color: var(--texto);
+  background: var(--superficie);
+  border: 1px solid var(--borde); border-radius: 12px;
+}
+.campo input:focus,
+.campo textarea:focus { outline: 2px solid var(--verde); outline-offset: 1px; border-color: var(--verde); }
+.campo textarea { min-height: 150px; resize: vertical; }
+.campo .ayuda { display: block; font-weight: 400; font-size: .9rem; color: var(--suave); margin: 6px 0 0; }
+
+/* Trampa para robots: invisible para las personas y para los lectores de pantalla. */
+.trampa { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+.enviar {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 14px 26px; border: 0; border-radius: 999px;
+  background: var(--verde); color: #fff;
+  font: inherit; font-weight: 600; cursor: pointer;
+}
+.enviar:hover { filter: brightness(.94); }
+.enviar[disabled] { opacity: .6; cursor: default; }
+
+.aviso-form { margin-top: 18px; padding: 14px 16px; border-radius: 12px; font-size: .95rem; }
+.aviso-form.ok { background: var(--verde-suave); color: var(--verde-texto); }
+.aviso-form.error { background: var(--rojo-suave); color: var(--rojo); }

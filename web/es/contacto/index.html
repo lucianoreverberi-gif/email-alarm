@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Contacto — Email Alarm</title>
+    <meta
+      name="description"
+      content="Escríbenos: dudas sobre Email Alarm, problemas con una alarma o para entrar en la beta de iPhone."
+    />
+    <meta name="robots" content="index,follow" />
+    <link rel="icon" href="/icon.svg" />
+    <link rel="canonical" href="https://www.email-alarm.com/es/contacto/" />
+    <link rel="alternate" hreflang="en" href="https://www.email-alarm.com/contact/" />
+    <link rel="alternate" hreflang="es" href="https://www.email-alarm.com/es/contacto/" />
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/studio.css" />
+  </head>
+  <body>
+    <header class="contenedor encabezado">
+      <a class="marca" href="/es/"><img src="/icon.svg" alt="" />Email Alarm</a>
+      <nav class="studio-nav" aria-label="Navegación">
+        <a href="/es/android/">Android</a><a href="/es/ios/">iPhone</a
+        ><a href="/contact/" lang="en">English</a>
+      </nav>
+    </header>
+
+    <main class="contacto">
+      <h1>Hablemos.</h1>
+      <p class="bajada">
+        Dudas sobre la app, una alarma que no sonó, o para entrar en la beta de
+        iPhone. Contestamos desde support@email-alarm.com, casi siempre el mismo
+        día.
+      </p>
+
+      <form id="form">
+        <label class="campo">
+          <span>Tu nombre <em style="font-weight: 400; color: var(--suave)">· opcional</em></span>
+          <input type="text" name="nombre" autocomplete="name" maxlength="80" />
+        </label>
+
+        <label class="campo">
+          <span>Tu correo</span>
+          <input type="email" name="email" required autocomplete="email" maxlength="140" />
+          <span class="ayuda">A esta dirección te respondemos. No la usamos para nada más.</span>
+        </label>
+
+        <label class="campo">
+          <span>Tu mensaje</span>
+          <textarea name="mensaje" required maxlength="4000"></textarea>
+          <span class="ayuda">
+            Si algo no funcionó, cuéntanos qué teléfono usas y qué app de correo.
+          </span>
+        </label>
+
+        <!-- Invisible: solo la completan los robots. -->
+        <div class="trampa" aria-hidden="true">
+          <label>No completes esto <input type="text" name="web" tabindex="-1" autocomplete="off" /></label>
+        </div>
+
+        <button class="enviar" type="submit">Enviar mensaje</button>
+        <p id="aviso" class="aviso-form" hidden></p>
+      </form>
+    </main>
+
+    <footer class="contenedor pie">
+      <span>© 2026 Email Alarm</span>
+      <nav>
+        <a href="/privacy/">Privacidad Android</a
+        ><a href="/es/privacy/ios/">Privacidad iOS</a
+        ><a href="/es/contacto/">Contacto</a>
+      </nav>
+    </footer>
+
+    <script>
+      // Se envia sin recargar la pagina: quien escribe ve la respuesta ahi mismo.
+      const form = document.getElementById("form");
+      const aviso = document.getElementById("aviso");
+      const boton = form.querySelector("button");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        boton.disabled = true;
+        boton.textContent = "Enviando…";
+        aviso.hidden = true;
+
+        const datos = Object.fromEntries(new FormData(form));
+        datos.idioma = "es";
+        datos.pagina = location.href;
+
+        try {
+          const r = await fetch("/api/contacto", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(datos),
+          });
+          if (!r.ok) throw new Error(r.status);
+          form.reset();
+          mostrar("ok", "¡Listo! Tu mensaje llegó. Te respondemos a la brevedad.");
+        } catch {
+          mostrar(
+            "error",
+            "No se pudo enviar. Escríbenos directo a support@email-alarm.com y lo resolvemos."
+          );
+        } finally {
+          boton.disabled = false;
+          boton.textContent = "Enviar mensaje";
+        }
+      });
+
+      function mostrar(tipo, texto) {
+        aviso.className = "aviso-form " + tipo;
+        aviso.textContent = texto;
+        aviso.hidden = false;
+      }
+    </script>
+  </body>
+</html>
