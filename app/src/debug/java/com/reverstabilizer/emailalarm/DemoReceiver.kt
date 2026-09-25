@@ -70,17 +70,26 @@ class DemoReceiver : BroadcastReceiver() {
     }
 
     private fun cargarReglas(context: Context, espanol: Boolean) {
+        // La de los turnos tiene dias y horario, para que las capturas muestren
+        // la funcion: el resumen aparece en la tarjeta y en el formulario.
+        val turnos = Horario(Horario.LUNES_A_VIERNES, 8 * 60, 20 * 60)
         val reglas = if (espanol) {
             listOf(
                 Regla(nombre = "Cliente: Acme", remitente = "Acme", palabraClave = "propuesta"),
                 Regla(nombre = "Cita de migraciones", palabraClave = "USCIS"),
-                Regla(nombre = "Turnos del restaurante", remitente = "turnos@bistro.com")
+                Regla(
+                    nombre = "Turnos del restaurante", remitente = "turnos@bistro.com",
+                    dias = turnos.dias, desde = turnos.desde, hasta = turnos.hasta
+                )
             )
         } else {
             listOf(
                 Regla(nombre = "Client: Acme", remitente = "Acme", palabraClave = "proposal"),
                 Regla(nombre = "Immigration appointment", palabraClave = "USCIS"),
-                Regla(nombre = "Restaurant shifts", remitente = "shifts@bistro.com")
+                Regla(
+                    nombre = "Restaurant shifts", remitente = "shifts@bistro.com",
+                    dias = turnos.dias, desde = turnos.desde, hasta = turnos.hasta
+                )
             )
         }
 

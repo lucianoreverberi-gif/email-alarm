@@ -74,12 +74,22 @@ for idioma in en es; do
     adb_ shell input keyevent KEYCODE_BACK
     sleep 1
 
-    # 3. Probar y actividad reciente. Arrastre lento para que no siga de largo.
+    # 3. Dias y horario: la alarma de los turnos ya trae uno, asi que la seccion
+    # abre desplegada. Un arrastre dentro del formulario para que entre entera.
+    adb_ shell input tap $(centro 'text="Turnos del restaurante"\|text="Restaurant shifts"')
+    sleep 2
+    adb_ shell input swipe 540 1800 540 ${ARRASTRE_HORARIO:-1000} 1500
+    sleep 1
+    captura "horario-$idioma"
+    adb_ shell input keyevent KEYCODE_BACK
+    sleep 1
+
+    # 4. Probar y actividad reciente. Arrastre lento para que no siga de largo.
     adb_ shell input swipe 540 1900 540 ${ARRASTRE_FIN:-1050} 1500
     sleep 1
     captura "actividad-$idioma"
 
-    # 4. La pantalla de alarma
+    # 5. La pantalla de alarma
     receptor --es accion alarma --es idioma $idioma
     sleep 3
     captura "alarma-$idioma"
