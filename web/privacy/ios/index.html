@@ -40,7 +40,7 @@
       <article class="wrap prose">
         <span class="eyebrow">iPhone · iOS</span>
         <h1>Email Alarm for iOS Privacy Policy</h1>
-        <p>Updated: September 21, 2026</p>
+        <p>Updated: October 9, 2026</p>
         <h2>Who operates this app</h2>
         <p>
           Email Alarm for iOS is operated by Luciano Reverberi. Privacy
@@ -71,14 +71,53 @@
           technical logs and backups under their policies; deleting active data
           does not imply immediate removal from those copies.
         </p>
-        <h2>Services we use</h2>
+        <h2>How we protect data</h2>
         <p>
-          Google and Microsoft authorize mail access. Vercel and Neon host the
-          server and database. Expo and Apple deliver notifications. Email Alarm
-          push alerts carry generic text, an identifier, provider and tone,
-          without sender or subject; details are retrieved inside the app
-          through an authenticated session. These providers may process data
-          outside your country.
+          We use HTTPS/TLS for data in transit. Access-renewal credentials and
+          remote alert details are encrypted at rest with AES-256-GCM, and the
+          encryption key is kept separately from the database in protected
+          server configuration. Authenticated sessions, access controls and
+          least-privilege permissions limit access to the service. No security
+          method can guarantee absolute protection, but we maintain procedures
+          designed to protect the confidentiality and integrity of Google user
+          data.
+        </p>
+        <h2>How and with whom we share, transfer or disclose data</h2>
+        <p>
+          We disclose Google user data only to the service providers listed
+          below, and only to operate the features requested by you. They process
+          data on our behalf for these stated purposes and may process it outside
+          your country:
+        </p>
+        <ul>
+          <li>
+            <strong>Google</strong> provides OAuth authorization, the Gmail API
+            and Pub/Sub delivery used to notify Email Alarm of mailbox changes.
+          </li>
+          <li>
+            <strong>Vercel</strong> hosts the application server that receives
+            Gmail events and checks sender and subject against your rules.
+          </li>
+          <li>
+            <strong>Neon</strong> hosts the database that stores the connected
+            account, encrypted access-renewal credentials, rules, message
+            identifiers and limited alert details described in this policy.
+          </li>
+          <li>
+            <strong>Expo and Apple Push Notification service (APNs)</strong>
+            receive the device notification token and a generic alert payload
+            needed to deliver the notification. That payload does not contain
+            the sender, subject, email body or attachments.
+          </li>
+        </ul>
+        <p>
+          Microsoft is used only when you separately connect an Outlook or
+          Hotmail account; Google user data is not disclosed to Microsoft. We
+          may disclose the minimum information required by law, legal process,
+          or to protect users, the public, our rights or the security of the
+          service. If Email Alarm is involved in a merger, acquisition or asset
+          transfer, data may be transferred to the successor subject to this
+          policy and applicable law, with notice where required.
         </p>
         <h2>Your controls</h2>
         <p>
@@ -92,8 +131,9 @@
         <h2>Limited use of data</h2>
         <p>
           We do not sell email data or use it for advertising or training AI
-          models. Email Alarm’s use and transfer of information received from
-          Google APIs will adhere to the
+          models. We do not share Google user data with data brokers or other
+          third parties for their own purposes. Email Alarm’s use and transfer
+          of information received from Google APIs will adhere to the
           <a
             href="https://developers.google.com/terms/api-services-user-data-policy"
             >Google API Services User Data Policy</a
