@@ -23,45 +23,40 @@
     <link rel="stylesheet" href="/styles.css" />
     <link rel="stylesheet" href="/studio.css" />
     <link rel="stylesheet" href="/launch.css" />
+    <link rel="stylesheet" href="/ios-page.css" />
   </head>
   <body class="platform-iphone">
     <header class="contenedor encabezado">
       <a class="marca" href="/es/"><img src="/icon.svg" alt="" />Email Alarm</a>
       <nav class="studio-nav" aria-label="Navigation">
-        <a href="/es/android/">Android</a><a href="/es/ios/">iPhone</a
+        <a href="/es/android/">Android</a><a href="/es/ios/" aria-current="page">iPhone</a
         ><a href="/ios/" lang="en">English</a>
       </nav>
     </header>
     <main>
-      <section class="contenedor portada">
-        <div>
-          <span class="eyebrow">EMAIL ALARM · IPHONE</span>
+      <section class="ios-hero">
+        <div class="ios-hero-copy">
+          <span class="ios-kicker">Email Alarm para iPhone</span>
           <h1>Deja de revisar el correo cada dos minutos.</h1>
-<p>Alarma para tus emails importantes. No los esperes más, nosotros te avisamos. Tú eliges qué merece interrumpirte.</p>
-          <span class="proximamente">Próximamente en iPhone</span>
-          <p class="precio">
-            Beta privada. Todavía no disponible en App Store.
-          </p>
-          <p class="iphone-limit">En iPhone, el aviso dura unos segundos y respeta el modo silencio y Concentración.</p>
-        </div>
-        <div class="device-stage">
-          <div class="orbit orbit-one"></div>
-          <div class="orbit orbit-two"></div>
-          <div class="ios-device">
-            <div class="island"></div>
-            <div class="mock-status">9:41 <span>● ▰</span></div>
-            <div class="alarm-view">
-              <span class="alarm-symbol">◉</span
-              ><span class="mock-label">CORREO IMPORTANTE</span>
-              <h3>Turnos del restaurante</h3>
-              <p>Ya están abiertos los turnos de la semana que viene.</p>
-              <span class="match-chip">✓ Coincide con: Mis turnos</span
-              ><span class="mock-stop">DETENER</span>
-            </div>
+          <p class="ios-hero-lead">Alarma para tus emails importantes. No los esperes más, nosotros te avisamos. Tú eliges qué merece interrumpirte.</p>
+          <div class="ios-status-row">
+            <span class="ios-status">Próximamente en iPhone</span>
+            <span class="ios-beta-note">Ahora en beta privada</span>
           </div>
-          <p class="preview-caption">
-            Ilustración de la experiencia dentro de la app.
-          </p>
+          <div class="ios-limit-card">
+            <svg class="icono" aria-hidden="true"><use href="/icons.svg#i-bell" /></svg>
+            <span>En iPhone, el aviso dura unos segundos y respeta el modo silencio y Concentración.</span>
+          </div>
+        </div>
+        <div class="ios-hero-visual" aria-label="Pantallas actuales de Email Alarm en iPhone">
+          <figure class="iphone-frame iphone-primary">
+            <img src="/img/ios-list-current.jpg" width="1290" height="2796" alt="Inicio de Email Alarm con las cuentas conectadas y las alarmas guardadas" />
+          </figure>
+          <figure class="iphone-frame iphone-secondary">
+            <img src="/img/ios-alarm-current.jpg" width="1290" height="2796" alt="Pantalla de alerta con el remitente, el asunto y la alarma que coincidió" />
+          </figure>
+          <div class="ios-real-badge"><span>✓</span>Pantallas reales</div>
+          <span class="ios-real-caption">VERSIÓN ACTUAL DE IPHONE</span>
         </div>
       </section>
       <section class="tesis">
@@ -104,82 +99,34 @@
           </article>
         </div>
       </section>
-      <section class="contenedor seccion">
-        <h2>Tu alarma. Tus reglas.</h2>
-        <p class="bajada">
-          Así se organiza la experiencia. Vistas ilustrativas.
-        </p>
-        <div class="galeria ios-gallery">
-          <figure>
-            <div class="ios-device">
-              <div class="island"></div>
-              <div class="mock-status">9:41 <span>● ▰</span></div>
-              <div class="mock-dashboard">
-                <img src="/icon.svg" alt="" />
-                <h3>Email Alarm</h3>
-                <p>Gmail · Outlook</p>
-                <h4>Mis alarmas</h4>
-                <div class="mock-card">
-                  <b>Mis turnos</b><span class="mock-toggle"></span>
-                  <p>scheduler@example.com</p>
-                  <small>Asunto: turnos disponibles</small>
-                </div>
-                <div class="mock-card">
-                  <b>Cliente importante</b><span class="mock-toggle"></span>
-                  <p>client@example.com</p>
-                </div>
-                <h4>Probar la alarma</h4>
-                <span class="mock-action">▷ Escuchar ahora</span>
-              </div>
-            </div>
-            <figcaption>
-              <b>Elige qué importa</b><span>Crea y activa tus reglas.</span>
-            </figcaption>
+      <section class="contenedor ios-showcase">
+        <div class="ios-showcase-head">
+          <div>
+            <span class="eyebrow">LA APP ACTUAL</span>
+            <h2>Tu alarma. Tus reglas.</h2>
+          </div>
+          <p class="ios-showcase-note">Pantallas reales de la beta actual de iPhone. La interfaz está disponible en español e inglés.</p>
+        </div>
+        <div class="ios-screens">
+          <figure class="ios-screen-card">
+            <div class="ios-screen-device"><img loading="lazy" src="/img/ios-list-current.jpg" width="1290" height="2796" alt="Inicio de Email Alarm con las alarmas guardadas" /></div>
+            <figcaption><b>Todo en un solo lugar</b><span>Conecta tus correos y consulta de un vistazo todas tus alarmas activas.</span></figcaption>
           </figure>
-          <figure>
-            <div class="ios-device">
-              <div class="island"></div>
-              <div class="mock-status">9:41 <span>● ▰</span></div>
-              <div class="alarm-view">
-                <span class="alarm-symbol">◉</span
-                ><span class="mock-label">CORREO IMPORTANTE</span>
-                <h3>Turnos del restaurante</h3>
-                <p>Ya están abiertos los turnos de la semana que viene.</p>
-                <span class="match-chip">✓ Coincide con: Mis turnos</span
-                ><span class="mock-stop">DETENER</span>
-              </div>
-            </div>
-            <figcaption>
-              <b>Mira por qué sonó</b
-              ><span
-                >Abre la notificación para ver el remitente, asunto y
-                alarma.</span
-              >
-            </figcaption>
+          <figure class="ios-screen-card">
+            <div class="ios-screen-device"><img loading="lazy" src="/img/ios-edit-current.jpg" width="1290" height="2796" alt="Creación de una alarma por remitente y asunto" /></div>
+            <figcaption><b>Elige qué importa</b><span>Usa un remitente, una frase en el asunto o exige que coincidan ambos.</span></figcaption>
           </figure>
-          <figure>
-            <div class="ios-device">
-              <div class="island"></div>
-              <div class="mock-status">9:41 <span>● ▰</span></div>
-              <div class="mock-dashboard">
-                <h3>Actividad reciente</h3>
-                <p>Los correos y sus coincidencias</p>
-                <div class="mock-card">
-                  <b>Turnos del restaurante</b>
-                  <p>Ya están abiertos los turnos de la semana que viene.</p>
-                  <small class="matched">✓ Sonó · Mis turnos</small>
-                </div>
-                <div class="mock-card">
-                  <b>Newsletter</b>
-                  <p>Las novedades de hoy</p>
-                  <small>Sin coincidencia</small>
-                </div>
-              </div>
-            </div>
-            <figcaption>
-              <b>Todo queda claro</b
-              ><span>Revisa qué correos coincidieron y cuáles no.</span>
-            </figcaption>
+          <figure class="ios-screen-card">
+            <div class="ios-screen-device"><img loading="lazy" src="/img/ios-alarm-current.jpg" width="1290" height="2796" alt="Detalle completo de una alerta de Email Alarm" /></div>
+            <figcaption><b>Entiende por qué sonó</b><span>Consulta el remitente, el asunto y la regla que activó la alerta.</span></figcaption>
+          </figure>
+          <figure class="ios-screen-card">
+            <div class="ios-screen-device"><img loading="lazy" src="/img/ios-schedule-current.jpg" width="1290" height="2796" alt="Selección de días, horarios y tiempo para posponer" /></div>
+            <figcaption><b>Tu tiempo sigue siendo tuyo</b><span>Elige los días y las horas en que cada alarma puede interrumpirte.</span></figcaption>
+          </figure>
+          <figure class="ios-screen-card">
+            <div class="ios-screen-device"><img loading="lazy" src="/img/ios-activity-current.jpg" width="1290" height="2796" alt="Actividad reciente con correos coincidentes y no coincidentes" /></div>
+            <figcaption><b>Todo queda claro</b><span>Revisa qué coincidió, qué no y cuál de tus alarmas se envió.</span></figcaption>
           </figure>
         </div>
       </section>
@@ -246,3 +193,4 @@
     </footer>
   </body>
 </html>
+
