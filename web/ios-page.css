@@ -356,7 +356,44 @@
 }
 
 .platform-iphone .privacidad {
+  grid-template-columns: 76px minmax(280px, .9fr) minmax(360px, 1.25fr);
+  grid-template-areas:
+    "icon title summary"
+    "icon details details";
+  column-gap: clamp(28px, 4vw, 56px);
+  row-gap: 24px;
+  align-items: start;
+  padding: clamp(38px, 5vw, 64px);
   background: linear-gradient(135deg, #e8f6ef, #eef5ff);
+}
+
+.platform-iphone .privacidad .escudo {
+  grid-area: icon;
+}
+
+.platform-iphone .privacidad h2 {
+  grid-area: title;
+  max-width: 11em;
+  font-size: clamp(32px, 3.3vw, 46px);
+  line-height: 1.05;
+  letter-spacing: -1.7px;
+}
+
+.platform-iphone .privacidad p {
+  font-size: 17px;
+  line-height: 1.65;
+}
+
+.platform-iphone .privacidad h2 + p {
+  grid-area: summary;
+  max-width: 37em;
+}
+
+.platform-iphone .privacidad p:last-child {
+  grid-area: details;
+  max-width: 72em;
+  padding-top: 22px;
+  border-top: 1px solid rgba(19, 77, 60, .13);
 }
 
 .platform-iphone .cierre {
@@ -407,6 +444,15 @@
   .ios-screen-card { grid-column: span 3; }
   .ios-screen-card:nth-child(4) { grid-column: span 3; }
   .ios-screen-card:nth-child(5) { grid-column: 2 / span 4; }
+  .platform-iphone .privacidad {
+    grid-template-columns: 64px minmax(0, 1fr);
+    grid-template-areas:
+      "icon title"
+      "summary summary"
+      "details details";
+    column-gap: 22px;
+  }
+  .platform-iphone .privacidad h2 { max-width: 13em; }
 }
 
 @media (max-width: 560px) {
@@ -451,6 +497,26 @@
     border-radius: 28px;
   }
   .ios-screen-device { width: 220px; }
+  .platform-iphone .privacidad {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "icon"
+      "title"
+      "summary"
+      "details";
+    row-gap: 18px;
+    padding: 30px 24px;
+  }
+  .platform-iphone .privacidad h2 {
+    font-size: 32px;
+    letter-spacing: -1.2px;
+  }
+  .platform-iphone .privacidad p {
+    font-size: 16px;
+  }
+  .platform-iphone .privacidad p:last-child {
+    padding-top: 18px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
