@@ -168,4 +168,33 @@
     <string name="channel_off_hours">Emails outside alarm hours</string>
     <string name="channel_off_hours_description">Silent: an alarm\'s email that arrived outside its days or hours.</string>
     <string name="off_hours_title">Arrived outside hours · %1$s</string>
+
+    <!-- Cuando suena: el modo de coincidencia -->
+    <string name="trigger_title">When it rings</string>
+    <string name="trigger_either">Either one</string>
+    <string name="trigger_both">Both</string>
+    <string name="trigger_help_either">Rings when the sender matches OR the word appears in the subject. Filling in just one is fine.</string>
+    <string name="trigger_help_both">Rings only when the sender matches AND the word appears. Fewer false alarms, but it can miss an email if the sender shows up differently.</string>
+    <string name="trigger_help_one_field">With one field filled in, that one decides. Fill in both and you can choose whether one is enough or both are required.</string>
+
+    <!-- Tonos de la app -->
+    <string name="tone_alarm">Alarm</string>
+    <string name="tone_aurora">Aurora</string>
+    <string name="tone_bells">Bells</string>
+    <string name="tone_pulse">Pulse</string>
+    <string name="tone_breeze">Breeze</string>
+    <string name="tone_digital">Digital</string>
+    <string name="sound_duration">%1$d s · long tone</string>
+    <string name="sound_selected">Selected</string>
+    <string name="sound_preview">Preview</string>
+    <string name="sound_from_phone">More from my phone…</string>
+    <string name="sound_bundled_help">These tones play for %1$d seconds and repeat until you stop the alarm.</string>
+    <string name="sound_phone_title">From your phone</string>
+
+    <!-- Idioma -->
+    <string name="section_language">Language</string>
+    <string name="language_system">Phone language</string>
+    <string name="language_es">Español</string>
+    <string name="language_en">English</string>
+    <string name="language_help">Changes the app only. Your phone stays as it is.</string>
 </resources>

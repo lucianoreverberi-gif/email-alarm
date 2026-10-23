@@ -166,4 +166,33 @@
     <string name="channel_off_hours">Correos fuera de horario</string>
     <string name="channel_off_hours_description">Silenciosa: un correo de una alarma que llegó fuera de sus días u horas.</string>
     <string name="off_hours_title">Llegó fuera de horario · %1$s</string>
+
+    <!-- Cuando suena: el modo de coincidencia -->
+    <string name="trigger_title">Cuándo suena</string>
+    <string name="trigger_either">Cualquiera</string>
+    <string name="trigger_both">Los dos</string>
+    <string name="trigger_help_either">Suena si coincide el remitente O si la palabra aparece en el asunto. Podés completar uno solo.</string>
+    <string name="trigger_help_both">Suena solo si coincide el remitente Y aparece la palabra. Menos alarmas de más, pero puede perderse un correo si el remitente aparece distinto.</string>
+    <string name="trigger_help_one_field">Con un campo completo, ese decide. Si completás los dos vas a poder elegir si alcanza con uno o si tienen que darse los dos.</string>
+
+    <!-- Tonos de la app -->
+    <string name="tone_alarm">Alarma</string>
+    <string name="tone_aurora">Aurora</string>
+    <string name="tone_bells">Campanas</string>
+    <string name="tone_pulse">Pulso</string>
+    <string name="tone_breeze">Brisa</string>
+    <string name="tone_digital">Digital</string>
+    <string name="sound_duration">%1$d s · tono largo</string>
+    <string name="sound_selected">Elegido</string>
+    <string name="sound_preview">Probar</string>
+    <string name="sound_from_phone">Más tonos del teléfono…</string>
+    <string name="sound_bundled_help">Estos tonos suenan %1$d segundos y se repiten hasta que pares la alarma.</string>
+    <string name="sound_phone_title">Del teléfono</string>
+
+    <!-- Idioma -->
+    <string name="section_language">Idioma</string>
+    <string name="language_system">Idioma del teléfono</string>
+    <string name="language_es">Español</string>
+    <string name="language_en">English</string>
+    <string name="language_help">Cambia solo la app. El teléfono queda como está.</string>
 </resources>

@@ -38,6 +38,13 @@ import com.reverstabilizer.emailalarm.ui.theme.VerdeMarca
  */
 class AlarmaActivity : ComponentActivity() {
 
+    // El idioma tiene que estar puesto antes de que se lea el primer texto.
+    // En Android 13+ esto no hace nada: ahi el idioma lo aplica el sistema.
+    override fun attachBaseContext(base: android.content.Context) {
+        super.attachBaseContext(Idioma.envolver(base))
+    }
+
+
     private val remitente = mutableStateOf("")
     private val asunto = mutableStateOf("")
 

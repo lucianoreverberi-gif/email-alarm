@@ -37,6 +37,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
@@ -166,6 +167,43 @@ fun PantallaAjustes(
                     tint = MaterialTheme.colorScheme.primary
                 )
             }
+        }
+
+        Seccion(stringResource(R.string.section_language))
+        Tarjeta {
+            val contexto = LocalContext.current
+            val actividad = contexto as? android.app.Activity
+            var idioma by remember { mutableStateOf(Idioma.elegido(contexto)) }
+
+            val opciones = listOf<Pair<String?, Int>>(
+                null to R.string.language_system,
+                "es" to R.string.language_es,
+                "en" to R.string.language_en
+            )
+            opciones.forEach { (codigo, etiqueta) ->
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(12.dp))
+                        .clickable {
+                            if (codigo != idioma) {
+                                idioma = codigo
+                                // Abajo de Android 13 hay que recrear la pantalla
+                                // para que los textos se vuelvan a leer.
+                                if (Idioma.elegir(contexto, codigo)) actividad?.recreate()
+                            }
+                        }
+                        .padding(vertical = 4.dp)
+                ) {
+                    RadioButton(selected = codigo == idioma, onClick = null)
+                    Text(
+                        stringResource(etiqueta),
+                        modifier = Modifier.padding(start = 8.dp)
+                    )
+                }
+            }
+            Ayuda(stringResource(R.string.language_help))
         }
 
         Seccion(stringResource(R.string.section_alarm))

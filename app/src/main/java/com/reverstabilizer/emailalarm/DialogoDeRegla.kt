@@ -21,7 +21,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.MusicNote
+import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -39,7 +39,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -62,6 +61,7 @@ fun DialogoDeRegla(
     var remitente by remember { mutableStateOf(reglaInicial?.remitente ?: "") }
     var palabraClave by remember { mutableStateOf(reglaInicial?.palabraClave ?: "") }
     var sonido by remember { mutableStateOf(reglaInicial?.sonido) }
+    var exigeAmbos by remember { mutableStateOf(reglaInicial?.exigeAmbos ?: false) }
     var horario by remember { mutableStateOf(reglaInicial?.horario ?: Horario()) }
 
     val hayCondicion = remitente.isNotBlank() || palabraClave.isNotBlank()
@@ -156,7 +156,15 @@ fun DialogoDeRegla(
                     ayuda = stringResource(R.string.field_keyword_help)
                 )
 
-                Ayuda(stringResource(R.string.dialog_combination))
+                // Un tester creyo que la alarma solo miraba el remitente y
+                // cargo solo ese campo. No era error suyo: la pantalla no lo
+                // decia en ningun lado. Ahora el modo es una decision visible.
+                SeccionCuandoSuena(
+                    exigeAmbos = exigeAmbos,
+                    onCambio = { exigeAmbos = it },
+                    hayRemitente = remitente.isNotBlank(),
+                    hayPalabra = palabraClave.isNotBlank()
+                )
 
                 // El sonido va con los campos, no al fondo: un tono distinto por
                 // alarma dice que correo llego sin mirar el telefono.
@@ -176,32 +184,11 @@ fun DialogoDeRegla(
                             .putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, tituloSonido)
                     )
                 }
-                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Text(tituloSonido, fontWeight = FontWeight.SemiBold)
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(4.dp))
-                            .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(4.dp))
-                            .clickable(onClick = elegirSonido)
-                            .padding(start = 14.dp, top = 6.dp, bottom = 6.dp)
-                    ) {
-                        Icon(
-                            Icons.Outlined.MusicNote,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                        Text(
-                            nombreDelSonido(sonido),
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.weight(1f).padding(start = 12.dp)
-                        )
-                        TextButton(onClick = elegirSonido) { Text(stringResource(R.string.sound_change)) }
-                    }
-                    Ayuda(stringResource(R.string.field_sound_help))
-                }
+                SelectorDeTono(
+                    sonido = sonido,
+                    onElegir = { sonido = it },
+                    onAbrirSelectorDelSistema = elegirSonido
+                )
 
                 SeccionDeHorario(horario) { horario = it }
 
@@ -236,6 +223,7 @@ fun DialogoDeRegla(
                                 palabraClave = palabraClave.trim(),
                                 activa = reglaInicial?.activa ?: true,
                                 sonido = sonido,
+                                exigeAmbos = exigeAmbos,
                                 dias = horario.dias,
                                 desde = horario.desde,
                                 hasta = horario.hasta
@@ -248,6 +236,95 @@ fun DialogoDeRegla(
             }
             }
         }
+    }
+}
+
+/**
+ * Como se combinan remitente y palabra clave.
+ *
+ * Se muestra siempre, incluso con un solo campo cargado, porque es ahi donde
+ * alguien se entera de que la palabra clave tambien hace sonar la alarma. Con
+ * un solo campo el selector queda apagado y se explica por que: elegir "los
+ * dos" con un campo vacio daria una regla que no suena nunca.
+ */
+@Composable
+private fun SeccionCuandoSuena(
+    exigeAmbos: Boolean,
+    onCambio: (Boolean) -> Unit,
+    hayRemitente: Boolean,
+    hayPalabra: Boolean
+) {
+    val losDos = hayRemitente && hayPalabra
+
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(stringResource(R.string.trigger_title), fontWeight = FontWeight.SemiBold)
+        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            OpcionDeModo(
+                texto = stringResource(R.string.trigger_either),
+                seleccionado = !exigeAmbos,
+                habilitado = true,
+                modifier = Modifier.weight(1f)
+            ) { onCambio(false) }
+            OpcionDeModo(
+                texto = stringResource(R.string.trigger_both),
+                seleccionado = exigeAmbos,
+                habilitado = losDos,
+                modifier = Modifier.weight(1f)
+            ) { onCambio(true) }
+        }
+        Ayuda(
+            stringResource(
+                when {
+                    !losDos -> R.string.trigger_help_one_field
+                    exigeAmbos -> R.string.trigger_help_both
+                    else -> R.string.trigger_help_either
+                }
+            )
+        )
+    }
+}
+
+@Composable
+private fun OpcionDeModo(
+    texto: String,
+    seleccionado: Boolean,
+    habilitado: Boolean,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
+    val borde = when {
+        !habilitado -> MaterialTheme.colorScheme.outlineVariant
+        seleccionado -> MaterialTheme.colorScheme.primary
+        else -> MaterialTheme.colorScheme.outlineVariant
+    }
+    val color = when {
+        !habilitado -> MaterialTheme.colorScheme.onSurfaceVariant
+        seleccionado -> MaterialTheme.colorScheme.primary
+        else -> MaterialTheme.colorScheme.onSurface
+    }
+
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .clip(RoundedCornerShape(12.dp))
+            .background(
+                if (seleccionado && habilitado) MaterialTheme.colorScheme.primaryContainer
+                else MaterialTheme.colorScheme.surface
+            )
+            .border(if (seleccionado && habilitado) 2.dp else 1.dp, borde, RoundedCornerShape(12.dp))
+            .clickable(enabled = habilitado, onClick = onClick)
+            .padding(vertical = 12.dp)
+    ) {
+        if (seleccionado && habilitado) {
+            Icon(
+                Icons.Rounded.Check,
+                contentDescription = null,
+                tint = color,
+                modifier = Modifier.padding(end = 6.dp)
+            )
+        }
+        Text(texto, fontWeight = FontWeight.SemiBold, color = color)
     }
 }
 

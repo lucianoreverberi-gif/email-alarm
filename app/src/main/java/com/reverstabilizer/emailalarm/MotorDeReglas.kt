@@ -111,13 +111,20 @@ object MotorDeReglas {
         // Una regla sin nada cargado sonaria con todo. No dispara.
         if (!buscaRemitente && !buscaPalabra) return false
 
-        // Alcanza con que se cumpla una. Perderse un correo es peor que sonar
-        // de mas, asi que ante la duda la regla dispara.
         val remitenteCoincide = buscaRemitente &&
             coincideRemitente(regla.remitente, correo.textoDelRemitente())
         val palabraCoincide = buscaPalabra &&
             sinFirmas(normalizar(correo.textoDelContenido())).contains(normalizar(regla.palabraClave.trim()))
 
+        // "Los dos" solo tiene sentido si la regla tiene cargados los dos
+        // campos. Con uno solo cargado, exigir ambos dejaria una regla que no
+        // suena nunca: ahi manda el unico campo que hay.
+        if (regla.exigeAmbos && buscaRemitente && buscaPalabra) {
+            return remitenteCoincide && palabraCoincide
+        }
+
+        // Por defecto alcanza con que se cumpla uno. Perderse un correo es peor
+        // que sonar de mas, asi que ante la duda la regla dispara.
         return remitenteCoincide || palabraCoincide
     }
 

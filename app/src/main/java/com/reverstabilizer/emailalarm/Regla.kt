@@ -21,8 +21,8 @@ import kotlinx.coroutines.flow.Flow
  * Una regla de alarma.
  *
  * [remitente] y [palabraClave] son opcionales por separado, pero al menos uno
- * tiene que estar cargado. Si estan los dos, alcanza con que se cumpla uno (O).
- * Suena de mas antes que perderse un correo.
+ * tiene que estar cargado. Si estan los dos, [exigeAmbos] decide si alcanza con
+ * uno (lo normal) o si tienen que darse los dos.
  */
 @Entity(tableName = "reglas")
 data class Regla(
@@ -35,6 +35,16 @@ data class Regla(
     val activa: Boolean = true,
     /** Uri del tono elegido. null = el tono de alarma del sistema. */
     val sonido: String? = null,
+    /**
+     * Solo cuenta si la regla tiene cargados remitente Y palabra clave.
+     * false (lo normal) = alcanza con que se cumpla uno.
+     * true = tienen que cumplirse los dos, para reglas mas precisas.
+     *
+     * Arranca en false a proposito: perderse un correo es peor que sonar de mas,
+     * y las reglas que ya existian se comportaban asi.
+     */
+    @ColumnInfo(defaultValue = "0")
+    val exigeAmbos: Boolean = false,
     /** Dias en que suena, un bit por dia (lunes = bit 0). Ver [Horario]. */
     @ColumnInfo(defaultValue = "127")
     val dias: Int = Horario.TODOS_LOS_DIAS,
@@ -147,7 +157,20 @@ val MIGRACION_2_3 = object : Migration(2, 3) {
     }
 }
 
-@Database(entities = [Regla::class, Deteccion::class], version = 3, exportSchema = false)
+/**
+ * De la version 3 a la 4: el modo de coincidencia por regla.
+ *
+ * DEFAULT 0 no es un detalle: toda regla que ya existe queda en "alcanza con
+ * uno", que es como venia funcionando. Pasarlas a "los dos" en silencio haria
+ * que a alguien le deje de sonar una alarma sin enterarse.
+ */
+val MIGRACION_3_4 = object : Migration(3, 4) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE reglas ADD COLUMN exigeAmbos INTEGER NOT NULL DEFAULT 0")
+    }
+}
+
+@Database(entities = [Regla::class, Deteccion::class], version = 4, exportSchema = false)
 abstract class BaseDeDatos : RoomDatabase() {
 
     abstract fun reglaDao(): ReglaDao
@@ -163,7 +186,7 @@ abstract class BaseDeDatos : RoomDatabase() {
                     context.applicationContext,
                     BaseDeDatos::class.java,
                     "mailalarm.db"
-                ).addMigrations(MIGRACION_1_2, MIGRACION_2_3)
+                ).addMigrations(MIGRACION_1_2, MIGRACION_2_3, MIGRACION_3_4)
                     .build()
                     .also { instancia = it }
             }
