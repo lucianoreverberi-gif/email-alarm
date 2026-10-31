@@ -53,6 +53,8 @@
 
     <!-- Historial -->
     <string name="history_empty">Todavía no llegó ningún correo desde que se activó la app. Cuando llegue uno, aparece aquí aunque no coincida con ninguna alarma.</string>
+    <string name="history_empty_hint">Email Alarm suena a partir de las notificaciones que muestra tu app de correo. Si ya pasó un rato y esto sigue vacío, revisa que esa app tenga las notificaciones activadas.</string>
+    <string name="history_empty_action">Notificaciones de %1$s</string>
     <string name="history_hint">Los últimos 20, guardados solo en este teléfono.</string>
     <string name="history_clear">Borrar</string>
     <string name="history_rang">Sonó · %1$s</string>

@@ -1,7 +1,10 @@
 package com.reverstabilizer.emailalarm
 
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
+import android.provider.Settings
 
 data class AppCorreo(
     val paquete: String,
@@ -41,6 +44,26 @@ object AppsDeCorreo {
 
     /** El historial guarda el nombre de la app; esto recupera el paquete para su icono. */
     fun porNombre(nombre: String): AppCorreo? = CONOCIDAS.find { it.nombre == nombre }
+
+    /**
+     * Lleva a los ajustes de notificaciones de la app de correo.
+     *
+     * Si esa app tiene las notificaciones apagadas, aca no llega nada y la
+     * alarma nunca suena. Android no deja consultar los ajustes de un tercero,
+     * asi que no hay forma de detectarlo ni de arreglarlo desde el codigo: lo
+     * unico posible es abrirle la pantalla a la persona.
+     *
+     * Algunos fabricantes no atienden el intent directo; de ahi el respaldo a
+     * la ficha de la aplicacion, que siempre existe.
+     */
+    fun abrirNotificaciones(context: Context, paquete: String) {
+        val directo = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+            .putExtra(Settings.EXTRA_APP_PACKAGE, paquete)
+        val respaldo = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+            .setData(Uri.fromParts("package", paquete, null))
+        runCatching { context.startActivity(directo) }
+            .onFailure { runCatching { context.startActivity(respaldo) } }
+    }
 }
 
 /** Que apps estamos escuchando. Es una preferencia simple, no va a la base. */

@@ -140,6 +140,8 @@ fun PantallaPrincipal(
         hayAlarmasActivas = reglas.any { it.activa }
     )
 
+    val contextoDeLaPantalla = LocalContext.current
+
     // Historiales viejos pueden tener avisos de cuenta: no son correos.
     val correos = detecciones.filter { it.resultado != Resultado.AVISO_CUENTA.name }
     val correosVisibles = if (historialAbierto) correos else correos.take(CORREOS_VISIBLES)
@@ -214,6 +216,22 @@ fun PantallaPrincipal(
                 Tarjeta(relleno = PaddingValues(horizontal = 16.dp, vertical = 8.dp)) {
                     if (correos.isEmpty()) {
                         FilaVacia(Icons.Outlined.Email, stringResource(R.string.history_empty))
+                        // Una tester tenia las notificaciones de Gmail apagadas: la app
+                        // no recibia nada, el encabezado decia "Escuchando Gmail" y este
+                        // historial vacio no sugeria que revisar. No se puede detectar
+                        // desde el codigo, asi que al menos se nombra la causa probable
+                        // y se la lleva hasta la pantalla que lo arregla.
+                        Ayuda(
+                            stringResource(R.string.history_empty_hint),
+                            Modifier.padding(start = 48.dp, bottom = 4.dp)
+                        )
+                        appsInstaladas.filter { it.paquete in appsEscuchadas }.forEach { app ->
+                            TextButton(onClick = {
+                                AppsDeCorreo.abrirNotificaciones(contextoDeLaPantalla, app.paquete)
+                            }) {
+                                Text(stringResource(R.string.history_empty_action, app.nombre))
+                            }
+                        }
                     }
                     correosVisibles.forEachIndexed { i, d ->
                         if (i > 0) Separador()
