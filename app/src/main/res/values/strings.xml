@@ -54,6 +54,9 @@
 
     <!-- Historial -->
     <string name="history_empty">No emails yet since the app was turned on. When one arrives it shows up here, even if it matches none of your alarms.</string>
+    <string name="listening_silent">Listening to %1$s, but nothing is arriving</string>
+    <string name="no_signal_title">Nothing from %1$s in two days</string>
+    <string name="no_signal_body">Email Alarm rings from the notifications your email app shows. If %1$s has its notifications turned off, nothing reaches this app and the alarm will not ring. If you simply got no email, you can ignore this.</string>
     <string name="history_empty_hint">Email Alarm rings from the notifications your email app shows. If some time has passed and this is still empty, check that that app has its notifications turned on.</string>
     <string name="history_empty_action">%1$s notifications</string>
     <string name="history_hint">The last 20, stored only on this phone.</string>

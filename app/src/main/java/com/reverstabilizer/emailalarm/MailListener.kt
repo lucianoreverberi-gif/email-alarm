@@ -22,6 +22,7 @@ class MailListener : NotificationListenerService() {
 
     override fun onListenerConnected() {
         Registro.d("Listener CONECTADO: ya estoy recibiendo notificaciones")
+        Ajustes.anotarQueEscucha(this)
         // Se conecta al arrancar el telefono: buen momento para detectar una
         // suscripcion que vencio mientras la app no se abria, y avisar.
         scope.launch { Suscripcion.verificar(this@MailListener) }
@@ -33,6 +34,9 @@ class MailListener : NotificationListenerService() {
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         if (sbn.packageName !in Ajustes.appsEscuchadas(this)) return
+        // Antes de interpretar nada: esta app de correo esta emitiendo. Es la
+        // unica prueba que tenemos de que sus notificaciones estan prendidas.
+        Ajustes.anotarSenal(this, sbn.packageName)
         val app = AppsDeCorreo.porPaquete(sbn.packageName)?.nombre ?: sbn.packageName
 
         // Los avisos de cuenta de la app de correo ("no puedo entrar a x@hotmail.com")

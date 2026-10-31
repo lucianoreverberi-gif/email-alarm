@@ -66,23 +66,97 @@ object AppsDeCorreo {
     }
 }
 
+/**
+ * Cuanto silencio hace falta para sospechar que la app de correo tiene las
+ * notificaciones apagadas.
+ *
+ * Dos dias es a proposito generoso. Con menos, a cualquiera que se tome un fin
+ * de semana sin correos le saltaria un aviso que no corresponde, y un aviso que
+ * aparece cuando todo esta bien deja de significar algo.
+ *
+ * Si cambia, hay que cambiar tambien los textos no_signal_*, que dicen "dos dias".
+ */
+internal const val SILENCIO_SOSPECHOSO = 48L * 60 * 60 * 1000
+
+/**
+ * Si de una app de correo no llego nada en mucho tiempo.
+ *
+ * Aparte para poder probarla: la decision es lo unico que importa y no necesita
+ * ni Android ni preferencias.
+ *
+ * [escuchaDesde] en 0 significa que todavia no sabemos desde cuando escuchamos
+ * (recien actualizada, o el listener nunca se conecto): sin esa referencia dos
+ * dias de silencio no prueban nada. Igual que recien empezado a escuchar: hace
+ * falta la ventana completa antes de concluir algo.
+ */
+internal fun haySilencio(escuchaDesde: Long, ultimaSenal: Long, ahora: Long): Boolean {
+    if (escuchaDesde == 0L) return false
+    if (ahora - escuchaDesde < SILENCIO_SOSPECHOSO) return false
+    return ahora - ultimaSenal >= SILENCIO_SOSPECHOSO
+}
+
 /** Que apps estamos escuchando. Es una preferencia simple, no va a la base. */
 object Ajustes {
 
     private const val ARCHIVO = "ajustes"
     private const val CLAVE_APPS = "apps_escuchadas"
+    private const val CLAVE_ESCUCHA_DESDE = "escucha_desde"
+    private const val PREFIJO_SENAL = "senal_"
+
+    private fun prefs(context: Context) =
+        context.getSharedPreferences(ARCHIVO, Context.MODE_PRIVATE)
+
+    /**
+     * Desde cuando estamos escuchando. Se anota una sola vez, la primera que el
+     * listener se conecta, y es la referencia para no avisar de un silencio que
+     * en realidad es "la app es nueva".
+     */
+    fun anotarQueEscucha(context: Context) {
+        val p = prefs(context)
+        if (p.getLong(CLAVE_ESCUCHA_DESDE, 0L) != 0L) return
+        p.edit().putLong(CLAVE_ESCUCHA_DESDE, System.currentTimeMillis()).apply()
+    }
+
+    /**
+     * Llego algo de esta app de correo.
+     *
+     * Se anota antes de leer la notificacion, no despues: lo que interesa es si
+     * la app de correo esta emitiendo, y una notificacion que nuestro lector no
+     * entiende tambien lo prueba. Si solo contaramos las que entendemos, un
+     * formato nuevo de Outlook se veria igual que Gmail apagado, y mandariamos a
+     * la persona a revisar unos ajustes que estan bien.
+     */
+    fun anotarSenal(context: Context, paquete: String) {
+        prefs(context).edit()
+            .putLong(PREFIJO_SENAL + paquete, System.currentTimeMillis())
+            .apply()
+    }
+
+    /**
+     * Las apps que escuchamos y de las que hace dos dias que no llega nada.
+     *
+     * Es una sospecha, no un diagnostico: Android no deja consultar los ajustes
+     * de notificaciones de otra app. Tambien da positivo con alguien que
+     * simplemente no recibio correos, y por eso el aviso que lo muestra es
+     * ambar y dice que se puede ignorar.
+     */
+    fun appsSinSenal(context: Context, ahora: Long = System.currentTimeMillis()): Set<String> {
+        val p = prefs(context)
+        val desde = p.getLong(CLAVE_ESCUCHA_DESDE, 0L)
+        return appsEscuchadas(context)
+            .filter { haySilencio(desde, p.getLong(PREFIJO_SENAL + it, 0L), ahora) }
+            .toSet()
+    }
 
 
     fun appsEscuchadas(context: Context): Set<String> {
-        val prefs = context.getSharedPreferences(ARCHIVO, Context.MODE_PRIVATE)
-        val guardadas = prefs.getStringSet(CLAVE_APPS, null)
+        val guardadas = prefs(context).getStringSet(CLAVE_APPS, null)
         // Por defecto escuchamos todas las apps de correo que haya instaladas.
         return guardadas ?: AppsDeCorreo.instaladas(context).map { it.paquete }.toSet()
     }
 
     fun guardarAppsEscuchadas(context: Context, paquetes: Set<String>) {
-        context.getSharedPreferences(ARCHIVO, Context.MODE_PRIVATE)
-            .edit()
+        prefs(context).edit()
             .putStringSet(CLAVE_APPS, paquetes)
             .apply()
     }

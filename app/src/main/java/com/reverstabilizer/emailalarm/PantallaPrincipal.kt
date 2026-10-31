@@ -38,6 +38,7 @@ import androidx.compose.material.icons.rounded.ExpandLess
 import androidx.compose.material.icons.rounded.ExpandMore
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.NotificationsActive
+import androidx.compose.material.icons.rounded.NotificationsOff
 import androidx.compose.material.icons.rounded.NotificationsPaused
 import androidx.compose.material.icons.rounded.PriorityHigh
 import androidx.compose.material.icons.rounded.Shield
@@ -108,6 +109,8 @@ fun PantallaPrincipal(
     permisos: List<EstadoDePermiso>,
     appsInstaladas: List<AppCorreo>,
     appsEscuchadas: Set<String>,
+    /** Paquetes que escuchamos y de los que hace dos dias que no llega nada. */
+    appsSinSenal: Set<String>,
     reglas: List<Regla>,
     detecciones: List<Deteccion>,
     suscripcion: Suscripcion.Estado,
@@ -142,6 +145,9 @@ fun PantallaPrincipal(
 
     val contextoDeLaPantalla = LocalContext.current
 
+    // Las que escuchamos, estan instaladas, y hace dos dias que no dicen nada.
+    val mudas = appsInstaladas.filter { it.paquete in appsEscuchadas && it.paquete in appsSinSenal }
+
     // Historiales viejos pueden tener avisos de cuenta: no son correos.
     val correos = detecciones.filter { it.resultado != Resultado.AVISO_CUENTA.name }
     val correosVisibles = if (historialAbierto) correos else correos.take(CORREOS_VISIBLES)
@@ -157,8 +163,22 @@ fun PantallaPrincipal(
                 Encabezado(
                     appsEscuchadas = appsInstaladas.filter { it.paquete in appsEscuchadas },
                     escuchando = permisos.firstOrNull { it.clave == "listener" }?.concedido ?: true,
+                    haySilencio = mudas.isNotEmpty(),
                     onAbrirAjustes = onAbrirAjustes
                 )
+            }
+
+            // Si ya hay una alerta roja, esto no se muestra: diria lo mismo con
+            // menos certeza, y dos avisos juntos se leen como ninguno.
+            if (alerta == null && mudas.isNotEmpty()) {
+                item {
+                    AvisoSinSenal(
+                        apps = mudas,
+                        onRevisar = { app ->
+                            AppsDeCorreo.abrirNotificaciones(contextoDeLaPantalla, app.paquete)
+                        }
+                    )
+                }
             }
 
             // Excepcion: si una alarma no va a sonar, se dice antes que nada.
@@ -314,7 +334,12 @@ fun PantallaPrincipal(
 
 /** Logo, nombre, y si la app esta escuchando: la prueba de vida, de un vistazo. */
 @Composable
-private fun Encabezado(appsEscuchadas: List<AppCorreo>, escuchando: Boolean, onAbrirAjustes: () -> Unit) {
+private fun Encabezado(
+    appsEscuchadas: List<AppCorreo>,
+    escuchando: Boolean,
+    haySilencio: Boolean,
+    onAbrirAjustes: () -> Unit
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 4.dp)
@@ -328,7 +353,10 @@ private fun Encabezado(appsEscuchadas: List<AppCorreo>, escuchando: Boolean, onA
             )
             if (escuchando) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    val activo = appsEscuchadas.isNotEmpty()
+                    // El punto verde era la prueba de vida, y mentia: decia
+                    // "Escuchando Gmail" igual cuando Gmail tenia las
+                    // notificaciones apagadas y no entraba un solo correo.
+                    val activo = appsEscuchadas.isNotEmpty() && !haySilencio
                     Box(
                         Modifier
                             .size(8.dp)
@@ -338,10 +366,16 @@ private fun Encabezado(appsEscuchadas: List<AppCorreo>, escuchando: Boolean, onA
                             )
                     )
                     Text(
-                        text = if (activo) {
-                            stringResource(R.string.listening, appsEscuchadas.joinToString(" · ") { it.nombre })
-                        } else {
-                            stringResource(R.string.listening_none)
+                        text = when {
+                            appsEscuchadas.isEmpty() -> stringResource(R.string.listening_none)
+                            haySilencio -> stringResource(
+                                R.string.listening_silent,
+                                appsEscuchadas.joinToString(" · ") { it.nombre }
+                            )
+                            else -> stringResource(
+                                R.string.listening,
+                                appsEscuchadas.joinToString(" · ") { it.nombre }
+                            )
                         },
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -418,6 +452,55 @@ private fun BarraDeAlerta(
             shape = RoundedCornerShape(14.dp),
             colors = ButtonDefaults.buttonColors(containerColor = color)
         ) { Text(stringResource(boton)) }
+    }
+}
+
+/**
+ * Hace dos dias que no llega nada de una app de correo que estamos escuchando.
+ *
+ * El caso que lo motivo: una tester tenia las notificaciones de Gmail apagadas.
+ * La app no recibia nada, pero no habia como saberlo: el encabezado decia
+ * "Escuchando Gmail" en verde y el historial vacio no sugeria nada. La alarma
+ * no sonaba y la causa estaba en una pantalla de Android que nadie iba a mirar.
+ *
+ * Ambar y no rojo, y con una salida escrita: es una sospecha. Android no deja
+ * consultar los ajustes de otra app, asi que esto mismo lo dispara alguien que
+ * simplemente no recibio correos en dos dias. Un aviso que puede equivocarse se
+ * tiene que poder ignorar sin culpa, y tiene que decirlo el.
+ */
+@Composable
+private fun AvisoSinSenal(apps: List<AppCorreo>, onRevisar: (AppCorreo) -> Unit) {
+    val color = Aviso.texto
+    val nombres = apps.joinToString(" · ") { it.nombre }
+    Tarjeta(color = Aviso.fondo) {
+        Row(verticalAlignment = Alignment.Top) {
+            Icon(Icons.Rounded.NotificationsOff, contentDescription = null, tint = color)
+            Column(
+                modifier = Modifier.padding(start = 10.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Text(
+                    stringResource(R.string.no_signal_title, nombres),
+                    style = MaterialTheme.typography.titleSmall,
+                    color = color
+                )
+                Text(
+                    stringResource(R.string.no_signal_body, nombres),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = color
+                )
+            }
+        }
+        // Un boton por app: lleva derecho a la pantalla de notificaciones de esa
+        // app, no a Ajustes a buscarla.
+        apps.forEach { app ->
+            Button(
+                onClick = { onRevisar(app) },
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(14.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = color)
+            ) { Text(stringResource(R.string.history_empty_action, app.nombre)) }
+        }
     }
 }
 

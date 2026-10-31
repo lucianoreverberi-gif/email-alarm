@@ -37,6 +37,7 @@ class MainActivity : ComponentActivity() {
 
     private val permisos = mutableStateOf<List<EstadoDePermiso>>(emptyList())
     private val appsEscuchadas = mutableStateOf<Set<String>>(emptySet())
+    private val appsSinSenal = mutableStateOf<Set<String>>(emptySet())
     private val planes = mutableStateOf<List<Suscripcion.Plan>>(emptyList())
 
     private val pedirPermisoNotificaciones =
@@ -90,6 +91,7 @@ class MainActivity : ComponentActivity() {
                             permisos = permisos.value,
                             appsInstaladas = instaladas,
                             appsEscuchadas = appsEscuchadas.value,
+                            appsSinSenal = appsSinSenal.value,
                             reglas = reglas,
                             detecciones = detecciones,
                             suscripcion = suscripcion,
@@ -135,6 +137,10 @@ class MainActivity : ComponentActivity() {
         super.onResume()
         // Se revisan al volver de Ajustes del sistema, asi la pantalla queda al dia sola.
         permisos.value = Permisos.revisarTodos(this)
+        // Aca y no en un flujo: el silencio se mide en dias, no cambia mientras
+        // la pantalla esta abierta, y al volver de prender las notificaciones de
+        // la app de correo conviene que el aviso ya no este.
+        appsSinSenal.value = Ajustes.appsSinSenal(this)
         // Al volver de la hoja de pago o de la pantalla de suscripciones de
         // Play, el estado puede haber cambiado.
         lifecycleScope.launch {
