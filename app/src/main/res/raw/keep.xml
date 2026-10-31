@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Los tonos de la app se piden en tiempo de ejecucion por nombre
+  ("android.resource://.../raw/tono_alarma"), nunca como R.raw.tono_alarma.
+  El reductor de recursos solo mira las referencias por id, asi que los daba
+  por no usados y los borraba del bundle: en debug sonaban y en la version
+  publicada no, que es la peor forma de que falle.
+
+  Si agregas un tono a Tonos.kt no hace falta tocar esto, mientras el archivo
+  siga empezando con "tono_".
+-->
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@raw/tono_*" />

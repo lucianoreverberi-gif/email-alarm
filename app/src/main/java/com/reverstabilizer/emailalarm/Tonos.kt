@@ -13,6 +13,11 @@ import android.net.Uri
  * [archivo] se guarda por nombre y no por id de recurso: los id cambian en
  * cada compilacion, asi que una regla guardada se quedaria sin tono despues
  * de una actualizacion.
+ *
+ * El precio de esa decision es que nada en el codigo nombra R.raw.tono_*, y el
+ * reductor de recursos solo mira eso: en la 1.7 dio los seis por no usados y
+ * los borro del bundle publicado. En debug sonaban igual, asi que no se veia.
+ * Los mantiene vivos res/raw/keep.xml; no lo borres.
  */
 enum class Tono(val archivo: String, val etiqueta: Int) {
     ALARMA("tono_alarma", R.string.tone_alarm),
