@@ -154,6 +154,9 @@
 
     <!-- Dias y horario -->
     <string name="schedule_title">Días y horario</string>
+    <string name="schedule_mode_always">A cualquier hora</string>
+    <string name="schedule_mode_limited">Solo ciertos días y horas</string>
+    <string name="schedule_help_always">Esta alarma suena apenas llega el correo, de día o de madrugada. Si no quieres que te despierte, elige «Solo ciertos días y horas».</string>
     <string name="schedule_always">Todos los días, a cualquier hora</string>
     <string name="schedule_every_day">Todos los días</string>
     <string name="schedule_weekdays">Lunes a viernes</string>

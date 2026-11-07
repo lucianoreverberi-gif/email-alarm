@@ -14,11 +14,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material.icons.rounded.Check
-import androidx.compose.material.icons.rounded.ExpandLess
-import androidx.compose.material.icons.rounded.ExpandMore
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
@@ -43,7 +40,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.reverstabilizer.emailalarm.ui.theme.Aviso
 import java.time.DayOfWeek
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -54,41 +50,63 @@ import java.util.Locale
 /**
  * Dias y horas en que suena la alarma, dentro del editor.
  *
- * Plegada muestra solo el resumen ("Todos los dias, a cualquier hora"): la
- * mayoria de las alarmas no la necesita y no tiene por que alargar el editor.
- * Si la alarma ya tiene un horario propio, abre desplegada para que se vea.
+ * Un tester puso una alarma para los registros de clientes nuevos y a las 4 de
+ * la madrugada lo desperto uno. El horario ya existia y no le servia de nada:
+ * estaba al final del editor, plegado, resumido en gris como "Todos los dias,
+ * a cualquier hora". Decia la verdad y no comunicaba nada, porque describia un
+ * ajuste en vez de su consecuencia: nadie lee "a cualquier hora" y entiende
+ * "te va a despertar a las 4". Ahora es una decision a la vista, igual que el
+ * modo de coincidencia, y el texto nombra la madrugada.
+ *
+ * El valor por defecto sigue siendo "a cualquier hora" a proposito: que una
+ * alarma no suene por un correo urgente de noche es peor falla que despertar a
+ * alguien. Lo que cambia es que ahora se elige con los ojos abiertos.
  */
 @Composable
 fun SeccionDeHorario(horario: Horario, onCambio: (Horario) -> Unit) {
-    var abierta by rememberSaveable { mutableStateOf(!horario.esSiempre) }
+    // Estado propio, no derivado de horario.esSiempre: si alguien elige "solo
+    // ciertos dias y horas" y despues marca todos los dias con todo el dia
+    // prendido, el horario vuelve a ser "siempre", pero la seccion no tiene
+    // que cerrarse sola abajo de sus manos.
+    var restringido by rememberSaveable { mutableStateOf(!horario.esSiempre) }
     var eligiendo by remember { mutableStateOf<Extremo?>(null) }
 
-    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(12.dp))
-                .clickable { abierta = !abierta }
-                .padding(vertical = 4.dp)
-        ) {
-            Circulo(Icons.Outlined.CalendarMonth, fondo = Aviso.fondo, tinte = Aviso.texto, tamano = 40.dp)
-            Column(Modifier.weight(1f).padding(start = 12.dp)) {
-                Text(stringResource(R.string.schedule_title), fontWeight = FontWeight.SemiBold)
-                Text(
-                    resumenDelHorario(horario),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        Text(stringResource(R.string.schedule_title), fontWeight = FontWeight.SemiBold)
+
+        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            OpcionDeModo(
+                texto = stringResource(R.string.schedule_mode_always),
+                seleccionado = !restringido,
+                habilitado = true,
+                modifier = Modifier.weight(1f)
+            ) {
+                restringido = false
+                onCambio(Horario())
+            }
+            OpcionDeModo(
+                texto = stringResource(R.string.schedule_mode_limited),
+                seleccionado = restringido,
+                habilitado = true,
+                modifier = Modifier.weight(1f)
+            ) {
+                restringido = true
+                // Si ya tenia horas puestas, se respetan; recien si no tiene
+                // ninguna se proponen las sugeridas.
+                onCambio(
+                    if (horario.todoElDia) {
+                        horario.copy(desde = Horario.DESDE_SUGERIDO, hasta = Horario.HASTA_SUGERIDO)
+                    } else {
+                        horario
+                    }
                 )
             }
-            Icon(
-                if (abierta) Icons.Rounded.ExpandLess else Icons.Rounded.ExpandMore,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
-            )
         }
 
-        AnimatedVisibility(abierta) {
+        // La advertencia va en la opcion elegida, no escondida adentro de la otra.
+        if (!restringido) Ayuda(stringResource(R.string.schedule_help_always))
+
+        AnimatedVisibility(restringido) {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 FlowRow(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),

@@ -156,6 +156,9 @@
 
     <!-- Dias y horario -->
     <string name="schedule_title">Days and hours</string>
+    <string name="schedule_mode_always">Any time</string>
+    <string name="schedule_mode_limited">Only certain days and hours</string>
+    <string name="schedule_help_always">This alarm rings the moment the email arrives, day or night. To avoid being woken up, choose “Only certain days and hours”.</string>
     <string name="schedule_always">Every day, any time</string>
     <string name="schedule_every_day">Every day</string>
     <string name="schedule_weekdays">Monday to Friday</string>

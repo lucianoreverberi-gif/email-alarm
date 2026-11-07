@@ -166,6 +166,10 @@ fun DialogoDeRegla(
                     hayPalabra = palabraClave.isNotBlank()
                 )
 
+                // El horario va pegado a "cuando suena": las dos cosas deciden
+                // si el telefono va a sonar. El tono es lo de despues.
+                SeccionDeHorario(horario) { horario = it }
+
                 // El sonido va con los campos, no al fondo: un tono distinto por
                 // alarma dice que correo llego sin mirar el telefono.
                 val elegirSonido = {
@@ -189,8 +193,6 @@ fun DialogoDeRegla(
                     onElegir = { sonido = it },
                     onAbrirSelectorDelSistema = elegirSonido
                 )
-
-                SeccionDeHorario(horario) { horario = it }
 
                 // Las reglas por palabra clave son para remitentes desconocidos
                 // (un tramite, un organismo), que son justo los que mas caen en spam.
@@ -285,7 +287,7 @@ private fun SeccionCuandoSuena(
 }
 
 @Composable
-private fun OpcionDeModo(
+internal fun OpcionDeModo(
     texto: String,
     seleccionado: Boolean,
     habilitado: Boolean,
