@@ -8,6 +8,13 @@
 
   Si agregas un tono a Tonos.kt no hace falta tocar esto, mientras el archivo
   siga empezando con "tono_".
+
+  Los recursos de Play Billing caen en la misma trampa y por el mismo motivo:
+  la biblioteca de Google los lee por nombre, no por id, asi que el reductor
+  los daba por no usados y los sacaba del bundle publicado. Son archivos de
+  configuracion (Phenotype, el sistema de banderas de Google), y no esta
+  documentado que pase si faltan. Con una suscripcion de por medio no es algo
+  que convenga averiguar en produccion: cuesta una linea conservarlos.
 -->
 <resources xmlns:tools="http://schemas.android.com/tools"
-    tools:keep="@raw/tono_*" />
+    tools:keep="@raw/tono_*,@raw/com_android_billingclient_*,@xml/com_android_billingclient_*" />
