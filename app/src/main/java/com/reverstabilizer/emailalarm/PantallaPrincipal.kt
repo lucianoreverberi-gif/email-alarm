@@ -40,10 +40,12 @@ import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.NotificationsActive
 import androidx.compose.material.icons.rounded.NotificationsOff
 import androidx.compose.material.icons.rounded.NotificationsPaused
+import androidx.compose.material.icons.rounded.PauseCircleOutline
 import androidx.compose.material.icons.rounded.PriorityHigh
 import androidx.compose.material.icons.rounded.Shield
 import androidx.compose.material.icons.rounded.Timer
 import androidx.compose.material.icons.rounded.VerifiedUser
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -58,6 +60,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -78,6 +81,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
 import com.reverstabilizer.emailalarm.ui.theme.Aviso
+import kotlinx.coroutines.delay
 
 /** Algo que hace que las alarmas no suenen. Es lo unico que va arriba de todo. */
 enum class Alerta { PERMISO, VENCIDA, SIN_SUSCRIPCION }
@@ -114,6 +118,10 @@ fun PantallaPrincipal(
     reglas: List<Regla>,
     detecciones: List<Deteccion>,
     suscripcion: Suscripcion.Estado,
+    /** Hasta cuando estan pausadas todas las alarmas; 0 si no hay pausa. */
+    pausaHasta: Long,
+    onPausar: (Pausa.Duracion) -> Unit,
+    onReactivar: () -> Unit,
     onResolverPermiso: (EstadoDePermiso) -> Unit,
     onCambiarApp: (String, Boolean) -> Unit,
     onGuardarRegla: (Regla) -> Unit,
@@ -128,6 +136,7 @@ fun PantallaPrincipal(
 ) {
     var reglaEnEdicion by remember { mutableStateOf<Regla?>(null) }
     var mostrandoDialogo by remember { mutableStateOf(false) }
+    var eligiendoPausa by remember { mutableStateOf(false) }
     var permisosAbiertos by rememberSaveable { mutableStateOf(false) }
     var historialAbierto by rememberSaveable { mutableStateOf(false) }
 
@@ -144,6 +153,27 @@ fun PantallaPrincipal(
     )
 
     val contextoDeLaPantalla = LocalContext.current
+
+    // Con la pantalla abierta cuando vence la pausa, la tarjeta no puede quedar
+    // diciendo "en pausa" de mentira. Esto es solo para que lo que se ve este
+    // al dia: que la alarma vuelva a sonar no depende de esta espera, se decide
+    // mirando la hora guardada cuando llega el correo.
+    if (pausaHasta != 0L && pausaHasta != PAUSA_SIN_VENCIMIENTO) {
+        LaunchedEffect(pausaHasta) {
+            delay((pausaHasta - System.currentTimeMillis()).coerceAtLeast(0L))
+            onReactivar()
+        }
+    }
+
+    if (eligiendoPausa) {
+        DialogoDePausa(
+            onElegir = { duracion ->
+                eligiendoPausa = false
+                onPausar(duracion)
+            },
+            onCerrar = { eligiendoPausa = false }
+        )
+    }
 
     // Las que escuchamos, estan instaladas, y hace dos dias que no dicen nada.
     val mudas = appsInstaladas.filter { it.paquete in appsEscuchadas && it.paquete in appsSinSenal }
@@ -191,6 +221,15 @@ fun PantallaPrincipal(
                         onSuscribirse = onSuscribirse
                     )
                 }
+            }
+
+            // La pausa, entre los avisos y las alarmas: cuando esta puesta es lo
+            // que mas importa saber, y cuando no esta es una fila sola que no
+            // le quita lugar a nada.
+            if (pausaHasta != 0L) {
+                item { TarjetaDePausa(hasta = pausaHasta, onReactivar = onReactivar) }
+            } else if (reglas.any { it.activa }) {
+                item { BotonDePausa(onPausar = { eligiendoPausa = true }) }
             }
 
             // Mis alarmas: lo primero y lo mas grande
@@ -504,6 +543,144 @@ private fun AvisoSinSenal(apps: List<AppCorreo>, onRevisar: (AppCorreo) -> Unit)
     }
 }
 
+// --- Pausa ---
+
+/**
+ * Callar todas las alarmas de una vez.
+ *
+ * Fila delgada y no una tarjeta: tiene que estar siempre a la vista (el tester
+ * que lo pidio se quejo justamente de no encontrar como hacerlo), pero cuando
+ * no hay nada pausado no es lo importante de la pantalla.
+ *
+ * Solo aparece si hay alguna alarma encendida: sin nada que callar, un boton
+ * para callar no significa nada.
+ */
+@Composable
+private fun BotonDePausa(onPausar: () -> Unit) {
+    OutlinedButton(
+        onClick = onPausar,
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(14.dp),
+        contentPadding = PaddingValues(vertical = 12.dp),
+        colors = ButtonDefaults.outlinedButtonColors(
+            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    ) {
+        Icon(Icons.Rounded.PauseCircleOutline, contentDescription = null, modifier = Modifier.size(20.dp))
+        Spacer(Modifier.width(8.dp))
+        Text(stringResource(R.string.action_pause_alarms), style = MaterialTheme.typography.labelLarge)
+    }
+}
+
+/**
+ * Las alarmas estan en pausa, y hasta cuando.
+ *
+ * Ambar y no rojo: el rojo de esta app significa "algo esta roto y una alarma
+ * no va a sonar sin que lo sepas". Una pausa la eligio la persona, pero
+ * tampoco es un estado normal, asi que no puede pasar desapercibida.
+ *
+ * Dice en voz alta las dos cosas que evitan el enojo: la hora en que vuelven,
+ * y que los correos igual van a quedar anotados.
+ */
+@Composable
+private fun TarjetaDePausa(hasta: Long, onReactivar: () -> Unit) {
+    val color = Aviso.texto
+    Tarjeta(color = Aviso.fondo) {
+        Row(verticalAlignment = Alignment.Top) {
+            Icon(Icons.Rounded.PauseCircleOutline, contentDescription = null, tint = color)
+            Column(
+                modifier = Modifier.padding(start = 10.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Text(
+                    stringResource(R.string.paused_title),
+                    style = MaterialTheme.typography.titleSmall,
+                    color = color
+                )
+                Text(
+                    if (hasta == PAUSA_SIN_VENCIMIENTO) {
+                        stringResource(R.string.paused_until_manual)
+                    } else {
+                        stringResource(R.string.paused_until, textoDeVuelta(hasta))
+                    },
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = color
+                )
+                Text(
+                    stringResource(R.string.paused_body_quiet),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = color
+                )
+            }
+        }
+        Button(
+            onClick = onReactivar,
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(14.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = color)
+        ) { Text(stringResource(R.string.action_resume_now)) }
+    }
+}
+
+/** El nombre de cada duracion, en el orden en que se ofrecen. */
+@Composable
+private fun etiquetaDePausa(duracion: Pausa.Duracion): String = stringResource(
+    when (duracion) {
+        Pausa.Duracion.MEDIA_HORA -> R.string.pause_30m
+        Pausa.Duracion.UNA_HORA -> R.string.pause_1h
+        Pausa.Duracion.DOS_HORAS -> R.string.pause_2h
+        Pausa.Duracion.OCHO_HORAS -> R.string.pause_8h
+        Pausa.Duracion.INDEFINIDA -> R.string.pause_manual
+    }
+)
+
+/**
+ * Por cuanto tiempo.
+ *
+ * Elegir la duracion es un paso de mas a proposito: un interruptor de
+ * "pausado / activo" es un toque mas rapido y la forma mas facil de perderse
+ * el correo por el que se pago. Lo dice el texto, porque la promesa de que
+ * vuelven solas es lo que hace que pausar no de miedo.
+ */
+@Composable
+private fun DialogoDePausa(onElegir: (Pausa.Duracion) -> Unit, onCerrar: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onCerrar,
+        title = { Text(stringResource(R.string.pause_dialog_title)) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                Ayuda(stringResource(R.string.pause_dialog_body), Modifier.padding(bottom = 6.dp))
+                Pausa.Duracion.entries.forEach { duracion ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(12.dp))
+                            .clickable { onElegir(duracion) }
+                            .padding(vertical = 14.dp, horizontal = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            Icons.Rounded.Timer,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Text(
+                            etiquetaDePausa(duracion),
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.padding(start = 12.dp)
+                        )
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onCerrar) { Text(stringResource(R.string.action_cancel)) }
+        }
+    )
+}
+
 // --- Alarmas ---
 
 /** Sin alarmas, una invitacion grande, no un mensaje de error. */
@@ -729,6 +906,10 @@ private fun ResultadoDelCorreo(d: Deteccion, modifier: Modifier = Modifier) {
         Resultado.SIN_SUSCRIPCION -> Triple(stringResource(R.string.history_no_sub), rojo, Icons.Rounded.PriorityHigh)
         // No es un error: la persona eligio que a esa hora no suene.
         Resultado.FUERA_DE_HORARIO -> Triple(stringResource(R.string.history_off_hours, d.regla.orEmpty()), gris, Icons.Rounded.NotificationsPaused)
+        // Tampoco: llego con todas las alarmas en pausa. Se distingue de
+        // "fuera de horario" porque la salida es otra (reactivar, no editar
+        // el horario de la alarma).
+        Resultado.EN_PAUSA -> Triple(stringResource(R.string.history_paused, d.regla.orEmpty()), gris, Icons.Rounded.PauseCircleOutline)
         Resultado.SIN_COINCIDENCIA, Resultado.AVISO_CUENTA -> Triple(stringResource(R.string.history_no_match), gris, null)
     }
     Row(

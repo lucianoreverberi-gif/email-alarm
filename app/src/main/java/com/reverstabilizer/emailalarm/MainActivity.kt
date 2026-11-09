@@ -40,6 +40,9 @@ class MainActivity : ComponentActivity() {
     private val appsSinSenal = mutableStateOf<Set<String>>(emptySet())
     private val planes = mutableStateOf<List<Suscripcion.Plan>>(emptyList())
 
+    /** Hasta cuando estan pausadas las alarmas; 0 si no hay pausa. */
+    private val pausaHasta = mutableStateOf(0L)
+
     private val pedirPermisoNotificaciones =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {
             permisos.value = Permisos.revisarTodos(this)
@@ -51,6 +54,7 @@ class MainActivity : ComponentActivity() {
         pedirNotificacionesSiHaceFalta()
 
         appsEscuchadas.value = Ajustes.appsEscuchadas(this)
+        pausaHasta.value = Pausa.hasta(this)
         Suscripcion.inicializar(this)
         val instaladas = AppsDeCorreo.instaladas(this)
 
@@ -95,6 +99,15 @@ class MainActivity : ComponentActivity() {
                             reglas = reglas,
                             detecciones = detecciones,
                             suscripcion = suscripcion,
+                            pausaHasta = pausaHasta.value,
+                            onPausar = { duracion ->
+                                Pausa.pausar(this@MainActivity, duracion)
+                                pausaHasta.value = Pausa.hasta(this@MainActivity)
+                            },
+                            onReactivar = {
+                                Pausa.reactivar(this@MainActivity)
+                                pausaHasta.value = 0L
+                            },
                             onResolverPermiso = { permiso -> permiso.intent?.let { startActivity(it) } },
                             onCambiarApp = { paquete, activada ->
                                 val nuevas = appsEscuchadas.value.toMutableSet().apply {
@@ -141,6 +154,9 @@ class MainActivity : ComponentActivity() {
         // la pantalla esta abierta, y al volver de prender las notificaciones de
         // la app de correo conviene que el aviso ya no este.
         appsSinSenal.value = Ajustes.appsSinSenal(this)
+        // Al volver a la app la pausa puede haber vencido, o la persona puede
+        // haberla reactivado desde la notificacion.
+        pausaHasta.value = Pausa.hasta(this)
         // Al volver de la hoja de pago o de la pantalla de suscripciones de
         // Play, el estado puede haber cambiado.
         lifecycleScope.launch {

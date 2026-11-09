@@ -171,9 +171,29 @@
     <string name="schedule_same_time">Desde y hasta no pueden ser la misma hora</string>
     <string name="cd_schedule">Días y horario</string>
     <string name="history_off_hours">Fuera de horario · %1$s</string>
-    <string name="channel_off_hours">Correos fuera de horario</string>
-    <string name="channel_off_hours_description">Silenciosa: un correo de una alarma que llegó fuera de sus días u horas.</string>
+    <string name="channel_off_hours">Correos que no sonaron</string>
+    <string name="channel_off_hours_description">Silenciosa: un correo de una alarma que llegó fuera de sus días y horas, o con las alarmas en pausa.</string>
     <string name="off_hours_title">Llegó fuera de horario · %1$s</string>
+
+    <!-- Pausar todas las alarmas de una vez -->
+    <string name="action_pause_alarms">Pausar alarmas</string>
+    <string name="action_resume">Reactivar</string>
+    <string name="action_resume_now">Reactivar ahora</string>
+    <string name="pause_dialog_title">Pausar alarmas</string>
+    <string name="pause_dialog_body">No suena nada hasta la hora que elijas. Las alarmas vuelven solas: no tienes que acordarte.</string>
+    <string name="pause_30m">30 minutos</string>
+    <string name="pause_1h">1 hora</string>
+    <string name="pause_2h">2 horas</string>
+    <string name="pause_8h">8 horas</string>
+    <string name="pause_manual">Hasta que yo las reactive</string>
+    <string name="paused_title">Alarmas en pausa</string>
+    <string name="paused_until">Vuelven a sonar a las %1$s</string>
+    <string name="paused_until_manual">No van a sonar hasta que las reactives</string>
+    <string name="paused_body_quiet">Los correos que coinciden igual llegan: no suenan, pero te queda una notificación silenciosa.</string>
+    <string name="paused_arrived_title">Llegó con las alarmas en pausa · %1$s</string>
+    <string name="history_paused">En pausa · %1$s</string>
+    <string name="channel_paused">Alarmas en pausa</string>
+    <string name="channel_paused_description">Recordatorio de que las alarmas están en pausa, para que no te olvides de reactivarlas.</string>
 
     <!-- Cuando suena: el modo de coincidencia -->
     <string name="trigger_title">Cuándo suena</string>

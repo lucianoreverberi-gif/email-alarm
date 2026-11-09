@@ -23,6 +23,10 @@ class MailListener : NotificationListenerService() {
     override fun onListenerConnected() {
         Registro.d("Listener CONECTADO: ya estoy recibiendo notificaciones")
         Ajustes.anotarQueEscucha(this)
+        // Se conecta al arrancar el telefono, que es cuando Android ya borro
+        // las notificaciones y los temporizadores: si quedaba una pausa en
+        // curso, aca vuelve su aviso a la barra.
+        Pausa.restaurar(this)
         // Se conecta al arrancar el telefono: buen momento para detectar una
         // suscripcion que vencio mientras la app no se abria, y avisar.
         scope.launch { Suscripcion.verificar(this@MailListener) }
@@ -80,13 +84,26 @@ internal object ProcesarCorreo {
             is Decision.FueraDeHorario -> {
                 Registro.d("[$app] FUERA DE HORARIO '${decision.regla.nombre}' -> ${correo.asunto}")
                 registrar(context, app, correo.remitente, correo.asunto, Resultado.FUERA_DE_HORARIO, decision.regla.nombre)
-                AvisoFueraDeHorario.mostrar(context, decision.regla.nombre, correo.remitente, correo.asunto)
+                AvisoSilencioso.mostrar(context, decision.regla.nombre, correo.remitente, correo.asunto)
                 return
             }
             is Decision.Suena -> decision.regla
         }
 
         Registro.d("[$app] COINCIDE regla '${regla.nombre}' -> DE: ${correo.remitente} | ASUNTO: ${correo.asunto}")
+
+        // La pausa se consulta aca y no en el motor: el motor decide con las
+        // reglas y la hora, que es lo que se puede probar sin un telefono.
+        //
+        // Antes que la suscripcion, por el mismo motivo que fuera de horario:
+        // la persona pidio silencio hace un rato (esta en una reunion), y un
+        // aviso de pago seria justo el ruido que quiso evitar.
+        if (Pausa.activa(context)) {
+            Registro.d("   alarmas en pausa: no suena, se avisa en silencio")
+            registrar(context, app, correo.remitente, correo.asunto, Resultado.EN_PAUSA, regla.nombre)
+            AvisoSilencioso.mostrar(context, regla.nombre, correo.remitente, correo.asunto, enPausa = true)
+            return
+        }
 
         // Si lo guardado dice "sin suscripcion", se confirma con Google Play
         // antes de silenciar: puede haber pagado recien y no estar actualizado.

@@ -55,9 +55,15 @@ data class Regla(
     val horario: Horario get() = Horario(dias, desde, hasta)
 }
 
-/** Que paso con un correo que la app vio. */
+/**
+ * Que paso con un correo que la app vio.
+ *
+ * Se guardan por nombre, no por posicion, asi que agregar uno al final no
+ * necesita migracion. Lo que no se puede es renombrarlos: un historial viejo
+ * guardado con el nombre anterior quedaria sin leer.
+ */
 // AVISO_CUENTA ya no se guarda; queda para leer historiales viejos.
-enum class Resultado { SONO, SIN_COINCIDENCIA, SIN_SUSCRIPCION, AVISO_CUENTA, FUERA_DE_HORARIO }
+enum class Resultado { SONO, SIN_COINCIDENCIA, SIN_SUSCRIPCION, AVISO_CUENTA, FUERA_DE_HORARIO, EN_PAUSA }
 
 /**
  * Un correo que la app vio, con lo que decidio. Se guardan los ultimos

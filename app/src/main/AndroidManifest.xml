@@ -75,6 +75,10 @@
             android:exported="false" />
 
         <receiver
+            android:name=".PausaReceiver"
+            android:exported="false" />
+
+        <receiver
             android:name=".ReconectarListener"
             android:exported="false">
             <intent-filter>

@@ -23,6 +23,8 @@ class ReconectarListener : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action != Intent.ACTION_MY_PACKAGE_REPLACED) return
         Registro.d("App actualizada: pido reconectar el listener")
+        // Actualizar la app tambien cancela los temporizadores pendientes.
+        Pausa.restaurar(context)
         runCatching {
             NotificationListenerService.requestRebind(
                 ComponentName(context, MailListener::class.java)
