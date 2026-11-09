@@ -14,10 +14,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import android.os.Build
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.automirrored.rounded.OpenInNew
 import androidx.compose.material.icons.rounded.NotificationsOff
+import androidx.compose.material.icons.rounded.PauseCircleOutline
 import androidx.compose.material.icons.rounded.WorkspacePremium
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -204,6 +206,32 @@ fun PantallaAjustes(
                 }
             }
             Ayuda(stringResource(R.string.language_help))
+        }
+
+        // Solo desde Android 13, que es cuando existe el dialogo del sistema
+        // para agregar un mosaico. En versiones anteriores el mosaico esta
+        // igual, pero hay que buscarlo editando la cortina a mano, y eso no se
+        // explica en una fila: mostrarla sin poder cumplirla seria peor.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val contextoDelMosaico = LocalContext.current
+            Seccion(stringResource(R.string.section_pause))
+            Tarjeta {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Circulo(Icons.Rounded.PauseCircleOutline)
+                    Column(Modifier.weight(1f).padding(start = 14.dp)) {
+                        Text(
+                            stringResource(R.string.tile_add_title),
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                        Ayuda(stringResource(R.string.tile_add_hint))
+                    }
+                }
+                OutlinedButton(
+                    onClick = { PausaTile.ofrecerAgregar(contextoDelMosaico) },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(14.dp)
+                ) { Text(stringResource(R.string.tile_add_action)) }
+            }
         }
 
         Seccion(stringResource(R.string.section_alarm))

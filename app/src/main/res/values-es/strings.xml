@@ -176,6 +176,12 @@
     <string name="off_hours_title">Llegó fuera de horario · %1$s</string>
 
     <!-- Pausar todas las alarmas de una vez -->
+    <string name="section_pause">Pausar las alarmas</string>
+    <string name="tile_label">Pausar alarmas</string>
+    <string name="tile_until_manual">Hasta que las reactives</string>
+    <string name="tile_add_title">Pausar desde la cortina</string>
+    <string name="tile_add_hint">Agrega un mosaico a los ajustes rápidos del teléfono. Un toque pausa todas las alarmas por una hora, sin abrir la app.</string>
+    <string name="tile_add_action">Agregar el mosaico</string>
     <string name="action_pause_alarms">Pausar alarmas</string>
     <string name="action_resume">Reactivar</string>
     <string name="action_resume_now">Reactivar ahora</string>

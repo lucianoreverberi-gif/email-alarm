@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -41,7 +42,7 @@ class MainActivity : ComponentActivity() {
     private val planes = mutableStateOf<List<Suscripcion.Plan>>(emptyList())
 
     /** Hasta cuando estan pausadas las alarmas; 0 si no hay pausa. */
-    private val pausaHasta = mutableStateOf(0L)
+    private val pausaHasta = mutableLongStateOf(0L)
 
     private val pedirPermisoNotificaciones =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {
@@ -54,7 +55,7 @@ class MainActivity : ComponentActivity() {
         pedirNotificacionesSiHaceFalta()
 
         appsEscuchadas.value = Ajustes.appsEscuchadas(this)
-        pausaHasta.value = Pausa.hasta(this)
+        pausaHasta.longValue = Pausa.hasta(this)
         Suscripcion.inicializar(this)
         val instaladas = AppsDeCorreo.instaladas(this)
 
@@ -99,14 +100,14 @@ class MainActivity : ComponentActivity() {
                             reglas = reglas,
                             detecciones = detecciones,
                             suscripcion = suscripcion,
-                            pausaHasta = pausaHasta.value,
+                            pausaHasta = pausaHasta.longValue,
                             onPausar = { duracion ->
                                 Pausa.pausar(this@MainActivity, duracion)
-                                pausaHasta.value = Pausa.hasta(this@MainActivity)
+                                pausaHasta.longValue = Pausa.hasta(this@MainActivity)
                             },
                             onReactivar = {
                                 Pausa.reactivar(this@MainActivity)
-                                pausaHasta.value = 0L
+                                pausaHasta.longValue = 0L
                             },
                             onResolverPermiso = { permiso -> permiso.intent?.let { startActivity(it) } },
                             onCambiarApp = { paquete, activada ->
@@ -156,7 +157,7 @@ class MainActivity : ComponentActivity() {
         appsSinSenal.value = Ajustes.appsSinSenal(this)
         // Al volver a la app la pausa puede haber vencido, o la persona puede
         // haberla reactivado desde la notificacion.
-        pausaHasta.value = Pausa.hasta(this)
+        pausaHasta.longValue = Pausa.hasta(this)
         // Al volver de la hoja de pago o de la pantalla de suscripciones de
         // Play, el estado puede haber cambiado.
         lifecycleScope.launch {

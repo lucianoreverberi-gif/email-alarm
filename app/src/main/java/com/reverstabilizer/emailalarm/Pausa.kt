@@ -108,6 +108,7 @@ object Pausa {
         Registro.d("Alarmas en pausa (${duracion.name})")
         AvisoDePausa.mostrar(ctx, hasta)
         programarVencimiento(ctx, hasta)
+        PausaTile.repintar(ctx)
     }
 
     /** Idempotente: la puede llamar la persona, el temporizador o [hasta]. */
@@ -116,6 +117,9 @@ object Pausa {
         prefs(ctx).edit().remove(CLAVE_HASTA).apply()
         AvisoDePausa.ocultar(ctx)
         cancelarVencimiento(ctx)
+        // Si no, el mosaico de la cortina queda diciendo "en pausa" hasta la
+        // proxima vez que alguien la abra.
+        PausaTile.repintar(ctx)
     }
 
     /**

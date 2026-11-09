@@ -178,6 +178,12 @@
     <string name="off_hours_title">Arrived outside hours · %1$s</string>
 
     <!-- Pausar todas las alarmas de una vez -->
+    <string name="section_pause">Pausing alarms</string>
+    <string name="tile_label">Pause alarms</string>
+    <string name="tile_until_manual">Until you resume them</string>
+    <string name="tile_add_title">Pause from the pulldown</string>
+    <string name="tile_add_hint">Adds a tile to your phone’s Quick Settings. One tap pauses every alarm for an hour — no need to open the app.</string>
+    <string name="tile_add_action">Add the tile</string>
     <string name="action_pause_alarms">Pause alarms</string>
     <string name="action_resume">Resume</string>
     <string name="action_resume_now">Resume now</string>
