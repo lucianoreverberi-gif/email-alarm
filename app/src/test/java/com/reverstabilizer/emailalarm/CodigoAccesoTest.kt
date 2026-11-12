@@ -1,6 +1,8 @@
 package com.reverstabilizer.emailalarm
 
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.time.LocalDate
@@ -32,5 +34,20 @@ class CodigoAccesoTest {
     fun `vence despues de la fecha, no antes`() {
         assertTrue(codigoValido("EA-TEST-1", vence, huella, vence))
         assertFalse(codigoValido("EA-TEST-1", vence.plusDays(1), huella, vence))
+    }
+
+    /**
+     * La fecha del codigo es lo que decide si se ofrece suscribirse estando
+     * activo. Tiene que verse mientras el codigo sea lo unico que sostiene la
+     * app, y desaparecer apenas Play cobra: si no, a quien ya pago le queda en
+     * pantalla una fecha de corte que no lo afecta y un boton de comprar algo
+     * que ya tiene.
+     */
+    @Test
+    fun `la fecha del codigo se muestra solo mientras el codigo sea lo que sostiene la app`() {
+        assertEquals(vence, vencimientoAMostrar(codigoVigente = true, pagaPlay = false, vence = vence))
+        assertNull(vencimientoAMostrar(codigoVigente = true, pagaPlay = true, vence = vence))
+        assertNull(vencimientoAMostrar(codigoVigente = false, pagaPlay = false, vence = vence))
+        assertNull(vencimientoAMostrar(codigoVigente = false, pagaPlay = true, vence = vence))
     }
 }

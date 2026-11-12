@@ -67,6 +67,10 @@ class MainActivity : ComponentActivity() {
                 val detecciones by remember { base.deteccionDao().observarUltimas() }
                     .collectAsState(initial = emptyList())
                 val suscripcion by Suscripcion.estadoFlujo.collectAsState()
+                // En su propio flujo y no derivado del estado: al suscribirse
+                // teniendo un codigo puesto el estado no se mueve (ACTIVA
+                // antes y despues) pero esto si cambia. Ver codigoVenceFlujo.
+                val codigoVence by Suscripcion.codigoVenceFlujo.collectAsState()
                 val scope = rememberCoroutineScope()
 
                 var enAjustes by rememberSaveable { mutableStateOf(false) }
@@ -84,8 +88,7 @@ class MainActivity : ComponentActivity() {
                             planes = planes.value,
                             onVolver = { enAjustes = false },
                             onComprar = { plan -> scope.launch { Suscripcion.comprar(this@MainActivity, plan) } },
-                            // Se relee cuando cambia el estado (por ejemplo, al canjear un codigo).
-                            codigoVence = remember(suscripcion) { Suscripcion.codigoVenceEl(this@MainActivity) },
+                            codigoVence = codigoVence,
                             onCanjearCodigo = { codigo -> Suscripcion.canjearCodigo(this@MainActivity, codigo) },
                             onGestionarSuscripcion = { Suscripcion.abrirGestion(this@MainActivity) },
                             onDetenerAlarma = { Alarma.detener() },

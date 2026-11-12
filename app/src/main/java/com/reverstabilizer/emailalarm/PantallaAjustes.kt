@@ -121,7 +121,15 @@ fun PantallaAjustes(
                 }
             }
 
-            if (!activa) {
+            // Con un codigo canjeado la app figura activa, pero el codigo vence
+            // un dia fijo y ese dia la alarma deja de sonar. Por eso los planes
+            // tambien se ofrecen con el codigo puesto: quien lo uso tiene que
+            // poder pasar a pagar antes de esa fecha, sin soltar el codigo
+            // primero y sin quedarse ni un rato sin la app. Suscribirse no
+            // borra el codigo: queda abajo, sin efecto, y vence solo.
+            val conCodigo = codigoVence != null
+            if (!activa || conCodigo) {
+                if (conCodigo) Ayuda(stringResource(R.string.sub_code_expiring))
                 if (planes.isEmpty()) {
                     Text(
                         stringResource(R.string.sub_unavailable),
@@ -132,15 +140,18 @@ fun PantallaAjustes(
                     SelectorDePlan(planes, vencida, onComprar)
                 }
                 // Para los revisores de Google Play, que no pueden suscribirse.
-                var pidiendoCodigo by remember { mutableStateOf(false) }
-                TextButton(onClick = { pidiendoCodigo = true }) {
-                    Text(stringResource(R.string.sub_code_link))
-                }
-                if (pidiendoCodigo) {
-                    DialogoDeCodigo(
-                        onCanjear = onCanjearCodigo,
-                        onCerrar = { pidiendoCodigo = false }
-                    )
+                // Con un codigo ya puesto no se ofrece de nuevo.
+                if (!activa) {
+                    var pidiendoCodigo by remember { mutableStateOf(false) }
+                    TextButton(onClick = { pidiendoCodigo = true }) {
+                        Text(stringResource(R.string.sub_code_link))
+                    }
+                    if (pidiendoCodigo) {
+                        DialogoDeCodigo(
+                            onCanjear = onCanjearCodigo,
+                            onCerrar = { pidiendoCodigo = false }
+                        )
+                    }
                 }
             }
 

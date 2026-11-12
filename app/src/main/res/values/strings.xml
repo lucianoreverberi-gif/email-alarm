@@ -135,6 +135,7 @@
     <string name="sub_code_apply">Activate</string>
     <string name="sub_code_invalid">That code isn\'t valid or has expired.</string>
     <string name="sub_code_active">Access code active until %1$s.</string>
+    <string name="sub_code_expiring">After that date the alarm stops ringing. Subscribe before then and nothing is interrupted.</string>
     <string name="sub_manage">Manage or cancel subscription</string>
     <string name="sub_manage_hint">Opens Google Play</string>
     <string name="sub_unavailable">Can\'t reach Google Play right now. Check your connection and try again.</string>

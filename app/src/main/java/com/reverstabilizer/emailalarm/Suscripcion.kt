@@ -89,6 +89,18 @@ object Suscripcion {
     private val _estado = MutableStateFlow(Estado.NUNCA)
     val estadoFlujo: StateFlow<Estado> = _estado
 
+    private val _codigoVence = MutableStateFlow<LocalDate?>(null)
+
+    /**
+     * Hasta cuando vale el codigo canjeado, o null si no hay uno vigente.
+     *
+     * Va en un flujo propio y no se calcula una sola vez junto al estado
+     * porque las dos cosas cambian por separado: quien canjeo un codigo y
+     * despues se suscribe sigue ACTIVA de punta a punta, asi que el estado no
+     * se mueve y un `remember(estado)` se quedaria con el valor viejo.
+     */
+    val codigoVenceFlujo: StateFlow<LocalDate?> = _codigoVence
+
     // --- Estado guardado (lo usa el listener, que no puede esperar a la red) ---
 
     fun estado(context: Context): Estado {
@@ -109,7 +121,13 @@ object Suscripcion {
 
     /** Arranca la UI con el ultimo estado conocido, sin esperar a Google Play. */
     fun inicializar(context: Context) {
+        publicar(context)
+    }
+
+    /** Lo que mira la pantalla. Siempre los dos juntos: ver [codigoVenceFlujo]. */
+    private fun publicar(context: Context) {
         _estado.value = estado(context)
+        _codigoVence.value = codigoVenceEl(context)
     }
 
     /**
@@ -120,12 +138,17 @@ object Suscripcion {
         if (!codigoValido(codigo, LocalDate.now(), CODIGO_HUELLA, CODIGO_VENCE)) return false
         context.getSharedPreferences(ARCHIVO, Context.MODE_PRIVATE)
             .edit().putString(CLAVE_CODIGO, CODIGO_HUELLA).apply()
-        _estado.value = estado(context)
+        publicar(context)
         return true
     }
 
-    /** Hasta cuando vale el codigo canjeado, o null si no hay uno vigente. */
-    fun codigoVenceEl(context: Context): LocalDate? = if (codigoVigente(context)) CODIGO_VENCE else null
+    /** Ver [codigoVenceFlujo]. */
+    fun codigoVenceEl(context: Context): LocalDate? = vencimientoAMostrar(
+        codigoVigente = codigoVigente(context),
+        pagaPlay = context.getSharedPreferences(ARCHIVO, Context.MODE_PRIVATE)
+            .getBoolean(CLAVE_ACTIVA, false),
+        vence = CODIGO_VENCE
+    )
 
     private fun codigoVigente(context: Context): Boolean {
         val guardado = context.getSharedPreferences(ARCHIVO, Context.MODE_PRIVATE)
@@ -138,7 +161,7 @@ object Suscripcion {
         if (!BuildConfig.DEBUG) return
         context.getSharedPreferences(ARCHIVO, Context.MODE_PRIVATE)
             .edit().putBoolean(CLAVE_DEMO, activa).apply()
-        _estado.value = estado(context)
+        publicar(context)
     }
 
     private fun guardar(context: Context, activa: Boolean) {
@@ -149,7 +172,7 @@ object Suscripcion {
             .putBoolean(CLAVE_ALGUNA_VEZ, activa || prefs.getBoolean(CLAVE_ALGUNA_VEZ, false))
             .apply()
         val nuevo = estado(context)
-        _estado.value = nuevo
+        publicar(context)
 
         // Una suscripcion que se vence no puede dejar la alarma muda sin avisar.
         if (anterior == Estado.ACTIVA && nuevo == Estado.VENCIDA) {
@@ -331,6 +354,21 @@ internal fun ahorroAnual(mensualMicros: Long, anualMicros: Long): Int? {
     val ahorro = (100 - anualMicros * 100.0 / (mensualMicros * 12)).toInt()
     return ahorro.takeIf { it > 0 }
 }
+
+/**
+ * Cuando hay que mostrar la fecha de vencimiento del codigo: solo si el codigo
+ * sigue vigente y Google Play todavia no cobra.
+ *
+ * El segundo caso es el que importa. Quien canjeo un codigo y despues se
+ * suscribio de verdad esta cubierto por el pago, no por el codigo: seguir
+ * anunciando una fecha de corte que ya no lo afecta es asustarlo por nada, y
+ * ademas deja en pantalla la oferta de suscribirse a alguien que ya pago.
+ */
+internal fun vencimientoAMostrar(
+    codigoVigente: Boolean,
+    pagaPlay: Boolean,
+    vence: LocalDate
+): LocalDate? = if (codigoVigente && !pagaPlay) vence else null
 
 /**
  * Un codigo es valido si su huella coincide y no vencio. Sin distinguir

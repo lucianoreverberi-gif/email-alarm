@@ -133,6 +133,7 @@
     <string name="sub_code_apply">Activar</string>
     <string name="sub_code_invalid">Ese código no es válido o ya venció.</string>
     <string name="sub_code_active">Acceso con código hasta el %1$s.</string>
+    <string name="sub_code_expiring">Después de esa fecha la alarma deja de sonar. Suscríbete antes y no se corta nada.</string>
     <string name="sub_manage">Gestionar o cancelar suscripción</string>
     <string name="sub_manage_hint">Se abre Google Play</string>
     <string name="sub_unavailable">No se pudo conectar con Google Play. Revisa la conexión y vuelve a intentarlo.</string>
