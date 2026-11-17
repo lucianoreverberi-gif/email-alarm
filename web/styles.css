@@ -90,6 +90,21 @@ img { max-width: 100%; }
   background: var(--superficie); border: 1px solid var(--borde);
   font-weight: 600; color: var(--suave); text-decoration: none;
 }
+/* Boton de tienda. Vive aca y no en launch.css porque lo usan las cuatro
+   paginas de producto, y launch.css solo lo cargan la portada y la de iPhone:
+   el boton de Google Play salia sin estilo, como un link pelado. */
+.tienda {
+  display: inline-flex; align-items: center; gap: 9px;
+  border: 0; text-decoration: none;
+  background: #087f52; color: #fff;
+  border-radius: 999px; font-size: 15px; font-weight: 600;
+  padding: 13px 22px;
+}
+.tienda:hover { background: #0a6e49; }
+.tienda .icono { width: 19px; height: 19px; }
+/* El cierre lo pinta studio.css de gris claro en las cuatro paginas, asi
+   que el boton se queda verde: en blanco sobre gris claro no se ve. */
+
 .precio, .portada .precio { font-size: 15px; color: var(--suave); margin: 14px 0 0; }
 .cierre .precio { color: rgba(255, 255, 255, .82); }
 

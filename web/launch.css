@@ -468,7 +468,9 @@
    telefono alrededor de otro telefono. */
 .ios-shots {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  /* Cuatro fijas, no auto-fit: con auto-fit sobraba una columna vacia al final
+     y las capturas quedaban corridas hacia la izquierda. */
+  grid-template-columns: repeat(4, 1fr);
   gap: 24px;
   margin: 0;
 }
@@ -485,23 +487,172 @@
 .ios-hero-shot { margin: 0; }
 .ios-hero-shot img { max-width: 330px; margin-inline: auto; border-radius: 24px; }
 
-/* Boton de tienda. Mismo aspecto que .proximamente, con un nombre que no
-   mienta: la app ya salio y el que lea esto en seis meses no tiene por que
-   adivinar que "proximamente" era solo un estilo. */
-.tienda {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  border: 0;
-  text-decoration: none;
-  background: #087f52;
+.launch-links { display: inline-flex; flex-wrap: wrap; gap: 12px; }
+
+/* Pies de las capturas. La captura sola no explica nada: dice que se ve, no
+   que hace. El texto de abajo es el que cuenta la funcion. */
+.ios-shots figcaption,
+.ios-hero-shot figcaption {
+  margin-top: 16px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--suave);
+}
+.ios-shots figcaption b {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 1.02rem;
+  color: var(--texto);
+}
+.ios-hero-shot figcaption {
+  max-width: 330px;
+  margin-inline: auto;
+  text-align: center;
+  font-size: 13px;
+}
+
+/* Numero de paso: circulo, no una linea de texto suelta. Esta regla solo
+   alcanza a la portada y a la de iPhone, que son las que cargan launch.css. */
+.platform-iphone .paso-num {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--verde-suave);
+  color: var(--verde-texto);
+  font-size: 15px;
+  letter-spacing: 0;
+  margin-bottom: 16px;
+}
+
+/* Planes. Dos tarjetas en vez del parrafo con los dos precios adentro. */
+.planes {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  max-width: 720px;
+}
+.plan {
+  position: relative;
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: 20px;
+  padding: 28px 26px;
+  box-shadow: var(--sombra);
+}
+.plan.destacado { border-color: var(--verde); }
+.plan-sello {
+  position: absolute;
+  top: -11px;
+  left: 26px;
+  background: var(--verde);
   color: #fff;
   border-radius: 999px;
-  font-size: 14px;
-  font-weight: 600;
-  padding: 13px 22px;
+  padding: 3px 12px;
+  font-size: 12px;
+  font-weight: 700;
 }
-.tienda:hover { background: #0a6e49; }
-.cierre .tienda { background: #087f52; color: #fff; }
+.plan-tipo {
+  display: block;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--suave);
+}
+.plan-precio {
+  margin: 10px 0 6px;
+  font-size: 2.1rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+.plan-precio span {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--suave);
+  letter-spacing: 0;
+}
+.plan-nota { margin: 0; color: var(--suave); font-size: 15px; }
+.incluye {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 24px;
+  list-style: none;
+  margin: 28px 0 0;
+  padding: 0;
+  max-width: 720px;
+}
+.incluye li { display: flex; align-items: center; gap: 10px; font-size: 15px; }
+.incluye .icono { width: 19px; height: 19px; color: var(--verde-texto); }
+.letra-chica {
+  margin: 24px 0 0;
+  max-width: 720px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--suave);
+}
+@media (max-width: 900px) {
+  .ios-shots { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px) {
+  .planes, .incluye { grid-template-columns: 1fr; }
+  .ios-shots { grid-template-columns: 1fr; gap: 36px; }
+  .ios-shots img { max-width: 300px; margin-inline: auto; }
+  .ios-shots figcaption { max-width: 420px; margin-inline: auto; }
+}
 
-.launch-links { display: inline-flex; flex-wrap: wrap; gap: 12px; }
+/* Los dos parrafos del bloque de privacidad van en una sola celda de la
+   grilla. Sueltos eran un cuarto hijo y desarmaban las tres columnas. */
+.privacidad-texto { display: grid; gap: 14px; }
+@media (max-width: 760px) {
+  .privacidad { grid-template-columns: 1fr; }
+}
+
+/* --- La foto de atras de "Tu eliges que merece interrumpirte" -----------
+   El telefono quedo sobre la mesa y atras alguien alza a su hijo contra el
+   atardecer. Va como fondo y no como <img> porque es decoracion: un lector
+   de pantalla no tiene nada que anunciar ahi.
+
+   El velo oscuro de encima no es opcional ni es para "darle onda": sin el,
+   el sol de la foto cae justo detras del titulo verde y el titulo deja de
+   leerse. Los valores salen de medir, no de tantear: contra el pixel mas
+   claro que hay detras de cada linea, el titulo queda en 4.1 a 1 y la bajada
+   en 4.2 a 1, con margen sobre el 3 a 1 que pide WCAG para texto grande. Si
+   alguna vez se cambia la foto, hay que volver a medir esto.
+
+   El recorte se corre hacia abajo (78%) para no perder el telefono, que es
+   la mitad de la idea; lo que se recorta es cielo. En pantallas angostas se
+   corre ademas a la derecha, donde estan el padre y el hijo. */
+.platform-iphone .tesis {
+  position: relative;
+  /* Mas alta que la franja de Android a proposito, y mas alta todavia en
+     pantallas anchas. Con background-size: cover, subir el alto agranda la
+     foto en vez de estirarla, y el padre y el hijo dejan de ser dos
+     manchitas detras del titulo. El clamp no es cosmetico: la foto es de
+     1.79 a 1 y si la franja se vuelve mucho mas apaisada que eso, el recorte
+     se come el hijo por arriba o el telefono por abajo, que son las dos
+     cosas que la foto tiene que mostrar. */
+  padding: clamp(150px, 13vw, 300px) 0;
+  background-image:
+    linear-gradient(
+      180deg,
+      rgba(16, 27, 22, .90) 0%,
+      rgba(16, 27, 22, .74) 30%,
+      rgba(16, 27, 22, .68) 58%,
+      rgba(16, 27, 22, .84) 100%
+    ),
+    url("/img/tesis-foto.webp");
+  background-repeat: no-repeat;
+  background-position: center top, center 78%;
+  background-size: cover, cover;
+}
+.platform-iphone .tesis > .contenedor { position: relative; }
+@media (max-width: 760px) {
+  /* En un telefono la foto entra recortadisima de ancho: no entran el
+     telefono de la mesa y la familia a la vez. Se queda la familia. */
+  .platform-iphone .tesis {
+    padding: 96px 0;
+    background-position: center top, 64% 78%;
+  }
+}
