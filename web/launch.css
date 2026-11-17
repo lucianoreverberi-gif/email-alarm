@@ -461,3 +461,47 @@
     transition: none;
   }
 }
+
+/* --- Capturas reales de la app en iPhone --------------------------------
+   Vienen de la ficha de la App Store, asi que ya traen su propio marco y su
+   fondo. Por eso NO van dentro de .marco como las de Android: dibujaria un
+   telefono alrededor de otro telefono. */
+.ios-shots {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 24px;
+  margin: 0;
+}
+.ios-shots figure { margin: 0; }
+.ios-shots img,
+.ios-hero-shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 760 / 1647;
+  border-radius: 20px;
+  box-shadow: 0 18px 40px rgba(12, 15, 13, 0.18);
+}
+.ios-hero-shot { margin: 0; }
+.ios-hero-shot img { max-width: 330px; margin-inline: auto; border-radius: 24px; }
+
+/* Boton de tienda. Mismo aspecto que .proximamente, con un nombre que no
+   mienta: la app ya salio y el que lea esto en seis meses no tiene por que
+   adivinar que "proximamente" era solo un estilo. */
+.tienda {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  text-decoration: none;
+  background: #087f52;
+  color: #fff;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 13px 22px;
+}
+.tienda:hover { background: #0a6e49; }
+.cierre .tienda { background: #087f52; color: #fff; }
+
+.launch-links { display: inline-flex; flex-wrap: wrap; gap: 12px; }
