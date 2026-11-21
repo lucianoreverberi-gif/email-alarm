@@ -1,0 +1,74 @@
+/* Paginas de ayuda. Se cargan solo en /es/ayuda/ y /help/, despues de
+   styles.css y studio.css, asi que pisan a los dos.
+
+   La idea de la pagina: cada problema se lee al lado de la pantalla donde se
+   arregla. Por eso todo aca es una grilla de dos columnas, texto y captura, y
+   no una lista larga de parrafos. */
+
+/* Indice de sintomas. Son anclas a las secciones de mas abajo: el que llega
+   enojado tiene que ver su problema en la primera pantalla, sin scrollear. */
+.indice {
+  display: flex; flex-wrap: wrap; gap: 10px;
+  list-style: none; padding: 0; margin: 28px 0 0;
+}
+.indice a {
+  display: inline-block; text-decoration: none;
+  border: 1px solid var(--borde); border-radius: 999px;
+  padding: 10px 18px; font-size: 15px; font-weight: 600;
+  color: var(--texto); background: #fff;
+}
+.indice a:hover { border-color: #087f52; color: #087f52; }
+
+/* Un sintoma: el texto a la izquierda, la captura a la derecha. La captura es
+   de ancho fijo porque es un telefono: si la dejamos crecer con la columna,
+   en una pantalla ancha queda un telefono gigante al lado de tres lineas. */
+.sintoma {
+  display: grid; grid-template-columns: 1fr 300px;
+  gap: 56px; align-items: start;
+}
+.sintoma > div { min-width: 0; }
+.sintoma h2 { margin-top: 0; }
+.sintoma .notas { margin-bottom: 0; }
+
+/* La captura queda pegada arriba mientras se lee el texto de al lado. */
+.captura { margin: 0; position: sticky; top: 24px; }
+.captura .marco { max-width: 300px; }
+/* Las de iPhone no van en el marco: tienen otra proporcion y el marco las
+   estiraria. Van con su propio borde. */
+.captura img.suelta {
+  display: block; width: 100%; max-width: 300px; margin: 0 auto;
+  height: auto; border-radius: 22px;
+  box-shadow: 0 20px 40px rgba(12, 15, 13, .18);
+}
+.captura figcaption {
+  margin-top: 16px; text-align: center;
+  font-size: 14px; color: var(--suave); line-height: 1.5;
+}
+
+/* Marca de plataforma, para que nadie lea la respuesta del telefono que no
+   tiene. Va pegada al h2 del sintoma. */
+.solo {
+  display: inline-block; vertical-align: middle;
+  margin-left: 12px; padding: 5px 12px;
+  border-radius: 999px; font-size: 13px; font-weight: 700;
+  letter-spacing: .02em; text-transform: uppercase;
+}
+.solo-android { background: #e6f4ec; color: #0a6e49; }
+.solo-iphone { background: #eef0f4; color: #384049; }
+
+/* El cierre de la pagina: si nada sirvio, que escriba. */
+.sin-suerte {
+  background: var(--superficie); border: 1px solid var(--borde);
+  border-radius: 24px; padding: 36px 32px; text-align: center;
+}
+.sin-suerte h2 { margin: 0 0 10px; }
+.sin-suerte p { margin: 0 auto; max-width: 46em; color: var(--suave); }
+.sin-suerte a { color: #087f52; font-weight: 600; }
+
+@media (max-width: 900px) {
+  /* En un telefono la captura va debajo del texto y deja de ser sticky: en
+     pantalla angosta, pegada arriba, tapa lo que se esta leyendo. */
+  .sintoma { grid-template-columns: 1fr; gap: 32px; }
+  .captura { position: static; }
+  .captura .marco, .captura img.suelta { max-width: 260px; }
+}
