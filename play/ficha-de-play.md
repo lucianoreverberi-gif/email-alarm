@@ -18,6 +18,19 @@ Los límites de caracteres son los de Play; `play/verificar_ficha.py` los compru
 
 ---
 
+## Datos de contacto de la ficha
+
+Van en Play Console, en **Crecimiento > Presencia en Play > Ficha principal**, seccion *Datos de contacto*. A diferencia de Apple, Play no tiene un campo "URL de soporte" aparte: lo que se muestra como asistencia de la app es el sitio web de contacto.
+
+| Campo | Valor |
+|---|---|
+| Correo electronico | support@email-alarm.com |
+| Sitio web | `https://www.email-alarm.com/help/android/` |
+
+**Pendiente de cargar a mano (20/11/2026).** El sitio web apuntaba a la pagina de producto. La de ayuda de Android es la que corresponde, y a diferencia de Apple este cambio sale solo, sin esperar a una version nueva.
+
+---
+
 ## Ficha en inglés (idioma por defecto)
 
 **Título** (máx. 30):
