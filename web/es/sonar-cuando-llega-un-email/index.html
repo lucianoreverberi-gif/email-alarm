@@ -6,12 +6,12 @@
     <title>Cómo hacer que el teléfono suene cuando llega un email — Email Alarm</title>
     <meta
       name="description"
-      content="Las tres formas de que el teléfono te avise cuando llega un correo importante: el filtro de tu app de correo, un reenvío a SMS, o una alarma de verdad. Qué hace cada una y cuál te conviene."
+      content="Email Alarm espera el correo que te importa y suena como un despertador cuando llega. Cómo funciona en Android y cómo funciona en iPhone."
     />
     <meta property="og:title" content="Cómo hacer que el teléfono suene cuando llega un email" />
     <meta
       property="og:description"
-      content="Las tres formas que existen, qué hace cada una y cuál te conviene."
+      content="Eliges qué correo esperas y el teléfono suena como un despertador cuando llega."
     />
     <meta property="og:image" content="https://www.email-alarm.com/og-es.png" />
     <meta property="og:url" content="https://www.email-alarm.com/es/sonar-cuando-llega-un-email/" />
@@ -22,6 +22,7 @@
     <link rel="canonical" href="https://www.email-alarm.com/es/sonar-cuando-llega-un-email/" />
     <link rel="stylesheet" href="/styles.css" />
     <link rel="stylesheet" href="/studio.css" />
+    <link rel="stylesheet" href="/ayuda.css" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -29,26 +30,26 @@
         "mainEntity": [
           {
             "@type": "Question",
-            "name": "¿Se puede hacer que el teléfono suene fuerte cuando llega un email?",
+            "name": "¿Se puede hacer que el teléfono suene cuando llega un email?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Sí, pero no con la app de correo sola. Un filtro de Gmail o un contacto VIP de Apple Mail cambian el sonido de la notificación, que dura un segundo y respeta el modo silencio. Para que suene como una alarma hace falta una app de alarma para el correo."
+              "text": "Sí, con una alarma para el correo. Email Alarm espera los correos que tú eliges y, cuando llega uno, suena con un tono largo que no se detiene solo, igual que un despertador."
             }
           },
           {
             "@type": "Question",
-            "name": "¿Suena aunque el teléfono esté en silencio?",
+            "name": "¿Cómo funciona en Android?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "En Android sí: Email Alarm suena a pantalla completa aunque el teléfono esté en silencio, bloqueado o en No Molestar, si le das ese permiso. En iPhone no: iOS no deja que una app se salte el silencio por su cuenta. Ahí llega primero la notificación y la alarma suena al abrirla."
+              "text": "Suena a pantalla completa sobre la pantalla de bloqueo, aunque el teléfono esté en silencio o en No Molestar, si le concedes ese permiso. No se conecta a tu cuenta de correo."
             }
           },
           {
             "@type": "Question",
-            "name": "¿Hace falta dar la contraseña del correo?",
+            "name": "¿Cómo funciona en iPhone?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "No. En Android la app lee las notificaciones que tu app de correo ya muestra, en el teléfono, sin conectarse a tu cuenta. En iPhone la conexión se autoriza desde Google o Microsoft, sin escribir la contraseña en Email Alarm, y se usan el remitente y el asunto, no el cuerpo ni los adjuntos."
+              "text": "Conectas tu cuenta de Gmail u Outlook y llega una notificación cuando aparece el correo que esperas. Al abrirla, la alarma suena hasta que la detienes."
             }
           },
           {
@@ -56,7 +57,7 @@
             "name": "¿Cuánto cuesta?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "7 días gratis. Después, US$1,99 al mes o US$9,99 al año, o el equivalente en tu moneda. Se cancela desde Google Play o desde los ajustes de tu cuenta de Apple."
+              "text": "7 días gratis. Después, US$1,99 al mes o US$9,99 al año, o el equivalente en tu moneda. Se cancela cuando quieras desde la tienda."
             }
           }
         ]
@@ -74,12 +75,13 @@
 
     <main>
       <section class="contenedor seccion">
-        <span class="eyebrow">GUÍA</span>
+        <span class="eyebrow">CÓMO FUNCIONA</span>
         <h1>Cómo hacer que el teléfono suene cuando llega un email</h1>
         <p class="bajada">
-          La respuesta corta: tu app de correo puede cambiarte el sonido de la
-          notificación, pero no puede despertarte. Para eso hace falta otra
-          cosa. Estas son las tres formas que existen y para qué sirve cada una.
+          Con una alarma para el correo. Le dices qué correo estás esperando,
+          cierras la bandeja de entrada y sigues con tu día; cuando ese correo
+          llega, el teléfono suena. Eso es Email Alarm, y aquí abajo está cómo
+          funciona en cada teléfono.
         </p>
       </section>
 
@@ -90,195 +92,161 @@
         </div>
       </section>
 
-      <section class="contenedor seccion">
-        <h2>Primero: por qué el filtro de tu correo no alcanza</h2>
-        <p class="bajada">
-          Es lo primero que todo el mundo prueba, y conviene saber hasta dónde
-          llega antes de perder la tarde configurándolo.
-        </p>
-        <ul class="notas">
-          <li>
-            <span class="icono-caja"
-              ><svg class="icono" aria-hidden="true">
-                <use href="/icons.svg#i-filter" /></svg
-            ></span>
-            <div>
-              <strong>Gmail: notificaciones de alta prioridad.</strong> Puedes
-              marcar una etiqueta como importante y darle su propio sonido. Lo
-              que consigues es una notificación distinta, no una alarma: suena
-              una vez, un segundo, y se detiene.
-            </div>
-          </li>
-          <li>
-            <span class="icono-caja"
-              ><svg class="icono" aria-hidden="true">
-                <use href="/icons.svg#i-bell" /></svg
-            ></span>
-            <div>
-              <strong>iPhone: contactos VIP y avisos urgentes.</strong> Apple
-              Mail deja marcar remitentes como VIP, y una notificación marcada
-              como urgente puede atravesar un modo de Concentración. Sigue
-              siendo una notificación: si el teléfono está en silencio, no la
-              oyes.
-            </div>
-          </li>
-          <li>
-            <span class="icono-caja"
-              ><svg class="icono" aria-hidden="true">
-                <use href="/icons.svg#i-x" /></svg
-            ></span>
-            <div>
-              <strong>El límite es el mismo en los dos.</strong> El sistema
-              trata el correo como correo. Mientras duermes, mientras conduces o
-              mientras el teléfono está boca abajo en otra habitación, una
-              notificación no te alcanzará. Para eso están las alarmas.
-            </div>
-          </li>
-        </ul>
-      </section>
-
-      <section class="contenedor seccion">
-        <h2>Las tres formas que existen</h2>
-        <p class="bajada">
-          Ordenadas de la más barata a la que de verdad te despierta.
-        </p>
-        <div class="grilla">
-          <article class="tarjeta">
-            <span class="icono-caja"
-              ><svg class="icono" aria-hidden="true">
-                <use href="/icons.svg#i-volume" /></svg
-            ></span>
-            <h3>1. Cambiar el sonido de la notificación</h3>
-            <p>
-              Gratis y en cinco minutos. Sirve para distinguir un correo de otro
-              cuando tienes el teléfono en la mano. No sirve si está en
-              silencio, ni de noche, ni a dos habitaciones de distancia.
-            </p>
-          </article>
-          <article class="tarjeta">
-            <span class="icono-caja"
-              ><svg class="icono" aria-hidden="true">
-                <use href="/icons.svg#i-phone" /></svg
-            ></span>
-            <h3>2. Reenviar el correo a un SMS o a una llamada</h3>
-            <p>
-              Se configura con un filtro y un servicio de automatización. Funciona,
-              pero hay que mantenerlo, suele costar una suscripción aparte, y
-              cada salto añade demora: justo lo que escasea cuando el correo
-              es por un turno.
-            </p>
-          </article>
-          <article class="tarjeta">
-            <span class="icono-caja"
-              ><svg class="icono" aria-hidden="true">
-                <use href="/icons.svg#i-bell" /></svg
-            ></span>
-            <h3>3. Una alarma para el correo</h3>
-            <p>
-              Una app que vigila la llegada y suena como un despertador, con un
-              tono largo que no se detiene solo. Es lo que hace Email Alarm, y es
-              la única de las tres pensada para que te enteres sin mirar el
-              teléfono.
-            </p>
-          </article>
+      <section class="contenedor seccion sintoma" id="android">
+        <div>
+          <h2>En Android<span class="solo solo-android">Android</span></h2>
+          <p class="bajada">
+            Suena como un despertador de verdad: a pantalla completa, sobre la
+            pantalla de bloqueo.
+          </p>
+          <ul class="notas">
+            <li>
+              <span class="icono-caja"
+                ><svg class="icono" aria-hidden="true">
+                  <use href="/icons.svg#i-filter" /></svg
+              ></span>
+              <div>
+                <strong>Creas la alarma</strong> con el remitente que esperas,
+                una palabra del asunto, o las dos cosas.
+              </div>
+            </li>
+            <li>
+              <span class="icono-caja"
+                ><svg class="icono" aria-hidden="true">
+                  <use href="/icons.svg#i-volume" /></svg
+              ></span>
+              <div>
+                <strong>Suena aunque el teléfono esté en silencio</strong> y
+                también en No Molestar, si le concedes ese permiso.
+              </div>
+            </li>
+            <li>
+              <span class="icono-caja"
+                ><svg class="icono" aria-hidden="true">
+                  <use href="/icons.svg#i-lock" /></svg
+              ></span>
+              <div>
+                <strong>No se conecta a tu cuenta de correo</strong> ni pide tu
+                contraseña. Funciona con Gmail, Outlook, Samsung Email, Yahoo y
+                más, en todas tus cuentas a la vez.
+              </div>
+            </li>
+            <li>
+              <span class="icono-caja"
+                ><svg class="icono" aria-hidden="true">
+                  <use href="/icons.svg#i-calendar" /></svg
+              ></span>
+              <div>
+                <strong>Cada alarma tiene sus días, sus horas y su tono</strong>,
+                y un interruptor para encenderla solo cuando la necesitas.
+              </div>
+            </li>
+          </ul>
+          <a class="tienda" href="https://play.google.com/store/apps/details?id=com.reverstabilizer.emailalarm"><svg class="icono" aria-hidden="true"><use href="/icons.svg#i-play" /></svg>Descargar en Google Play</a>
+          <p class="precio">
+            <a href="/es/android/">Ver todo lo que hace en Android</a>
+          </p>
         </div>
+        <figure class="captura">
+          <div class="marco">
+            <img
+              src="/img/alarma-es.png"
+              width="1080"
+              height="2400"
+              loading="lazy"
+              alt="La alarma de Email Alarm sonando a pantalla completa en Android, sobre la pantalla de bloqueo"
+            />
+          </div>
+          <figcaption>
+            Así suena en Android: a pantalla completa, hasta que la apagas.
+          </figcaption>
+        </figure>
       </section>
 
-      <section class="contenedor seccion">
-        <h2>Cómo se hace con Email Alarm</h2>
-        <div class="grilla">
-          <article class="tarjeta">
-            <div class="paso-num">01</div>
-            <h3>Dices qué correo esperas</h3>
-            <p>
-              Un remitente, una palabra del asunto, o las dos cosas. Si pones
-              <em>uscis</em>, también suena con &ldquo;USCIS Online
-              Account&rdquo;: no hace falta saber la dirección exacta.
-            </p>
-          </article>
-          <article class="tarjeta">
-            <div class="paso-num">02</div>
-            <h3>Eliges cuándo puede sonar</h3>
-            <p>
-              Los días y la franja horaria de cada alarma. Fuera de ahí, esa
-              alarma se queda callada. Y cada alarma puede tener su propio tono,
-              para saber cuál sonó sin mirar.
-            </p>
-          </article>
-          <article class="tarjeta">
-            <div class="paso-num">03</div>
-            <h3>Cierras el correo</h3>
-            <p>
-              Y sigues con tu día. La pruebas una vez con el botón de prueba,
-              antes de necesitarla, y después te olvidas hasta que suene.
-            </p>
-          </article>
+      <section class="contenedor seccion sintoma" id="iphone">
+        <div>
+          <h2>En iPhone<span class="solo solo-iphone">iPhone</span></h2>
+          <p class="bajada">
+            Llega primero la notificación y, al abrirla, suena la alarma. iOS no
+            permite que una aplicación tome la pantalla por su cuenta.
+          </p>
+          <ul class="notas">
+            <li>
+              <span class="icono-caja"
+                ><svg class="icono" aria-hidden="true">
+                  <use href="/icons.svg#i-mail" /></svg
+              ></span>
+              <div>
+                <strong>Conectas Gmail u Outlook</strong> desde Google o
+                Microsoft, sin escribir tu contraseña en Email Alarm.
+              </div>
+            </li>
+            <li>
+              <span class="icono-caja"
+                ><svg class="icono" aria-hidden="true">
+                  <use href="/icons.svg#i-filter" /></svg
+              ></span>
+              <div>
+                <strong>Creas la alarma</strong> con el remitente, una palabra
+                del asunto, o las dos cosas, y eliges si debe cumplirse una
+                condición o ambas.
+              </div>
+            </li>
+            <li>
+              <span class="icono-caja"
+                ><svg class="icono" aria-hidden="true">
+                  <use href="/icons.svg#i-bell" /></svg
+              ></span>
+              <div>
+                <strong>Al abrir la notificación suena la alarma</strong> hasta
+                que la detienes, y ves quién escribió, el asunto y qué alarma
+                coincidió.
+              </div>
+            </li>
+            <li>
+              <span class="icono-caja"
+                ><svg class="icono" aria-hidden="true">
+                  <use href="/icons.svg#i-calendar" /></svg
+              ></span>
+              <div>
+                <strong>Cada alarma tiene sus días, sus horas y su tono</strong>,
+                y puedes posponerla 1, 5 o 10 minutos.
+              </div>
+            </li>
+          </ul>
+          <a class="tienda" href="https://apps.apple.com/app/id6814333983"><svg class="icono" aria-hidden="true"><use href="/icons.svg#i-apple" /></svg>Descargar en la App Store</a>
+          <p class="precio">
+            <a href="/es/ios/">Ver todo lo que hace en iPhone</a>
+          </p>
         </div>
+        <figure class="captura">
+          <img
+            class="suelta"
+            src="/img/ios-alarma-en.webp"
+            width="760"
+            height="1647"
+            loading="lazy"
+            alt="La alarma sonando en un iPhone: el remitente, el asunto y el botón para detenerla"
+          />
+          <figcaption>
+            Así suena en iPhone, al abrir la notificación. La captura es de la
+            versión en inglés; la aplicación también está en español.
+          </figcaption>
+        </figure>
       </section>
 
       <section class="contenedor seccion">
-        <h2>En Android y en iPhone no funciona igual</h2>
-        <p class="bajada">
-          Conviene saberlo antes de instalar, porque la diferencia es real y no
-          depende de nosotros.
-        </p>
+        <h2>Precio</h2>
         <ul class="notas">
           <li>
             <span class="icono-caja"
               ><svg class="icono" aria-hidden="true">
-                <use href="/icons.svg#i-volume" /></svg
+                <use href="/icons.svg#i-check" /></svg
             ></span>
             <div>
-              <strong>Android: suena como una alarma de verdad.</strong> A
-              pantalla completa sobre la pantalla de bloqueo, aunque el teléfono
-              esté en silencio o en No Molestar, si le das ese permiso. Lee las
-              notificaciones que tu app de correo ya muestra, en el teléfono,
-              sin conectarse a tu cuenta.
-              <a href="/es/android/">Ver Email Alarm para Android</a>.
-            </div>
-          </li>
-          <li>
-            <span class="icono-caja"
-              ><svg class="icono" aria-hidden="true">
-                <use href="/icons.svg#i-phone" /></svg
-            ></span>
-            <div>
-              <strong>iPhone: primero la notificación, después la alarma.</strong>
-              iOS no deja que una app tome la pantalla por su cuenta, así que
-              llega una notificación con su propio sonido y, al abrirla, la
-              alarma suena hasta que la paras. Conecta Gmail y Outlook, y mira
-              el remitente y el asunto, no el cuerpo.
-              <a href="/es/ios/">Ver Email Alarm para iPhone</a>.
-            </div>
-          </li>
-        </ul>
-      </section>
-
-      <section class="contenedor seccion">
-        <h2>Preguntas</h2>
-        <ul class="notas">
-          <li>
-            <span class="icono-caja"
-              ><svg class="icono" aria-hidden="true">
-                <use href="/icons.svg#i-mail" /></svg
-            ></span>
-            <div>
-              <strong>¿Funciona con mi correo?</strong> En Android, con
-              cualquier app que muestre notificaciones: Gmail, Outlook, Samsung
-              Email, Yahoo y más, en todas tus cuentas a la vez. En iPhone, con
-              Gmail y con Outlook o Hotmail personales.
-            </div>
-          </li>
-          <li>
-            <span class="icono-caja"
-              ><svg class="icono" aria-hidden="true">
-                <use href="/icons.svg#i-lock" /></svg
-            ></span>
-            <div>
-              <strong>¿Hace falta dar la contraseña?</strong> No, en ninguna de
-              las dos. En Android la app ni siquiera se conecta a tu cuenta. En
-              iPhone autorizas la conexión desde Google o Microsoft, como con
-              cualquier otra app.
+              <strong>7 días gratis en los dos.</strong> Después, US$1,99 al mes
+              o US$9,99 al año, o el equivalente en tu moneda. Se cancela cuando
+              quieras desde la tienda.
             </div>
           </li>
           <li>
@@ -287,21 +255,9 @@
                 <use href="/icons.svg#i-alert" /></svg
             ></span>
             <div>
-              <strong>¿Y si el correo cae en spam?</strong> Entonces tu app de
-              correo no muestra notificación y no hay nada que detectar. Para un
-              remitente nuevo e importante, conviene crear antes un filtro en
-              Gmail con &ldquo;Nunca enviarlo a spam&rdquo;.
-            </div>
-          </li>
-          <li>
-            <span class="icono-caja"
-              ><svg class="icono" aria-hidden="true">
-                <use href="/icons.svg#i-check" /></svg
-            ></span>
-            <div>
-              <strong>¿Cuánto cuesta?</strong> 7 días gratis. Después, US$1,99
-              al mes o US$9,99 al año, o el equivalente en tu moneda. Se cancela
-              cuando quieras desde la tienda.
+              <strong>¿Y si no suena?</strong> La
+              <a href="/es/ayuda/">página de ayuda</a> tiene las causas
+              habituales y dónde se corrige cada una.
             </div>
           </li>
         </ul>
@@ -326,8 +282,8 @@
       <span>© 2026 Email Alarm</span>
       <nav>
         <a href="/es/ayuda/">Ayuda</a
-        ><a href="/privacy/#es">Política de privacidad</a>
-        <a href="/es/contacto/">Contacto</a>
+        ><a href="/privacy/#es">Política de privacidad</a
+        ><a href="/es/contacto/">Contacto</a>
       </nav>
     </footer>
   </body>
