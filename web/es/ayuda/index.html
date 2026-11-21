@@ -6,12 +6,12 @@
     <title>Ayuda — Email Alarm</title>
     <meta
       name="description"
-      content="La alarma no sonó, suena cuando no querías, o dejó de funcionar. Las respuestas, con la pantalla de la app al lado de cada una, para Android y para iPhone."
+      content="Ayuda de Email Alarm. La app funciona de otra manera en cada teléfono, así que cada uno tiene su propia página: una para Android y otra para iPhone."
     />
     <meta property="og:title" content="Ayuda de Email Alarm" />
     <meta
       property="og:description"
-      content="Elige lo que te ocurre y mira dónde se soluciona."
+      content="Elige tu teléfono: la app funciona de otra manera en cada uno."
     />
     <meta property="og:image" content="https://www.email-alarm.com/og-es.png" />
     <meta property="og:url" content="https://www.email-alarm.com/es/ayuda/" />
@@ -36,603 +36,57 @@
     <main>
       <section class="contenedor seccion">
         <span class="eyebrow">AYUDA</span>
-        <h1>¿Con qué necesitas ayuda?</h1>
+        <h1>¿Con qué teléfono?</h1>
         <p class="bajada">
-          Elige lo que te ocurre. Cada respuesta incluye la pantalla de la app
-          donde se soluciona. Las capturas de Android están en español; las de
-          iPhone, en inglés, aunque la aplicación también está en español.
+          Email Alarm funciona de otra manera en cada uno, así que las
+          respuestas también son distintas. Elige el tuyo y vas directo a lo que
+          te sirve.
         </p>
-        <ul class="indice">
-          <li><a href="#probar">¿Cómo la pruebo antes de necesitarla?</a></li>
-          <li><a href="#no-sono">¿No sonó?</a></li>
-          <li><a href="#horario">¿Llegó el correo y no sonó?</a></li>
-          <li><a href="#de-mas">¿Suena con correos que no quieres?</a></li>
-          <li><a href="#registro">¿Cómo saber qué ocurrió?</a></li>
-          <li><a href="#android">Solo en Android</a></li>
-          <li><a href="#iphone">Solo en iPhone</a></li>
-          <li><a href="#cobro">Prueba gratis y cancelación</a></li>
-        </ul>
-      </section>
-
-      <section class="tesis">
-        <div class="contenedor">
-          <p class="debil">Cuando una alarma no suena,</p>
-          <p class="fuerte">casi siempre es el spam, el remitente o el horario.</p>
+        <div class="grilla">
+          <article class="tarjeta">
+            <span class="icono-caja"
+              ><svg class="icono" aria-hidden="true">
+                <use href="/icons.svg#i-volume" /></svg
+            ></span>
+            <h3><a href="/es/ayuda/android/">Ayuda para Android</a></h3>
+            <p>
+              Suena a pantalla completa, aunque el teléfono esté en silencio.
+              Lee las notificaciones de tu app de correo y no se conecta a tu
+              cuenta.
+            </p>
+            <p class="precio">
+              Permisos, batería, spam, horarios y cancelación.
+            </p>
+          </article>
+          <article class="tarjeta">
+            <span class="icono-caja"
+              ><svg class="icono" aria-hidden="true">
+                <use href="/icons.svg#i-phone" /></svg
+            ></span>
+            <h3><a href="/es/ayuda/iphone/">Ayuda para iPhone</a></h3>
+            <p>
+              Llega una notificación y, al abrirla, suena la alarma. Conecta tu
+              cuenta de Gmail o de Outlook y vigila la bandeja de entrada.
+            </p>
+            <p class="precio">
+              Los dos pasos, la cuenta conectada, horarios y cancelación.
+            </p>
+          </article>
         </div>
-      </section>
-
-      <section class="contenedor seccion sintoma" id="probar">
-        <div>
-          <h2>Prueba la alarma antes de necesitarla</h2>
-          <p class="bajada">
-            Es el minuto mejor invertido. Si vas a confiar en una alarma para
-            algo importante, escúchala una vez en las condiciones reales: de
-            noche, con el teléfono bloqueado y en silencio.
-          </p>
-          <ul class="notas">
-            <li>
-              <span class="icono-caja"
-                ><svg class="icono" aria-hidden="true">
-                  <use href="/icons.svg#i-volume" /></svg
-              ></span>
-              <div>
-                <strong>&ldquo;Ahora&rdquo; reproduce el tono.</strong> Sirve
-                para elegir cuál prefieres y para comprobar el volumen.
-              </div>
-            </li>
-            <li>
-              <span class="icono-caja"
-                ><svg class="icono" aria-hidden="true">
-                  <use href="/icons.svg#i-moon" /></svg
-              ></span>
-              <div>
-                <strong>&ldquo;En 10 s&rdquo; es la prueba real.</strong>
-                Tócalo, bloquea el teléfono, déjalo como lo dejas por la noche y
-                espera. Así compruebas lo que ocurrirá cuando llegue el correo
-                de verdad.
-              </div>
-            </li>
-            <li>
-              <span class="icono-caja"
-                ><svg class="icono" aria-hidden="true">
-                  <use href="/icons.svg#i-bell" /></svg
-              ></span>
-              <div>
-                <strong>En la parte superior se indica si está escuchando.</strong>
-                El punto verde con &ldquo;Escuchando Gmail&rdquo; confirma que
-                la app está activa. Si no aparece, no sonará nada.
-              </div>
-            </li>
-          </ul>
-        </div>
-        <figure class="captura">
-          <div class="marco">
-            <img
-              src="/img/principal-es.png"
-              width="1080"
-              height="2400"
-              loading="lazy"
-              alt="Pantalla principal de Android con tres alarmas, los botones Ahora y En 10 segundos para probar, y la actividad reciente"
-            />
-          </div>
-          <figcaption>
-            Los dos botones de prueba están en la pantalla principal, debajo de
-            tus alarmas.
-          </figcaption>
-        </figure>
-      </section>
-
-      <section class="contenedor seccion sintoma" id="no-sono">
-        <div>
-          <h2>¿No sonó?</h2>
-          <p class="bajada">
-            Casi siempre es una de estas cuatro causas, y en ese orden. Las tres
-            primeras se corrigen en el editor de la alarma.
-          </p>
-          <ul class="notas">
-            <li>
-              <span class="icono-caja"
-                ><svg class="icono" aria-hidden="true">
-                  <use href="/icons.svg#i-alert" /></svg
-              ></span>
-              <div>
-                <strong>El correo cayó en spam.</strong> Es la causa más
-                frecuente y ninguna aplicación puede resolverla: si cae en spam,
-                tu app de correo no muestra notificación, y sin notificación no
-                hay nada que detectar. Antes de esperar un correo importante de
-                un remitente nuevo, crea un filtro en Gmail con &ldquo;Nunca
-                enviarlo a spam&rdquo;.
-              </div>
-            </li>
-            <li>
-              <span class="icono-caja"
-                ><svg class="icono" aria-hidden="true">
-                  <use href="/icons.svg#i-mail" /></svg
-              ></span>
-              <div>
-                <strong>Escribiste la dirección, pero llegó el nombre.</strong>
-                Gmail y Outlook suelen mostrar el <em>nombre</em> del remitente,
-                no la dirección. Si indicaste
-                <em>turnos@bistro.com</em> y la notificación dice &ldquo;Bistró
-                Central&rdquo;, no coincide. Usa el nombre tal como aparece en
-                la notificación.
-              </div>
-            </li>
-            <li>
-              <span class="icono-caja"
-                ><svg class="icono" aria-hidden="true">
-                  <use href="/icons.svg#i-filter" /></svg
-              ></span>
-              <div>
-                <strong>La palabra no estaba donde se busca.</strong> La
-                coincidencia es parcial, de modo que <em>uscis</em> también
-                encuentra &ldquo;USCIS Online Account&rdquo;, y no influyen
-                mayúsculas ni tildes. Pero se busca en el asunto y en la vista
-                previa, no en el correo completo.
-              </div>
-            </li>
-            <li>
-              <span class="icono-caja"
-                ><svg class="icono" aria-hidden="true">
-                  <use href="/icons.svg#i-bell" /></svg
-              ></span>
-              <div>
-                <strong>La alarma estaba desactivada.</strong> Cada alarma tiene
-                su interruptor, como un despertador. Si la desactivaste en algún
-                momento, sigue así.
-              </div>
-            </li>
-          </ul>
-        </div>
-        <figure class="captura">
-          <div class="marco">
-            <img
-              src="/img/editar-es.png"
-              width="1080"
-              height="2400"
-              loading="lazy"
-              alt="Editor de una alarma en Android, con los campos Viene de y Contiene la palabra, y el consejo para que el correo no caiga en spam"
-            />
-          </div>
-          <figcaption>
-            El editor advierte de las dos confusiones habituales: el nombre
-            frente a la dirección, y el spam.
-          </figcaption>
-        </figure>
-      </section>
-
-      <section class="contenedor seccion sintoma" id="horario">
-        <div>
-          <h2>¿Llegó el correo y no sonó?</h2>
-          <p class="bajada">
-            Si en la actividad reciente aparece el correo pero no sonó nada, lo
-            más probable es que la alarma estuviera fuera de su horario.
-          </p>
-          <ul class="notas">
-            <li>
-              <span class="icono-caja"
-                ><svg class="icono" aria-hidden="true">
-                  <use href="/icons.svg#i-calendar" /></svg
-              ></span>
-              <div>
-                <strong>Cada alarma tiene sus días y su franja horaria.</strong>
-                Si la dejaste de lunes a viernes de 08:00 a 20:00, un correo del
-                sábado o de las 21:30 no la activará.
-              </div>
-            </li>
-            <li>
-              <span class="icono-caja"
-                ><svg class="icono" aria-hidden="true">
-                  <use href="/icons.svg#i-moon" /></svg
-              ></span>
-              <div>
-                <strong>Fuera del horario no se pierde: queda en silencio.</strong>
-                Recibes una notificación silenciosa, para verlo cuando mires el
-                teléfono, sin que te despierte.
-              </div>
-            </li>
-            <li>
-              <span class="icono-caja"
-                ><svg class="icono" aria-hidden="true">
-                  <use href="/icons.svg#i-check" /></svg
-              ></span>
-              <div>
-                <strong>Si prefieres que suene siempre</strong>, activa
-                &ldquo;Todo el día&rdquo; y deja marcados los siete días. Es la
-                configuración predeterminada.
-              </div>
-            </li>
-          </ul>
-        </div>
-        <figure class="captura">
-          <div class="marco">
-            <img
-              src="/img/horario-es.png"
-              width="1080"
-              height="2400"
-              loading="lazy"
-              alt="Días y horario de una alarma en Android: lunes a viernes marcados, el interruptor Todo el día apagado, y la franja de 08:00 a 20:00"
-            />
-          </div>
-          <figcaption>
-            Los días y el horario están dentro de cada alarma, no en los ajustes
-            generales.
-          </figcaption>
-        </figure>
-      </section>
-
-      <section class="contenedor seccion sintoma" id="de-mas">
-        <div>
-          <h2>¿Suena con correos que no quieres?</h2>
-          <p class="bajada">
-            Ocurre cuando la alarma es más amplia de lo que parecía. Hay una
-            diferencia entre ambos teléfonos que conviene conocer.
-          </p>
-          <ul class="notas">
-            <li>
-              <span class="icono-caja"
-                ><svg class="icono" aria-hidden="true">
-                  <use href="/icons.svg#i-filter" /></svg
-              ></span>
-              <div>
-                <strong>En Android, remitente y palabra suman, no restan.</strong>
-                Si completas ambos campos, la alarma suena cuando se cumple
-                <em>cualquiera</em> de los dos. Para acotarla, deja uno solo y
-                hazlo más específico.
-              </div>
-            </li>
-            <li>
-              <span class="icono-caja"
-                ><svg class="icono" aria-hidden="true">
-                  <use href="/icons.svg#i-phone" /></svg
-              ></span>
-              <div>
-                <strong>En iPhone puedes elegir.</strong> El editor permite
-                decidir si debe cumplirse una condición o las dos. Elegir
-                &ldquo;las dos&rdquo; es la forma más rápida de que deje de
-                sonar de más.
-              </div>
-            </li>
-            <li>
-              <span class="icono-caja"
-                ><svg class="icono" aria-hidden="true">
-                  <use href="/icons.svg#i-alert" /></svg
-              ></span>
-              <div>
-                <strong>Cuidado con las palabras cortas.</strong> Una palabra de
-                tres o cuatro letras aparece dentro de otras y activa la alarma
-                con cualquier correo. Es preferible usar dos palabras juntas
-                antes que una sola corta.
-              </div>
-            </li>
-          </ul>
-        </div>
-        <figure class="captura">
-          <div class="marco">
-            <img
-              src="/img/actividad-es.png"
-              width="1080"
-              height="2400"
-              loading="lazy"
-              alt="Actividad reciente en Android: correos recibidos, cuáles hicieron sonar una alarma y cuáles quedaron sin coincidencia"
-            />
-          </div>
-          <figcaption>
-            La actividad reciente indica qué alarma sonó, de modo que sabes cuál
-            acotar.
-          </figcaption>
-        </figure>
-      </section>
-
-      <section class="contenedor seccion sintoma" id="registro">
-        <div>
-          <h2>¿Cómo saber qué ocurrió?</h2>
-          <p class="bajada">
-            Esta es la pantalla que responde casi todas las dudas, y la primera
-            que consultamos cuando alguien nos escribe.
-          </p>
-          <ul class="notas">
-            <li>
-              <span class="icono-caja"
-                ><svg class="icono" aria-hidden="true">
-                  <use href="/icons.svg#i-check" /></svg
-              ></span>
-              <div>
-                <strong>&ldquo;Sonó&rdquo;.</strong> El correo llegó, coincidió
-                y la alarma se activó. Si aun así no la escuchaste, el problema
-                está en el volumen o en los permisos, no en la alarma.
-              </div>
-            </li>
-            <li>
-              <span class="icono-caja"
-                ><svg class="icono" aria-hidden="true">
-                  <use href="/icons.svg#i-x" /></svg
-              ></span>
-              <div>
-                <strong>&ldquo;Sin coincidencia&rdquo;.</strong> El correo
-                llegó, pero no correspondía a ninguna de tus alarmas. Si
-                esperabas que sí, compara el remitente que aparece ahí con el
-                que escribiste.
-              </div>
-            </li>
-            <li>
-              <span class="icono-caja"
-                ><svg class="icono" aria-hidden="true">
-                  <use href="/icons.svg#i-alert" /></svg
-              ></span>
-              <div>
-                <strong>El correo no aparece.</strong> Entonces nunca hubo
-                notificación: o cayó en spam, o tu app de correo no estaba
-                avisando. Es el primer caso de esta página.
-              </div>
-            </li>
-          </ul>
-        </div>
-        <figure class="captura">
-          <img
-            class="suelta"
-            src="/img/ios-actividad-en.webp"
-            width="760"
-            height="1647"
-            loading="lazy"
-            alt="Actividad reciente en iPhone: un correo marcado como alarma enviada y otro marcado sin coincidencia"
-          />
-          <figcaption>
-            La misma pantalla existe en iPhone. En Android está en la portada de
-            la app; en iPhone, en su propia pestaña.
-          </figcaption>
-        </figure>
-      </section>
-
-      <section class="contenedor seccion sintoma" id="android">
-        <div>
-          <h2>Solo en Android<span class="solo solo-android">Android</span></h2>
-          <p class="bajada">
-            En Android la app no se conecta a tu cuenta de correo: lee las
-            notificaciones que tu app de correo ya muestra, dentro del teléfono.
-            De ahí provienen sus dos permisos y sus dos problemas más
-            habituales.
-          </p>
-          <ul class="notas">
-            <li>
-              <span class="icono-caja"
-                ><svg class="icono" aria-hidden="true">
-                  <use href="/icons.svg#i-bell" /></svg
-              ></span>
-              <div>
-                <strong>Acceso a las notificaciones.</strong> Sin ese permiso la
-                app no detecta nada y nunca podrá sonar. Android a veces lo
-                revoca por su cuenta tras una actualización del sistema: si la
-                app dejó de funcionar de un día para otro, revisa esto primero.
-              </div>
-            </li>
-            <li>
-              <span class="icono-caja"
-                ><svg class="icono" aria-hidden="true">
-                  <use href="/icons.svg#i-moon" /></svg
-              ></span>
-              <div>
-                <strong>No Molestar.</strong> Para sonar con el teléfono en No
-                Molestar hace falta conceder ese permiso aparte. Si no se ha
-                concedido, la app respeta el modo y permanece en silencio.
-              </div>
-            </li>
-            <li>
-              <span class="icono-caja"
-                ><svg class="icono" aria-hidden="true">
-                  <use href="/icons.svg#i-alert" /></svg
-              ></span>
-              <div>
-                <strong>El ahorro de batería.</strong> Algunos teléfonos
-                —Xiaomi, Huawei, Samsung— cierran las aplicaciones en segundo
-                plano para ahorrar energía. Si es tu caso, excluye a Email Alarm
-                de la optimización de batería; de lo contrario no estará activa
-                cuando llegue el correo.
-              </div>
-            </li>
-            <li>
-              <span class="icono-caja"
-                ><svg class="icono" aria-hidden="true">
-                  <use href="/icons.svg#i-mail" /></svg
-              ></span>
-              <div>
-                <strong>Tu app de correo debe estar instalada</strong> en ese
-                teléfono y con las notificaciones activadas. Funciona con Gmail,
-                Outlook, Samsung Email, Yahoo y más, en todas tus cuentas a la
-                vez.
-              </div>
-            </li>
-          </ul>
-        </div>
-        <figure class="captura">
-          <div class="marco">
-            <img
-              src="/img/alarma-es.png"
-              width="1080"
-              height="2400"
-              loading="lazy"
-              alt="La alarma sonando a pantalla completa en Android, sobre la pantalla de bloqueo"
-            />
-          </div>
-          <figcaption>
-            Con los permisos concedidos, así se ve: a pantalla completa, sobre
-            la pantalla de bloqueo.
-          </figcaption>
-        </figure>
-      </section>
-
-      <section class="contenedor seccion sintoma" id="iphone">
-        <div>
-          <h2>Solo en iPhone<span class="solo solo-iphone">iPhone</span></h2>
-          <p class="bajada">
-            En iPhone la app sí conecta tu cuenta, y suena en dos pasos. No es
-            un error: es el límite que iOS impone a todas las aplicaciones.
-          </p>
-          <ul class="notas">
-            <li>
-              <span class="icono-caja"
-                ><svg class="icono" aria-hidden="true">
-                  <use href="/icons.svg#i-bell" /></svg
-              ></span>
-              <div>
-                <strong>Primero la notificación, después la alarma.</strong>
-                Llega una notificación con su propio sonido, durante unos
-                segundos. Al tocarla se abre Email Alarm y el tono suena hasta
-                que lo detienes. Con la app abierta suena aunque el interruptor
-                de silencio esté activado.
-              </div>
-            </li>
-            <li>
-              <span class="icono-caja"
-                ><svg class="icono" aria-hidden="true">
-                  <use href="/icons.svg#i-moon" /></svg
-              ></span>
-              <div>
-                <strong>La notificación respeta el silencio y Concentración.</strong>
-                iOS no permite que una aplicación los ignore por su cuenta. Si
-                duermes con el teléfono en silencio, esa primera notificación no
-                te despertará.
-              </div>
-            </li>
-            <li>
-              <span class="icono-caja"
-                ><svg class="icono" aria-hidden="true">
-                  <use href="/icons.svg#i-lock" /></svg
-              ></span>
-              <div>
-                <strong>Si dejó de funcionar, revisa la cuenta.</strong> Sobre
-                la lista de alarmas se indica si Gmail y Outlook están
-                conectados. Un cambio de contraseña o una sesión caducada los
-                desconecta, y hay que volver a autorizarlos.
-              </div>
-            </li>
-            <li>
-              <span class="icono-caja"
-                ><svg class="icono" aria-hidden="true">
-                  <use href="/icons.svg#i-volume" /></svg
-              ></span>
-              <div>
-                <strong>Si suena en un momento inoportuno</strong>, puedes
-                posponerla 1, 5 o 10 minutos desde la propia pantalla de la
-                alarma.
-              </div>
-            </li>
-          </ul>
-        </div>
-        <figure class="captura">
-          <img
-            class="suelta"
-            src="/img/ios-alarma-en.webp"
-            width="760"
-            height="1647"
-            loading="lazy"
-            alt="La alarma sonando en un iPhone: el remitente, el asunto, la alarma que coincidió y el botón para parar"
-          />
-          <figcaption>
-            Al abrir la notificación se ve quién escribió, el asunto y qué
-            alarma coincidió.
-          </figcaption>
-        </figure>
-      </section>
-
-      <section class="contenedor seccion sintoma" id="cobro">
-        <div>
-          <h2>Prueba gratis y cancelación</h2>
-          <p class="bajada">
-            La prueba de 7 días la gestiona la tienda, no nosotros. Por eso se
-            cancela en el mismo sitio que el resto de tus suscripciones.
-          </p>
-          <ul class="notas">
-            <li>
-              <span class="icono-caja"
-                ><svg class="icono" aria-hidden="true">
-                  <use href="/icons.svg#i-check" /></svg
-              ></span>
-              <div>
-                <strong>7 días gratis y después US$1,99 al mes o US$9,99 al
-                año</strong>, o el equivalente en tu moneda. Si cancelas durante
-                la prueba, no se cobra nada.
-              </div>
-            </li>
-            <li>
-              <span class="icono-caja"
-                ><svg class="icono" aria-hidden="true">
-                  <use href="/icons.svg#i-calendar" /></svg
-              ></span>
-              <div>
-                <strong>El octavo día se cobra automáticamente</strong> y la app
-                sigue funcionando, como cualquier suscripción. No hay que hacer
-                nada para continuar.
-              </div>
-            </li>
-            <li>
-              <span class="icono-caja"
-                ><svg class="icono" aria-hidden="true">
-                  <use href="/icons.svg#i-x" /></svg
-              ></span>
-              <div>
-                <strong>Para cancelar</strong>, en Android entra en Google Play,
-                Pagos y suscripciones. En iPhone, en los ajustes de tu cuenta de
-                Apple. Para evitar el siguiente cobro, cancela al menos 24 horas
-                antes de que termine el período.
-              </div>
-            </li>
-            <li>
-              <span class="icono-caja"
-                ><svg class="icono" aria-hidden="true">
-                  <use href="/icons.svg#i-lock" /></svg
-              ></span>
-              <div>
-                <strong>Si falla la tarjeta, el servicio no se corta de
-                inmediato.</strong> Mientras la tienda reintenta el cobro, la
-                alarma sigue sonando.
-              </div>
-            </li>
-          </ul>
-        </div>
-        <figure class="captura">
-          <img
-            class="suelta"
-            src="/img/ios-alarmas-en.webp"
-            width="760"
-            height="1647"
-            loading="lazy"
-            alt="Lista de alarmas en iPhone, con el estado de las cuentas conectadas arriba"
-          />
-          <figcaption>
-            En iPhone, el estado de tus cuentas aparece sobre la lista de
-            alarmas.
-          </figcaption>
-        </figure>
       </section>
 
       <section class="contenedor seccion">
         <div class="sin-suerte">
-          <h2>Si no era nada de esto</h2>
+          <h2>¿Prefieres escribirnos?</h2>
           <p>
             Escríbenos a
             <a href="mailto:support@email-alarm.com">support@email-alarm.com</a>
-            y cuéntanos qué esperabas y qué ocurrió. Si puedes, consulta antes
-            la actividad reciente e indícanos qué dice junto a ese correo: con
-            eso casi siempre basta para localizar el problema.
+            y cuéntanos qué esperabas y qué ocurrió. Dinos también qué teléfono
+            tienes: es lo primero que necesitamos saber.
           </p>
         </div>
       </section>
     </main>
-
-    <section class="cierre">
-      <div class="contenedor">
-        <img src="/icon.svg" alt="" />
-        <p class="antes">¿Todavía no la tienes?</p>
-        <h2>Alarma para tus emails importantes.</h2>
-        <a class="tienda" href="https://play.google.com/store/apps/details?id=com.reverstabilizer.emailalarm"><svg class="icono" aria-hidden="true"><use href="/icons.svg#i-play" /></svg>Descargar en Google Play</a>
-        <a class="tienda" href="https://apps.apple.com/app/id6814333983"><svg class="icono" aria-hidden="true"><use href="/icons.svg#i-apple" /></svg>Descargar en la App Store</a>
-        <p class="precio">
-          7 días gratis. Después, US$1,99 al mes o US$9,99 al año. Cancela
-          cuando quieras.
-        </p>
-      </div>
-    </section>
 
     <footer class="contenedor pie">
       <span>© 2026 Email Alarm</span>

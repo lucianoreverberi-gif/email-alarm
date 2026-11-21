@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Help for Android — Email Alarm</title>
+    <meta
+      name="description"
+      content="It didn't ring on your Android, it rings for the wrong emails, or it stopped working. The answers, each next to the screen where you fix it."
+    />
+    <meta property="og:title" content="Email Alarm help for Android" />
+    <meta
+      property="og:description"
+      content="Pick what's happening and see where it gets fixed."
+    />
+    <meta property="og:image" content="https://www.email-alarm.com/og.png" />
+    <meta property="og:url" content="https://www.email-alarm.com/help/android/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <link rel="alternate" hreflang="en" href="/help/android/" />
+    <link rel="alternate" hreflang="es" href="/es/ayuda/android/" />
+    <link rel="canonical" href="https://www.email-alarm.com/help/android/" />
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/studio.css" />
+    <link rel="stylesheet" href="/ayuda.css" />
+  </head>
+  <body class="platform-home">
+    <header class="contenedor encabezado">
+      <a class="marca" href="/"><img src="/icon.svg" alt="" />Email Alarm</a>
+      <nav class="studio-nav" aria-label="Navigation">
+        <a href="/android/">Android</a><a href="/ios/">iPhone</a
+        ><a href="/es/ayuda/android/" lang="es">Español</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="contenedor seccion">
+        <span class="eyebrow">HELP · ANDROID</span>
+        <h1>What do you need help with?<span class="solo solo-android">Android</span></h1>
+        <p class="bajada">
+          This page is for Android only. On an iPhone,
+          <a href="/help/iphone/">this is yours</a> instead, because the app
+          works a different way there.
+        </p>
+        <ul class="indice">
+          <li><a href="#test">How do I test it before I need it?</a></li>
+          <li><a href="#no-ring">Why didn't it ring?</a></li>
+          <li><a href="#schedule">The email arrived — why was it silent?</a></li>
+          <li><a href="#too-much">Why does it ring for the wrong emails?</a></li>
+          <li><a href="#log">How do I know what happened?</a></li>
+          <li><a href="#permissions">Permissions and battery</a></li>
+          <li><a href="#billing">Free trial and cancelling</a></li>
+        </ul>
+      </section>
+
+      <section class="tesis">
+        <div class="contenedor">
+          <p class="debil">When an alarm doesn't ring,</p>
+          <p class="fuerte">it is almost always spam, a permission, or the schedule.</p>
+        </div>
+      </section>
+
+      <section class="contenedor seccion sintoma" id="test">
+        <div>
+          <h2>Test the alarm before you need it</h2>
+          <p class="bajada">
+            If you're going to trust an alarm with something that matters, hear
+            it once under real conditions: at night, phone locked, phone on
+            silent.
+          </p>
+          <ul class="notas">
+            <li>
+              <span class="icono-caja"
+                ><svg class="icono" aria-hidden="true">
+                  <use href="/icons.svg#i-volume" /></svg
+              ></span>
+              <div>
+                <strong>&ldquo;Now&rdquo; plays the tone.</strong> Good for
+                picking the one you like and checking the volume.
+              </div>
+            </li>
+            <li>
+              <span class="icono-caja"
+                ><svg class="icono" aria-hidden="true">
+                  <use href="/icons.svg#i-moon" /></svg
+              ></span>
+              <div>
+                <strong>&ldquo;In 10s&rdquo; is the real test.</strong> Tap it,
+                lock the phone, and leave it the way you leave it at night.
+              </div>
+            </li>
+            <li>
+              <span class="icono-caja"
+                ><svg class="icono" aria-hidden="true">
+                  <use href="/icons.svg#i-bell" /></svg
+              ></span>
+              <div>
+                <strong>The top of the screen says if it's listening.</strong>
+                The green dot means the app is active. Without it, nothing will
+                ring.
+              </div>
+            </li>
+          </ul>
+        </div>
+        <figure class="captura">
+          <div class="marco">
+            <img
+              src="/img/principal-en.png"
+              width="1080"
+              height="2400"
+              loading="lazy"
+              alt="The Android home screen with three alarms, the test buttons and recent activity"
+            />
+          </div>
+          <figcaption>
+            Both test buttons sit under your alarms.
+          </figcaption>
+        </figure>
+      </section>
+
+      <section class="contenedor seccion sintoma" id="no-ring">
+        <div>
+          <h2>Why didn't it ring?</h2>
+          <p class="bajada">
+            On Android the app never connects to your account: it reads the
+            notifications your mail app already shows. The first two causes come
+            from that.
+          </p>
+          <ul class="notas">
+            <li>
+              <span class="icono-caja"
+                ><svg class="icono" aria-hidden="true">
+                  <use href="/icons.svg#i-alert" /></svg
+              ></span>
+              <div>
+                <strong>The email landed in spam.</strong> The most frequent
+                cause: in spam your mail app shows no notification, and with no
+                notification there is nothing to catch. Before you wait on
+                something important from a new sender, create a Gmail filter
+                with &ldquo;Never send it to Spam&rdquo;.
+              </div>
+            </li>
+            <li>
+              <span class="icono-caja"
+                ><svg class="icono" aria-hidden="true">
+                  <use href="/icons.svg#i-mail" /></svg
+              ></span>
+              <div>
+                <strong>You typed the address and the name arrived.</strong> The
+                app only sees what the notification shows, and Gmail and Outlook
+                usually show the sender's <em>name</em>, not the address. Use
+                the name exactly as you see it in the notification.
+              </div>
+            </li>
+            <li>
+              <span class="icono-caja"
+                ><svg class="icono" aria-hidden="true">
+                  <use href="/icons.svg#i-filter" /></svg
+              ></span>
+              <div>
+                <strong>The word didn't match.</strong> Matching is partial and
+                case and accents don't count: <em>migracion</em> finds
+                &ldquo;Migración&rdquo;. But we look in the subject and the
+                preview line, not in the whole email.
+              </div>
+            </li>
+            <li>
+              <span class="icono-caja"
+                ><svg class="icono" aria-hidden="true">
+                  <use href="/icons.svg#i-bell" /></svg
+              ></span>
+              <div>
+                <strong>The alarm was switched off.</strong> Each alarm has its
+                own switch, like an alarm clock.
+              </div>
+            </li>
+          </ul>
+        </div>
+        <figure class="captura">
+          <div class="marco">
+            <img
+              src="/img/editar-en.png"
+              width="1080"
+              height="2400"
+              loading="lazy"
+              alt="The Android alarm editor, with the sender field and the subject keyword field"
+            />
+          </div>
+          <figcaption>
+            The editor warns you about both traps: name versus address, and
+            spam.
+          </figcaption>
+        </figure>
+      </section>
+
+      <section class="contenedor seccion sintoma" id="schedule">
+        <div>
+          <h2>The email arrived — why was it silent?</h2>
+          <p class="bajada">
+            If recent activity shows the email but nothing rang, the likely
+            answer is that the alarm was outside its own hours.
+          </p>
+          <ul class="notas">
+            <li>
+              <span class="icono-caja"
+                ><svg class="icono" aria-hidden="true">
+                  <use href="/icons.svg#i-calendar" /></svg
+              ></span>
+              <div>
+                <strong>Each alarm has its days and window.</strong> If you left
+                it Monday to Friday, 08:00 to 20:00, an email on Saturday or at
+                21:30 won't ring it.
+              </div>
+            </li>
+            <li>
+              <span class="icono-caja"
+                ><svg class="icono" aria-hidden="true">
+                  <use href="/icons.svg#i-moon" /></svg
+              ></span>
+              <div>
+                <strong>Outside those hours it isn't lost, it's quiet.</strong>
+                You get a silent notification, so you see it when you pick up
+                the phone.
+              </div>
+            </li>
+            <li>
+              <span class="icono-caja"
+                ><svg class="icono" aria-hidden="true">
+                  <use href="/icons.svg#i-check" /></svg
+              ></span>
+              <div>
+                <strong>If you want it to ring always</strong>, turn on
+                &ldquo;All day&rdquo; and leave all seven days ticked.
+              </div>
+            </li>
+          </ul>
+        </div>
+        <figure class="captura">
+          <div class="marco">
+            <img
+              src="/img/horario-en.png"
+              width="1080"
+              height="2400"
+              loading="lazy"
+              alt="Days and schedule for an Android alarm: weekdays ticked and a window from 08:00 to 20:00"
+            />
+          </div>
+          <figcaption>
+            Days and hours live inside each alarm, not in the general settings.
+          </figcaption>
+        </figure>
+      </section>
+
+      <section class="contenedor seccion sintoma" id="too-much">
+        <div>
+          <h2>Why does it ring for the wrong emails?</h2>
+          <p class="bajada">
+            That happens when the alarm is wider than you thought.
+          </p>
+          <ul class="notas">
+            <li>
+              <span class="icono-caja"
+                ><svg class="icono" aria-hidden="true">
+                  <use href="/icons.svg#i-filter" /></svg
+              ></span>
+              <div>
+                <strong>Sender and word add up, they don't narrow.</strong> Fill
+                both fields and the alarm rings when <em>either</em> one
+                matches. To make it narrower, keep one and make it more
+                specific.
+              </div>
+            </li>
+            <li>
+              <span class="icono-caja"
+                ><svg class="icono" aria-hidden="true">
+                  <use href="/icons.svg#i-alert" /></svg
+              ></span>
+              <div>
+                <strong>Careful with short words.</strong> A three or four
+                letter word turns up inside other words and rings for anything.
+                Two words together beat one short one.
+              </div>
+            </li>
+            <li>
+              <span class="icono-caja"
+                ><svg class="icono" aria-hidden="true">
+                  <use href="/icons.svg#i-calendar" /></svg
+              ></span>
+              <div>
+                <strong>Or narrow the hours.</strong> If the email you're
+                waiting for only arrives during business hours, the alarm
+                doesn't need to be on at 3am.
+              </div>
+            </li>
+          </ul>
+        </div>
+        <figure class="captura">
+          <div class="marco">
+            <img
+              src="/img/actividad-en.png"
+              width="1080"
+              height="2400"
+              loading="lazy"
+              alt="Recent activity on Android: emails that came in and which ones rang an alarm"
+            />
+          </div>
+          <figcaption>
+            Recent activity tells you which alarm rang, so you know which one to
+            narrow.
+          </figcaption>
+        </figure>
+      </section>
+
+      <section class="contenedor seccion sintoma" id="log">
+        <div>
+          <h2>How do I know what happened?</h2>
+          <p class="bajada">
+            Recent activity is on the home screen and answers almost everything.
+            It is the first thing we look at when somebody writes in.
+          </p>
+          <ul class="notas">
+            <li>
+              <span class="icono-caja"
+                ><svg class="icono" aria-hidden="true">
+                  <use href="/icons.svg#i-check" /></svg
+              ></span>
+              <div>
+                <strong>&ldquo;Rang&rdquo;.</strong> The email arrived, it
+                matched, the alarm fired. If you still didn't hear it, the
+                problem is volume or permissions.
+              </div>
+            </li>
+            <li>
+              <span class="icono-caja"
+                ><svg class="icono" aria-hidden="true">
+                  <use href="/icons.svg#i-x" /></svg
+              ></span>
+              <div>
+                <strong>&ldquo;No match&rdquo;.</strong> The email arrived, but
+                it wasn't any of your alarms. Compare the sender shown there
+                with what you typed.
+              </div>
+            </li>
+            <li>
+              <span class="icono-caja"
+                ><svg class="icono" aria-hidden="true">
+                  <use href="/icons.svg#i-alert" /></svg
+              ></span>
+              <div>
+                <strong>The email isn't listed at all.</strong> Then there never
+                was a notification: either it went to spam, or your mail app
+                wasn't notifying.
+              </div>
+            </li>
+          </ul>
+        </div>
+        <figure class="captura">
+          <div class="marco">
+            <img
+              src="/img/principal-en.png"
+              width="1080"
+              height="2400"
+              loading="lazy"
+              alt="Recent activity on the Android home screen, with one email that rang and one with no match"
+            />
+          </div>
+          <figcaption>
+            The last 20 emails detected, kept only on your phone.
+          </figcaption>
+        </figure>
+      </section>
+
+      <section class="contenedor seccion sintoma" id="permissions">
+        <div>
+          <h2>Permissions and battery</h2>
+          <p class="bajada">
+            These explain most of the cases where the app was working and one
+            day stopped.
+          </p>
+          <ul class="notas">
+            <li>
+              <span class="icono-caja"
+                ><svg class="icono" aria-hidden="true">
+                  <use href="/icons.svg#i-bell" /></svg
+              ></span>
+              <div>
+                <strong>Notification access.</strong> Without that permission
+                the app sees nothing and can never ring. Android sometimes
+                revokes it after a system update: if it stopped working
+                overnight, check this first.
+              </div>
+            </li>
+            <li>
+              <span class="icono-caja"
+                ><svg class="icono" aria-hidden="true">
+                  <use href="/icons.svg#i-moon" /></svg
+              ></span>
+              <div>
+                <strong>Do Not Disturb.</strong> Ringing through Do Not Disturb
+                needs its own separate permission. Without it, the app respects
+                the mode and stays quiet.
+              </div>
+            </li>
+            <li>
+              <span class="icono-caja"
+                ><svg class="icono" aria-hidden="true">
+                  <use href="/icons.svg#i-alert" /></svg
+              ></span>
+              <div>
+                <strong>Battery saving.</strong> Some phones — Xiaomi, Huawei,
+                Samsung — close background apps. If yours is one of those,
+                exclude Email Alarm from battery optimization.
+              </div>
+            </li>
+            <li>
+              <span class="icono-caja"
+                ><svg class="icono" aria-hidden="true">
+                  <use href="/icons.svg#i-mail" /></svg
+              ></span>
+              <div>
+                <strong>Your mail app has to be installed</strong> on that
+                phone, with notifications turned on. Works with Gmail, Outlook,
+                Samsung Email, Yahoo and more, across all your accounts at once.
+              </div>
+            </li>
+          </ul>
+        </div>
+        <figure class="captura">
+          <div class="marco">
+            <img
+              src="/img/alarma-en.png"
+              width="1080"
+              height="2400"
+              loading="lazy"
+              alt="The alarm ringing full screen on Android, over the lock screen"
+            />
+          </div>
+          <figcaption>
+            With the permissions in place, this is what it looks like: full
+            screen, over the Lock Screen.
+          </figcaption>
+        </figure>
+      </section>
+
+      <section class="contenedor seccion" id="billing">
+        <h2>Free trial and cancelling</h2>
+        <p class="bajada">
+          The 7 day trial is handled by Google Play, not by us.
+        </p>
+        <ul class="notas">
+          <li>
+            <span class="icono-caja"
+              ><svg class="icono" aria-hidden="true">
+                <use href="/icons.svg#i-check" /></svg
+            ></span>
+            <div>
+              <strong>7 days free, then US$1.99 a month or US$9.99 a
+              year</strong>, or the equivalent in your currency. Cancel during
+              the trial and you pay nothing. On day eight it charges
+              automatically and the app keeps working.
+            </div>
+          </li>
+          <li>
+            <span class="icono-caja"
+              ><svg class="icono" aria-hidden="true">
+                <use href="/icons.svg#i-x" /></svg
+            ></span>
+            <div>
+              <strong>To cancel</strong>, open Google Play, Payments and
+              subscriptions. To avoid the next charge, cancel at least 24 hours
+              before the period ends.
+            </div>
+          </li>
+          <li>
+            <span class="icono-caja"
+              ><svg class="icono" aria-hidden="true">
+                <use href="/icons.svg#i-lock" /></svg
+            ></span>
+            <div>
+              <strong>A failed card doesn't cut you off at once.</strong> While
+              Google Play retries the payment, the alarm keeps ringing.
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <section class="contenedor seccion">
+        <div class="sin-suerte">
+          <h2>If none of this was it</h2>
+          <p>
+            Write to
+            <a href="mailto:support@email-alarm.com">support@email-alarm.com</a>
+            and tell us what you expected and what happened. If you can, check
+            recent activity first and tell us what it says next to that email:
+            that alone is usually enough to find the problem.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <section class="cierre">
+      <div class="contenedor">
+        <img src="/icon.svg" alt="" />
+        <p class="antes">Don't have it yet?</p>
+        <h2>An alarm for the emails that matter.</h2>
+        <a class="tienda" href="https://play.google.com/store/apps/details?id=com.reverstabilizer.emailalarm"><svg class="icono" aria-hidden="true"><use href="/icons.svg#i-play" /></svg>Get it on Google Play</a>
+        <p class="precio">
+          7 days free, then US$1.99 a month or US$9.99 a year. Cancel anytime.
+        </p>
+      </div>
+    </section>
+
+    <footer class="contenedor pie">
+      <span>© 2026 Email Alarm</span>
+      <nav>
+        <a href="/help/">Help</a
+        ><a href="/ring-when-an-email-arrives/">Guide</a
+        ><a href="/privacy/">Privacy policy</a
+        ><a href="/contact/">Contact</a>
+      </nav>
+    </footer>
+  </body>
+</html>
