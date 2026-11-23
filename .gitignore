@@ -21,7 +21,12 @@ local.properties
 *.keystore
 keystore.properties
 
-# Configuracion local de Claude Code
-/.claude/
+# Configuracion local de Claude Code. Los skills y los agentes SI van al repo:
+# son conocimiento del proyecto, igual que la documentacion, y conviene que
+# tengan copia de seguridad y que se vea cuando cambian.
+/.claude/*
+!/.claude/skills/
+!/.claude/agents/
+/.claude/settings.local.json
 .vercel
 .env*
