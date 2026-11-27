@@ -3,11 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Email Alarm — El correo que no te puedes perder</title>
+    <title>Email Alarm para Android — alarma para el correo importante</title>
     <meta
       name="description"
       content="Email Alarm suena como una alarma de verdad cuando llega un correo importante, aunque el teléfono esté en silencio, bloqueado o en No Molestar. Tus correos nunca salen del teléfono. 7 días gratis, después US$1,99 al mes o US$9,99 al año."
     />
+    <meta property="og:site_name" content="Email Alarm" />
     <meta property="og:title" content="Email Alarm" />
     <meta
       property="og:description"
@@ -17,11 +18,65 @@
     <meta property="og:url" content="https://www.email-alarm.com/es/android/" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="/icon.svg" type="image/svg+xml" />
-    <link rel="alternate" hreflang="en" href="/android/" />
-    <link rel="alternate" hreflang="es" href="/es/android/" />
     <link rel="stylesheet" href="/styles.css" />
+    <link rel="alternate" hreflang="en" href="https://www.email-alarm.com/android/" />
+    <link rel="alternate" hreflang="es" href="https://www.email-alarm.com/es/android/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.email-alarm.com/android/" />
     <link rel="canonical" href="https://www.email-alarm.com/es/android/" />
     <link rel="stylesheet" href="/studio.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://www.email-alarm.com/#publisher",
+            "name": "Rever Labs",
+            "url": "https://www.email-alarm.com/",
+            "logo": "https://www.email-alarm.com/img/logo.png",
+            "email": "support@email-alarm.com",
+            "sameAs": [
+              "https://play.google.com/store/apps/details?id=com.reverstabilizer.emailalarm",
+              "https://apps.apple.com/app/id6814333983"
+            ]
+          },
+          {
+            "@type": "SoftwareApplication",
+            "@id": "https://www.email-alarm.com/#app-android",
+            "name": "Email Alarm",
+            "operatingSystem": "Android 10.0 or later",
+            "applicationCategory": "ProductivityApplication",
+            "description": "Alarma para los correos que importan. Suena a pantalla completa y fuerte, incluso con el telefono en silencio si le das ese permiso. El correo nunca sale del telefono.",
+            "url": "https://www.email-alarm.com/es/android/",
+            "installUrl": "https://play.google.com/store/apps/details?id=com.reverstabilizer.emailalarm",
+            "sameAs": "https://play.google.com/store/apps/details?id=com.reverstabilizer.emailalarm",
+            "inLanguage": [
+              "en",
+              "es"
+            ],
+            "publisher": {
+              "@id": "https://www.email-alarm.com/#publisher"
+            },
+            "offers": [
+              {
+                "@type": "Offer",
+                "price": "1.99",
+                "priceCurrency": "USD",
+                "category": "subscription",
+                "name": "Monthly, after a 7-day free trial"
+              },
+              {
+                "@type": "Offer",
+                "price": "9.99",
+                "priceCurrency": "USD",
+                "category": "subscription",
+                "name": "Yearly, after a 7-day free trial"
+              }
+            ]
+          }
+        ]
+      }
+    </script>
   </head>
   <body class="platform-android">
     <header class="contenedor encabezado">
