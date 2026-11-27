@@ -32,7 +32,7 @@ cd mobile && npx.cmd expo export --platform ios   # el comando exacto que corre 
 **Usar expo.dev → Builds → "Build from GitHub"**, no el CLI. En Windows el CLI bloquea los `.ps1`, pide Apple ID + 2FA, y en "Select a Provider" el cursor arranca en una cuenta ajena.
 
 - Platform **iOS**, Git ref **`feat/expo-ios-foundation`**, carpeta base `/mobile`.
-- Perfil **`beta`** (deja el cobro apagado) o **`billing`** (lo enciende). Elegir a conciencia.
+- Perfil **`billing`** (o `beta`: desde el commit `92207da` del 15/11 **son lo mismo**, porque la variable del cobro paso a `production`, de quien los dos heredan, justamente para que un build de tienda no pueda salir sin el cobro adentro).
 - Si se quiere envío automático, tildar "Automatically submit to stores" con perfil de submit `beta`.
 
 Alternativa por consola, si hace falta:
